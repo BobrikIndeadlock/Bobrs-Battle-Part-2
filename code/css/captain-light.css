@@ -17,13 +17,4 @@
 #scene[data-palette-side="0"] .right .shade83,#scene[data-palette-side="1"] .left .shade83{opacity:1}
 .motes83 i{position:absolute;left:var(--x);top:var(--y);width:var(--r);height:var(--r);border-radius:50%;background:rgb(var(--hot));box-shadow:0 0 6px 1px rgba(var(--rgb),.7);animation:light83mote var(--dur) var(--delay) linear infinite;opacity:0}
 @keyframes light83mote{0%{transform:translate(0,0);opacity:0}22%{opacity:.8}75%{opacity:.5}100%{transform:translate(var(--dx),-105px);opacity:0}}
-#scene .captain-count{transition:box-shadow 1.5s,border-color 1.5s}
-#scene .captain.active .captain-count{box-shadow:0 0 12px 2px rgba(var(--glow),.65),0 0 28px rgba(var(--glow),.45)!important}
-/* Deadlock: current class is set by the existing coin-aware turn controller. */
-#dlPhase #dlDraftScreen .dl-team{transition:box-shadow 1.5s,border-color 1.5s;isolation:isolate}
-#dlPhase #dlDraftScreen .dl-team.current{box-shadow:0 0 24px rgba(var(--glow),.52),inset 0 0 32px rgba(var(--glow),.19)!important}
-#dlPhase #dlDraftScreen .dl-team .dl-captain{transition:filter 1.5s;filter:brightness(.78) drop-shadow(0 0 7px rgba(var(--glow),.2))}
-#dlPhase #dlDraftScreen .dl-team.current .dl-captain{filter:brightness(1.08) drop-shadow(0 0 18px rgba(var(--glow),.8)) drop-shadow(0 0 30px rgba(var(--glow),.35))}
-#dlPhase #dlDraftScreen .dl-team h2{transition:box-shadow 1.5s,border-color 1.5s}
-#dlPhase #dlDraftScreen .dl-team.current h2{box-shadow:0 0 16px rgba(var(--glow),.65);border-color:var(--light)}
-@media(prefers-reduced-motion:reduce){.turn-light83 .aura83::before,.motes83 i{animation:none}.turn-light83 .shade83,.turn-light83 .aura83,.turn-light83 .motes83,#dlPhase #dlDraftScreen .dl-team,#dlPhase #dlDraftScreen .dl-team .dl-captain{transition:none}}
+@media(prefers-reduced-motion:reduce){.turn-light83 .aura83::before,.motes83 i{animation:none}.turn-light83 .shade83,.turn-light83 .aura83,.turn-light83 .motes83{transition:none}}

@@ -1,2 +1,116 @@
+/* The roster is registered to the stone below each painted pedestal. */
+#scene .captain {
+  --roster-anchor: 69%;
+  --roster-rail: url("../../media/draft/rail-demon.webp");
+  --roster-light: #e1bcf5;
+  --roster-reflection: #9e54d080;
+}
+#scene .captain.right {
+  --roster-anchor: 31%;
+  --roster-rail: url("../../media/draft/rail-vampire.webp");
+  --roster-light: #ffd1ca;
+  --roster-reflection: #c74b5488;
+}
+#scene .captain .captain-count {
+  position: absolute;
+  top: 124%;
+  bottom: auto;
+  left: var(--roster-anchor);
+  width: 30%;
+  aspect-ratio: 4.15;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  transform: translateX(-50%);
+  color: var(--roster-light);
+  font: 600 clamp(7px, 1vw, 16px)/1 Georgia, serif;
+  background: url("../../media/draft/number-plate.webp") center / 100% 100%;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow: 0 1px 2px #000, 0 0 7px var(--roster-reflection);
+}
+#scene .captain.active .captain-count {
+  box-shadow: none;
+  text-shadow: 0 1px 2px #000, 0 0 11px var(--roster-reflection);
+}
+#scene .captain .teams-view {
+  position: absolute;
+  top: 131.5%;
+  bottom: auto;
+  left: var(--roster-anchor);
+  right: auto;
+  transform: translateX(-50%);
+  width: 101%;
+  aspect-ratio: 760 / 244;
+  padding: 2% 5.2% 5.7%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 3%;
+  align-items: stretch;
+  z-index: 8;
+  background: var(--roster-rail) center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+#scene .captain .teams-view[hidden] { display: none; }
+#scene .captain .teams-view::before {
+  content: "";
+  position: absolute;
+  inset: 57% -6% -9%;
+  z-index: -1;
+  background: radial-gradient(ellipse at center, #0b050bd9, #11071357 59%, transparent 73%);
+}
 
-.captain .teams-view{position:absolute!important;top:calc(100% + 7px)!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translateX(-50%);width:98%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;z-index:8;pointer-events:none;align-items:start;justify-items:center}.captain .teams-view[hidden]{display:none!important}.roster-slot{width:100%;max-width:72px;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;color:#f4d9b4;text-align:center;font-size:clamp(8px,.85vw,13px);line-height:1.1;text-shadow:0 1px 4px black,0 1px 3px black}.captain .team-badge{display:block;width:100%;height:auto;aspect-ratio: 2/3;object-fit:contain;background:#120a10;border:1px solid #ba9364;border-radius:3px;box-shadow:0 2px 9px #000}.captain.right .team-badge{border-color:#b94a51}.roster-slot span{overflow-wrap:anywhere;background:#10080bd9;width:100%;padding:2px 0}.roster-slot.empty{aspect-ratio:2/3;border:1px dashed #b4815966;border-radius:3px;background:#10080b80;justify-content:center;color:#b4815988;font-size:16px}.roster-arrive{animation:rosterArrival .65s ease-out both}@keyframes rosterArrival{from{opacity:0;transform:translateY(7px);filter:brightness(2)}to{opacity:1;transform:translateY(0);filter:brightness(1)}}@media(max-width:850px){.captain .teams-view{gap:2px;grid-template-columns:repeat(3,minmax(0,1fr))}.roster-slot{font-size:8px;max-width:48px}}
+.roster-slot {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #f4dfc4;
+  font: 600 clamp(6px, .74vw, 12px)/1.08 Georgia, serif;
+  text-align: center;
+  text-shadow: 0 1px 2px #000, 0 1px 5px #000;
+}
+.roster-slot .team-badge {
+  display: block;
+  width: 96%;
+  min-height: 0;
+  flex: 1 1 0;
+  object-fit: contain;
+  border: 1px solid #947353;
+  border-radius: 2px;
+  background: #10090e;
+  box-shadow: 0 2px 3px #000;
+}
+.roster-slot span {
+  width: 110%;
+  min-height: 1.1em;
+  overflow-wrap: anywhere;
+  padding-top: .23em;
+}
+.roster-arrive { animation: rosterSeat .6s cubic-bezier(.18,.55,.22,1) both; }
+.roster-withdrawn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--roster-light);
+  box-shadow: inset 0 0 12px var(--roster-reflection);
+  animation: rosterAfterglow .75s ease-out both;
+}
+@keyframes rosterSeat {
+  0% { opacity: 0; transform: translateY(-10px) rotateX(-23deg) scale(1.09); }
+  73% { opacity: 1; transform: translateY(1px) rotateX(4deg); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes rosterAfterglow { from { opacity: .85; } to { opacity: 0; } }
+@media (max-width: 600px) {
+  #scene .captain .teams-view { width: 112%; }
+  #scene .captain .captain-count { width: 35%; }
+  .roster-slot span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .roster-arrive, .roster-withdrawn::after { animation: none; }
+  .roster-withdrawn::after { display: none; }
+}

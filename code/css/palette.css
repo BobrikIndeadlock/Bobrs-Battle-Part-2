@@ -3,9 +3,6 @@
 :root{--m-dark:#170b27;--m-mid:#6229a3;--m-light:#d1a1ff;--m-rgb:157,75,231;--a-dark:#26080f;--a-mid:#900c20;--a-light:#ff909a;--a-rgb:225,43,68;--c-dark:#291b0c;--c-mid:#ad863e;--c-light:#ffe4aa;--c-rgb:218,170,81;--neutral:#141018;--metal:#a77a43;--ink:#f3e4cf;--accent:var(--metal);--glow:183,132,76;--tint:#231713;--light:var(--ink)}
 #cap0,#dlTeam0,.battle-team.side0,#finish .vs-captain.left,#finish .vs-team:first-child,[data-palette-side="0"]{--accent:var(--m-mid);--glow:var(--m-rgb);--tint:var(--m-dark);--light:var(--m-light)}
 #cap1,#dlTeam1,.battle-team.side1,#finish .vs-captain.right,#finish .vs-team:nth-child(2),[data-palette-side="1"]{--accent:var(--a-mid);--glow:var(--a-rgb);--tint:var(--a-dark);--light:var(--a-light)}
-.captain .captain-count{background:var(--tint)!important;border-color:var(--accent)!important;color:var(--light)!important}
-.captain.active .captain-count{border-color:var(--light)!important;box-shadow:0 0 12px 2px rgba(var(--glow),.65)!important}
-.captain .team-badge{border-color:var(--accent)!important}.captain .roster-slot.empty{border-color:rgba(var(--glow),.4);color:var(--light);background:var(--tint)}.captain .roster-slot span{color:var(--light);background:var(--tint)}
 .scene[data-palette-side] .status{color:var(--light);text-shadow:0 0 12px rgba(var(--glow),.6),0 2px 4px #000}
 #grid.grid > button.tile:hover:not(:disabled){outline-color:var(--light)!important;filter:brightness(1.12) drop-shadow(0 0 9px rgba(var(--glow),.65))!important}
 .compare .compare-stage-fx .compare-halo{background:radial-gradient(circle,rgba(var(--glow),.32),rgba(var(--glow),.13) 35%,transparent 67%)}
@@ -20,20 +17,6 @@
 #finish .vs-captain .vs-name,#finish .vs-team .vs-team-heading{color:var(--light)!important;text-shadow:0 3px 4px #000,0 0 20px rgba(var(--glow),.4)}
 #finish .vs-captain .vs-captain-image{filter:drop-shadow(0 18px 22px #0009) drop-shadow(0 0 22px rgba(var(--glow),.35))!important}
 #finish .vs-team .vs-small-card{box-shadow:0 0 0 1px var(--accent),0 8px 12px #0008}
-#dlPhase #dlDraftScreen .dl-team{background:linear-gradient(155deg,var(--tint),#100b12 60%,var(--tint));border-color:var(--accent);box-shadow:inset 0 0 25px #000,0 0 12px #000}
-#dlPhase #dlDraftScreen .dl-team.current{border-color:var(--light);box-shadow:0 0 15px rgba(var(--glow),.38),inset 0 0 20px rgba(var(--glow),.12)}
-#dlPhase #dlDraftScreen .dl-team .dl-captain{filter:drop-shadow(0 0 12px rgba(var(--glow),.35))}
-#dlPhase #dlDraftScreen .dl-team h2,#dlPhase #dlDraftScreen .dl-team h3{background:linear-gradient(90deg,#100b12,var(--tint),#100b12);border-color:var(--accent);color:var(--light)}
-#dlPhase #dlDraftScreen .dl-team .dl-player-roster img,#dlPhase #dlDraftScreen .dl-team .dl-slot{border-color:var(--accent)}
-#dlPhase #dlDraftScreen .dl-team .dl-place{color:var(--light)}
-#dlPhase #dlDraftScreen .dl-turn{background:linear-gradient(90deg,#100b12,var(--tint),#100b12);border-color:var(--accent);box-shadow:0 0 13px rgba(var(--glow),.3)}
-#dlPhase .dl-turn strong{color:var(--light)}#dlPhase .dl-progress>div{background:linear-gradient(90deg,var(--accent),var(--light))}
-#dlPhase #dlDraftScreen .dl-hero.selected{border-color:var(--light);box-shadow:0 0 12px rgba(var(--glow),.5)}
-#dlPhase #dlDraftScreen #dlConfirm{background:linear-gradient(var(--tint),#100a11);border-color:var(--accent);color:var(--light)}
-#dlPhase #dlDraftScreen .dl-order-item b{border-color:var(--accent)}
-#dlPhase #dlDraftScreen .dl-order-item.done b{box-shadow:inset 0 0 0 2px var(--accent)}
-#dlPhase #dlDraftScreen .dl-order-item.now b{border-color:var(--light);box-shadow:0 0 9px rgba(var(--glow),.65)}
-#dlPhase #dlDraftScreen .dl-order-item{color:var(--light)}
 #dlEndScreen .battle-team h3,#dlEndScreen .battle-team h4{color:var(--light);border-color:var(--accent);background:linear-gradient(90deg,transparent,var(--tint),transparent)}
 #dlEndScreen .battle-team figure{border-color:var(--accent)}#dlEndScreen .battle-team figcaption{color:var(--light)}
 #dlEndScreen .battle-captain{filter:drop-shadow(0 0 18px rgba(var(--glow),.45))}

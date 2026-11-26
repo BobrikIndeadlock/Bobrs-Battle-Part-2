@@ -144,7 +144,62 @@ function skipBlockedTurnIfNeeded(){
  return true;
 }
 
-function captainUpdate(){captainTurn=turn%2;for(let i=0;i<2;i++){$('chrono84-'+i).classList.toggle('mark-active',!!duoLock[i]&&state!=='idle'&&state!=='done');}$('scene').dataset.paletteSide=state==='idle'||state==='done'?'':String(captainTurn);$('compare').dataset.paletteSide=String(captainTurn);for(let i=0;i<2;i++){let c=$('cap'+i);c.classList.toggle('active',state!=='idle'&&state!=='done'&&captainTurn===i);c.classList.toggle('dim',state!=='idle'&&state!=='done'&&captainTurn!==i);$('capCount'+i).textContent=teams[i].length+' / 5';const roster=$('teamTiny'+i);roster.hidden=state==='idle';const previous=new Map([...roster.children].map(el=>[el.dataset.hero,el]));const slots=Array.from({length:5},(_,j)=>{const hero=teams[i][j];if(!hero){const el=document.createElement('div');el.className='roster-slot empty';el.textContent='◇';return el}const key=String(hero.id);if(previous.has(key))return previous.get(key);const el=document.createElement('div');el.className='roster-slot roster-arrive';el.dataset.hero=key;const image=new Image();image.className='team-badge';image.src=hero.image;image.alt=hero.name;const name=document.createElement('span');name.textContent=hero.name;el.append(image,name);return el});roster.replaceChildren(...slots)}}
+function renderRoster(roster, members){
+ for(let index=0;index<5;index++){
+  const hero=members[index];
+  let slot=roster.children[index];
+  if(!slot){
+   slot=document.createElement('div');
+   roster.append(slot);
+  }
+  const key=hero?String(hero.id):'';
+  if(slot.dataset.hero===key)continue;
+  const returning=!hero&&!!slot.dataset.hero&&state==='cutscene';
+  slot.dataset.hero=key;
+  slot.className=hero?'roster-slot roster-arrive':returning?'roster-slot empty roster-withdrawn':'roster-slot empty';
+  slot.title=hero?.name??'';
+  slot.replaceChildren();
+  if(hero){
+   const image=new Image();
+   image.className='team-badge';
+   image.src=hero.image;
+   image.alt=hero.name;
+   const name=document.createElement('span');
+   name.textContent=hero.name;
+   slot.append(image,name);
+  }
+ }
+}
+const rosterMotion=matchMedia('(prefers-reduced-motion: reduce)');
+function renderCount(counter, count){
+ const label=count+' / 5';
+ if(counter.textContent===label&&counter.firstElementChild)return;
+ const value=document.createElement('span');
+ value.textContent=label;
+ counter.replaceChildren(value);
+ if(state!=='idle'&&!rosterMotion.matches){
+  value.animate([
+   {opacity:.4,transform:'translateY(.28em)'},
+   {opacity:1,transform:'none'},
+  ],{duration:360,easing:'ease-out'});
+ }
+}
+function captainUpdate(){
+ captainTurn=turn%2;
+ const choosing=state!=='idle'&&state!=='done';
+ $('scene').dataset.paletteSide=choosing?String(captainTurn):'';
+ $('compare').dataset.paletteSide=String(captainTurn);
+ for(let side=0;side<2;side++){
+  $('chrono84-'+side).classList.toggle('mark-active',!!duoLock[side]&&choosing);
+  const captain=$('cap'+side);
+  captain.classList.toggle('active',choosing&&captainTurn===side);
+  captain.classList.toggle('dim',choosing&&captainTurn!==side);
+  renderCount($('capCount'+side),teams[side].length);
+  const roster=$('teamTiny'+side);
+  roster.hidden=state==='idle';
+  renderRoster(roster,teams[side]);
+ }
+}
 function backMarkup(){return '<div class="face card-back-face"><img class="card-back-image" src="media/images/draft-card-back.png" alt="" draggable="false"></div>'}
 function displayGrid(){const grid=$('grid');grid.replaceChildren();for(let i=0;i<available.length;i++){const c=available[i];const blocked=isHeroChainedForCaptain(c,captainTurn);const b=document.createElement('button');b.type='button';b.className='tile'+(available.length===1?' legendary':'')+(blocked?' chronos-sealed':'');b.setAttribute('aria-label',blocked?('Карта '+c.name+' запечатана Кроносом'):('Закрытая карта '+(i+1)));b.innerHTML=backMarkup();if(blocked){const image=b.querySelector('.card-back-image');if(image)image.src=chronosSealedBack;}b.style.animationDelay=(i*.038)+'s';b.onclick=()=>tapCard(c.id);b.disabled=state!=='choose'||!playableCards().some(card=>card.id===c.id);if(blocked){b.title='Кронос запечатал эту карту. Она недоступна для '+currentName();b.setAttribute('aria-disabled','true')}grid.append(b)}}
 function currentName(){return captains[captainTurn]}

@@ -10,3 +10,9 @@
 - [Видеодемонстрация, 24,4 секунды](Bobrs-Battle-Part-2-Captains-Demo.mp4)
 - [Результаты game-audit](QA-captains.md)
 - [Сырые замеры](captains-performance.json)
+
+## Ритуал десяти огней
+
+- [Непрерывная запись призыва из игры](Bobrs-Battle-Part-2-Summoning-Demo.mp4)
+- [Аудит и замеры](QA-summoning.md)
+- [Промт для исходной графики пламени](Prompts-summoning-vfx.md)

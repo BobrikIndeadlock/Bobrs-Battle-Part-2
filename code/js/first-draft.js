@@ -146,6 +146,7 @@ async function summon(){
  if(state!=='idle')return;
  const controller=new AbortController();
  summonController=controller;
+ const bookVisual=window.grimoireVisual?.begin();
  state='summoning';
  $('book').disabled=true;
  available=shuffle(baseCharacters).slice(0,10);
@@ -160,6 +161,7 @@ async function summon(){
  try{
   await summoningRitual.play({
    scene:$('scene'),grid,layer:fx,signal:controller.signal,
+   onBookFrame:bookVisual?.update,
    onCharge:()=>status('Все десять огней заняли свои места…'),
    onReveal:()=>{
     grid.classList.replace('summon-preparing','summon-materializing');
@@ -169,6 +171,7 @@ async function summon(){
  }catch(error){
   console.warn('Summoning effects unavailable:',error);
  }finally{
+  bookVisual?.finish();
   if(summonController===controller){
    summonController=null;
    fx.replaceChildren();

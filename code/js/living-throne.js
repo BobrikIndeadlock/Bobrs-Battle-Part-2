@@ -20,6 +20,7 @@
   const compact = matchMedia('(max-width: 850px), (max-height: 500px)');
   const images = new Map();
   const captains = createCaptainAtmosphere(context);
+  const grimoire = window.grimoireVisual;
   const candleLights = [
     { image: 'candle-left-front', x: 0, y: 645, phase: 1.3 },
     { image: 'candle-left-inner', x: 324, y: 620, phase: 3.6 },
@@ -114,6 +115,7 @@
       }
     }
     captains.paint(time, scene.dataset.paletteSide, reduced.matches, compact.matches);
+    grimoire?.paint(context, images.get('ember'), time, reduced.matches, compact.matches);
     context.globalAlpha = 1;
   }
 
@@ -180,7 +182,7 @@
       console.warn('Throne atmosphere asset unavailable:', name, error);
     }
   }));
-  Promise.all([roomReady, captains.ready]).then(() => {
+  Promise.all([roomReady, captains.ready, grimoire?.ready]).then(() => {
     ready = true;
     sync();
   });

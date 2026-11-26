@@ -204,7 +204,7 @@ const summoningRitual = (() => {
     });
   }
 
-  async function play({ scene, grid, layer, signal, onCharge, onReveal }) {
+  async function play({ scene, grid, layer, signal, onCharge, onReveal, onBookFrame }) {
     await loaded;
     if (signal.aborted || document.hidden) return;
 
@@ -221,6 +221,7 @@ const summoningRitual = (() => {
     layer.append(canvas);
 
     const orbs = reduced.matches ? [] : mountOrbs(layer, grid.children);
+    const bookTiming = { firstEmission, spacing, count: orbs.length, reveal };
     let paths, scale;
     const measure = () => {
       paths = getPaths(scene, grid);
@@ -286,6 +287,7 @@ const summoningRitual = (() => {
           }
           const gap = lastPaint === null ? interval : now - lastPaint;
           if (gap >= interval - .4) {
+            if (!still) onBookFrame?.(time, bookTiming);
             paint(time, paths, still);
             if (orbs.length) placeOrbs(orbs, paths, time, scale);
             lastPaint = now - Math.max(0, gap - interval) % interval;

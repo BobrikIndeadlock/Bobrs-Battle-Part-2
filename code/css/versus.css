@@ -52,3 +52,9 @@
 @keyframes vsFadeIn{to{opacity:1}}
 @media(max-width:700px){#finish .vs-frame{gap:12px;padding:13px 11px 18px}#finish .vs-main{grid-template-columns:minmax(0,1fr) minmax(64px,.47fr) minmax(0,1fr);height:clamp(220px,39vh,390px);gap:2px}#finish .vs-captain-image{width:100%;height:calc(100% - 25px)}#finish .vs-name{font-size:clamp(16px,4.5vw,30px);letter-spacing:0}#finish .vs-mark{font-size:clamp(58px,16vw,112px)}#finish .vs-topline{font-size:10px;letter-spacing:.15em}#finish .vs-headline{font-size:clamp(13px,2.8vw,17px);letter-spacing:.15em}#finish .vs-teams{gap:9px}#finish .vs-team-heading{font-size:clamp(9px,2.4vw,12px);letter-spacing:.07em;gap:4px}#finish .vs-small-cards{gap:3px;min-height:70px}#finish .vs-small-card{border-radius:3px}#finish .vs-actions button{font-size:11px;padding:12px 10px}#finish .vs-lightning{width:1px}}
 @media(prefers-reduced-motion:reduce){#finish.vs-intro .vs-captain,#finish.vs-intro .vs-mark,#finish.vs-armies .vs-small-card,#finish.vs-armies .vs-team{animation-duration:.01ms!important;animation-delay:0s!important}#finish .vs-lightning{display:none}}
+
+/* In a short landscape viewport, let the complete finale scroll without overlapping its actions. */
+@media (orientation: landscape) and (max-height: 540px) {
+  #finish .vs-frame { flex: 0 0 auto; }
+  #finish .vs-main { flex-shrink: 0; grid-template-rows: minmax(0, 1fr); }
+}

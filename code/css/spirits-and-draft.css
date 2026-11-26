@@ -1,11 +1,4 @@
 
-/* Spirit swarm around Makarych */
-.makarych-spirit{position:absolute;z-index:3;left:var(--left,1.5%);top:var(--top,24%);width:var(--w,10%);height:var(--h,32%);pointer-events:none;opacity:0;transform-origin:center bottom;mix-blend-mode:screen;filter:drop-shadow(0 0 12px rgba(181,140,255,.9)) drop-shadow(0 0 24px rgba(111,66,216,.8));animation:spiritFloat var(--floatDur,12s) ease-in-out infinite alternate, spiritPresence var(--presenceDur,11s) ease-in-out infinite;animation-delay:var(--floatDelay,0s),var(--presenceDelay,0s)}
-.makarych-spirit img{height:100%;width:100%;object-fit:contain;display:block}
-.makarych-spirit.spirit-left{--left:2.2%;--top:59%;--w:9%;--h:20%;--presenceDur:10.6s;--presenceDelay:-1.4s;--floatDelay:-.5s}
-.makarych-spirit.spirit-right{--left:22%;--top:60%;--w:8.5%;--h:19%;--presenceDur:12.4s;--presenceDelay:-5.3s;--floatDelay:-2.6s}
-@keyframes spiritFloat{from{transform:translateY(18px) rotate(-2.2deg) scale(.94)}to{transform:translateY(-35px) rotate(2.3deg) scale(1.03)}}
-@keyframes spiritPresence{0%,100%{opacity:0}19%{opacity:.4}33%,62%{opacity:.83}80%{opacity:.44}97%{opacity:0}}
 #cap0{z-index:4}
 /* Premium original crimson-gold card reverse with runic engraving. */
 .tile .face,.reveal-card .face{background:radial-gradient(ellipse at 50% 45%,#4c192c 0,#1a0914 46%,#09050c 86%);border:2px solid #b78e5a;box-shadow:inset 0 0 0 3px #2b111b,inset 0 0 0 5px #9a613e6a,inset 0 0 24px #7f173e80,0 8px 24px #000d}
@@ -17,24 +10,6 @@
 .face .sigil em{display:block;font:normal 700 .19em Georgia,serif;letter-spacing:.17em;text-align:center;color:#b99365;margin-top:4px}
 .face .back-footer{position:absolute;bottom:10%;font-size:clamp(5px,.55vw,10px);letter-spacing:.12em;color:#af765d}
 #grid .tile:disabled{pointer-events:none}
-@media(max-width:850px){.makarych-spirit{width:var(--w,10%);height:var(--h,20%)}.makarych-spirit.spirit-left{--left:2.2%;--top:59%}.makarych-spirit.spirit-right{--left:22%;--top:60%}}
-@media(prefers-reduced-motion:reduce){.makarych-spirit{animation:none;opacity:.55}}
-
-/* ACT II — cinematic ten-flame grimoire ritual (GPU-light on iPhone). */
-.bobrs-summon-orb{width:clamp(17px,1.9vw,30px);height:clamp(17px,1.9vw,30px);animation-name:ritualOrbFlight;animation-duration:3s;animation-timing-function:cubic-bezier(.23,.52,.24,1);animation-fill-mode:both;filter:drop-shadow(0 0 7px #ffc15e) drop-shadow(0 0 16px #f04d20);background:radial-gradient(circle at 38% 34%,#ffffff 0%,#fff8d2 12%,#ffe58a 25%,#ffae36 43%,#f65116 65%,#a40c16 81%,transparent 94%)}
-.bobrs-summon-orb::before{inset:-100% -55% -60%;opacity:.9;clip-path:polygon(50% 100%,25% 74%,10% 40%,34% 51%,28% 3%,56% 36%,79% 0,72% 52%,97% 29%,78% 81%);animation-duration:.46s}
-.bobrs-summon-orb .hell-tail{height:clamp(70px,9vw,142px);width:clamp(16px,2vw,28px);opacity:.85;background:linear-gradient(to bottom,#fff2aa 0%,#ffa339bd 17%,#ef461bb0 43%,#a20d3444 67%,transparent 100%);filter:blur(5px);animation-duration:.52s}
-.bobrs-summon-orb .summon-wake{position:absolute;left:50%;top:100%;width:clamp(8px,1vw,18px);height:clamp(88px,10vw,155px);transform:translateX(-50%) rotate(var(--lean));transform-origin:top center;pointer-events:none;border-radius:90% 90% 70% 70%;background:linear-gradient(180deg,#fffae29c,#ff8b286b 28%,#be214633 60%,transparent);filter:blur(8px);animation:ritualWake .64s ease-in-out infinite alternate;animation-delay:var(--flickerDelay)}
-.bobrs-summon-orb .summon-halo{position:absolute;inset:-60%;border-radius:50%;background:radial-gradient(circle,#fff6be40 0%,#ffae2345 32%,#e1232924 58%,transparent 72%);animation:ritualHalo 1.45s ease-in-out infinite alternate;pointer-events:none}
-.stage-fx.summon-charged .bobrs-summon-orb{filter:drop-shadow(0 0 12px #ffe7ae) drop-shadow(0 0 25px #ff5a29);transition:filter .4s}
-@keyframes ritualOrbFlight{0%{opacity:0;transform:translate(-50%,30px) scale(.12)}7%{opacity:1}27%{transform:translate(calc(var(--dx20) + var(--curve)),calc(var(--dy27) - 75px)) scale(.91)}57%{transform:translate(var(--dx70),calc(var(--dy70) - 38px)) scale(1.13)}82%{opacity:1;transform:translate(var(--dx),calc(var(--dy) - 16px)) scale(1.1)}100%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)}}
-@keyframes ritualWake{from{opacity:.43;transform:translateX(-50%) rotate(var(--lean)) scaleX(.7) scaleY(.77)}to{opacity:.85;transform:translateX(-50%) rotate(var(--lean)) scaleX(1.18) scaleY(1.18)}}
-@keyframes ritualHalo{from{opacity:.35;transform:scale(.8)}to{opacity:.9;transform:scale(1.32)}}
-.summon-impact-flash{background:radial-gradient(ellipse at 50% 50%,#ffffff 0%,#fffdf0 26%,#ffe6b5 55%,#ef8d44 78%,#4a1230 100%);animation-duration:1.03s}
-.summon-impact-flash::before{content:'';position:absolute;inset:-20%;background:repeating-conic-gradient(from 4deg at 50% 50%,#fff8eebd 0deg 7deg,transparent 9deg 25deg);mix-blend-mode:screen;animation:ritualFlashRays 1.03s ease-out both}
-@keyframes ritualFlashRays{0%{opacity:0;transform:scale(.12) rotate(-12deg)}18%{opacity:.85}100%{opacity:0;transform:scale(1.4) rotate(18deg)}}
-@media(max-width:850px){.bobrs-summon-orb .summon-wake{height:66px}.bobrs-summon-orb .hell-tail{height:72px}.bobrs-summon-orb .summon-halo{inset:-40%}}
-@media(prefers-reduced-motion:reduce){.bobrs-summon-orb .summon-wake,.bobrs-summon-orb .summon-halo{animation:none}}
 
 /* === Stage 3: cinematic pair reveal === */
 .compare.arcane-cinematic{overflow:hidden}
@@ -87,14 +62,7 @@
 #book:disabled,.grimoire:disabled{pointer-events:none!important;touch-action:none!important}
 #grid{position:relative;z-index:26;pointer-events:auto!important}
 #grid>.tile:not(:disabled){pointer-events:auto!important;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-#fx,.stage-fx,.bobrs-shuffle-layer,.summon-impact-flash{pointer-events:none!important}
-/* The tenth spark must be rendered exactly like the others. */
-#fx>.bobrs-summon-orb{visibility:visible!important}
-/* Use a direct opacity handoff for the flash, avoiding Safari animation glitches. */
-.summon-impact-flash.bobrs-force-flash{animation:none!important;opacity:0!important;transition:opacity .13s ease-out!important;background:#fff5df!important;will-change:opacity;}
-.summon-impact-flash.bobrs-force-flash.bobrs-flash-on{opacity:1!important}
-.summon-impact-flash.bobrs-force-flash.bobrs-flash-off{opacity:0!important;transition:opacity .55s ease-out!important}
-.summon-impact-flash.bobrs-force-flash::before{display:none!important}
+#fx,.stage-fx,.bobrs-shuffle-layer{pointer-events:none!important}
 
 /* === Card back variant 1 integration + hover/full-bleed fixes === */
 .tile{padding:0;overflow:visible;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}
@@ -166,49 +134,3 @@
 .tile.chronos-sealed .card-back-face,.tile.chronos-sealed .card-back-image{filter:none!important;opacity:1!important;}
 .tile.chronos-sealed:disabled{opacity:1!important;filter:none!important;}
 .tile.chronos-sealed::before,.tile.chronos-sealed::after{content:none!important;display:none!important;}
-#chronosEvent{position:fixed;inset:0;z-index:260;pointer-events:none;opacity:0;transition:opacity .35s ease}
-#chronosEvent.visible{opacity:1}
-#chronosEvent .chronos-wash{position:absolute;inset:0;background:rgba(165,165,165,0);backdrop-filter:grayscale(0);-webkit-backdrop-filter:grayscale(0)}
-#chronosEvent.grayfall .chronos-wash{animation:chronosGrayfall 2.7s ease forwards}
-@keyframes chronosGrayfall{0%{background:rgba(145,145,145,0);backdrop-filter:grayscale(0)}18%{background:rgba(165,165,165,.54);backdrop-filter:grayscale(.75)}55%{background:rgba(46,46,46,.88);backdrop-filter:grayscale(1)}100%{background:rgba(0,0,0,1);backdrop-filter:grayscale(1)}}
-#chronosEvent .chronos-dialogue{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:4vh 6vw 10vh;opacity:0;transform:translateY(12px) scale(.98)}
-#chronosEvent.show-figure .chronos-dialogue{opacity:1;transform:translateY(0) scale(1);transition:opacity .9s ease,transform .9s ease}
-#chronosPortrait{width:min(42vw,380px);max-width:70vw;max-height:56vh;object-fit:contain;filter:drop-shadow(0 0 18px rgba(255,248,225,.18)) drop-shadow(0 0 34px rgba(255,255,255,.08))}
-#chronosText{width:min(92vw,1040px);min-height:104px;padding:18px 24px 20px;background:linear-gradient(180deg,rgba(3,3,5,.02),rgba(8,8,10,.58) 24%,rgba(4,4,5,.92));border-top:1px solid rgba(244,236,220,.18);border-bottom:1px solid rgba(244,236,220,.18);color:#e6e0d5;font:500 clamp(16px,1.65vw,24px)/1.7 Georgia,serif;text-align:center;letter-spacing:.02em;text-shadow:0 2px 6px rgba(0,0,0,.8),0 0 18px rgba(255,255,255,.08);box-shadow:0 22px 36px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.05)}
-#chronosText p{margin:0 0 10px}
-#chronosText p:last-child{margin-bottom:0}
-#chronosText .word{opacity:0;display:inline-block;transform:translateY(8px);animation:chronosWord .65s ease forwards}
-@keyframes chronosWord{to{opacity:1;transform:translateY(0)}}
-#chronosEvent .chronos-rewind{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;opacity:0;transform:scale(.92)}
-#chronosEvent.rewind-active .chronos-rewind{opacity:1;transform:scale(1);transition:opacity .55s ease,transform .55s ease}
-#chronosEvent.rewind-fading .chronos-rewind{opacity:0;transform:scale(1.08);transition:opacity .45s ease,transform .45s ease}
-.rewind-clock{position:relative;width:min(42vw,360px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at center,#1f1612 0%,#09090b 54%,#000 70%);box-shadow:0 0 0 2px rgba(255,223,157,.25),0 0 0 10px rgba(130,95,45,.16),0 0 40px rgba(255,192,98,.16),0 0 120px rgba(0,0,0,.75)}
-.rewind-clock::before,.rewind-clock::after{content:"";position:absolute;inset:10%;border-radius:50%;border:1px solid rgba(240,205,132,.3)}
-.rewind-clock::after{inset:21%;border-style:dashed;opacity:.5;animation:chronosGearSpinReverse 2.4s linear infinite reverse}
-.rewind-ring{position:absolute;border-radius:50%;border:1px solid rgba(241,211,140,.36)}
-.rewind-ring.r1{inset:4%}
-.rewind-ring.r2{inset:15%;animation:chronosGearSpinReverse 7s linear infinite reverse}
-.rewind-ring.r3{inset:29%;animation:chronosGearSpinReverse 4.6s linear infinite}
-.rewind-ticks{position:absolute;inset:8%;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(245,228,179,.72) 0 2deg,rgba(245,228,179,0) 2deg 30deg);mask:radial-gradient(circle at center,transparent 0 72%,#000 74%);-webkit-mask:radial-gradient(circle at center,transparent 0 72%,#000 74%);opacity:.7}
-.rewind-hand{position:absolute;left:50%;bottom:50%;transform-origin:50% 100%;border-radius:999px;background:linear-gradient(180deg,#f7eac8,#6b5841);box-shadow:0 0 10px rgba(255,218,130,.22)}
-.rewind-hand.hour{width:7px;height:28%;margin-left:-3.5px;animation:chronosHourReverse 1.6s linear infinite reverse}
-.rewind-hand.minute{width:5px;height:38%;margin-left:-2.5px;animation:chronosMinuteReverse .62s linear infinite reverse}
-.rewind-hand.second{width:2px;height:42%;margin-left:-1px;background:linear-gradient(180deg,#fff2cc,#c58f4c);animation:chronosMinuteReverse .24s linear infinite reverse}
-.rewind-center{position:absolute;left:50%;top:50%;width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:radial-gradient(circle,#f8edca 0%,#b1803e 58%,#302115 100%);box-shadow:0 0 16px rgba(255,214,135,.35)}
-.rewind-caption{color:#f4e3b0;font:700 clamp(13px,1.35vw,20px)/1.2 Georgia,serif;letter-spacing:.32em;text-transform:uppercase;text-shadow:0 0 12px rgba(255,216,130,.35),0 2px 10px rgba(0,0,0,.8)}
-@keyframes chronosGearSpinReverse{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
-@keyframes chronosHourReverse{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
-@keyframes chronosMinuteReverse{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
-@media(max-width:850px){#chronosPortrait{width:min(72vw,320px);max-height:46vh}#chronosText{width:min(92vw,92vw);padding:16px 16px 18px;min-height:94px;font-size:16px;line-height:1.6}.rewind-clock{width:min(76vw,310px)}.rewind-caption{font-size:13px;letter-spacing:.22em}}
-
-/* CHRONOS: manual selection; slower theatrical timing and readable word spacing. */
-#chronosEvent.grayfall .chronos-wash{animation-duration:4.9s!important;animation-timing-function:cubic-bezier(.45,0,.55,1)!important}
-#chronosEvent.show-figure .chronos-dialogue{transition:opacity 1.8s ease,transform 1.8s ease!important}
-#chronosText{white-space:normal;word-spacing:.08em;line-height:1.75!important}
-#chronosText .word{display:inline;opacity:0;transform:none;animation:chronosWordReadable .45s ease forwards;white-space:normal}
-@keyframes chronosWordReadable{from{opacity:0;filter:blur(2px)}to{opacity:1;filter:blur(0)}}
-#chronosEvent.rewind-active .chronos-rewind{transition:opacity 1.15s ease,transform 1.15s ease!important}
-#chronosEvent.rewind-fading .chronos-rewind{transition:opacity 1s ease,transform 1s ease!important}
-.rewind-hand.hour{animation-duration:3.4s!important}
-.rewind-hand.minute{animation-duration:1.25s!important}
-.rewind-hand.second{animation-duration:.53s!important}

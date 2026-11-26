@@ -1,1 +1,18 @@
-#livingAtmosphere .living-vault-light{display:none!important}
+/* Empty status has no visual surface; keep the live text and the book's hitbox. */
+#scene #status:empty { visibility: hidden; }
+#scene #book .bookhit { display: none; }
+
+#center:has(> #grid.summon-preparing) + #status { bottom: 24.3%; }
+
+#scene #book {
+  left: 37.6%;
+  bottom: 4%;
+  width: 24.8%;
+  height: 20.2%;
+  min-height: 44px;
+}
+
+#scene #book:focus-visible {
+  outline: 2px solid #dfb47c;
+  outline-offset: -3px;
+}

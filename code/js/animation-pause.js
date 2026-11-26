@@ -1,4 +1,47 @@
+(() => {
+  const byId = id => document.getElementById(id);
+  const body = document.body;
+  const arena = document.querySelector('main.arena');
+  const active = (id, className = 'active') => byId(id)?.classList.contains(className);
+  let previous = '';
 
-(()=>{const $=id=>document.getElementById(id),body=document.body,arena=document.querySelector('main.arena');const on=(id,c='active')=>!!$(id)?.classList.contains(c);let previous='';
-function sync(){const covered=!!$('intro-stage')||arena.inert||on('movieFinal')||on('dlPhase')||on('hall92')||on('chronosEvent','visible')||on('c91oOverlay','show')||on('finish','visible');const hidden=document.hidden;const pause=covered||hidden;const finishPause=hidden||!on('finish','visible')||on('dlPhase')||on('movieFinal');body.classList.toggle('bobrs-pause-arena',pause);body.classList.toggle('bobrs-pause-finish',finishPause);$('dlPhase').classList.toggle('bobrs-fx-active',!!$('dlFx')?.querySelector('iframe'));const key=String(pause)+String(hidden);if(key!==previous){previous=key;document.dispatchEvent(new Event('bobrs-visibility-sync'))}}
-const obs=new MutationObserver(sync);for(const id of ['intro-stage','movieFinal','dlPhase','hall92','chronosEvent','c91oOverlay','finish','dlFx']){const e=$(id);if(e)obs.observe(e,{attributes:true,attributeFilter:['class','inert'],childList:id==='dlFx'})}obs.observe(arena,{attributes:true,attributeFilter:['inert']});obs.observe(body,{childList:true});document.addEventListener('visibilitychange',sync);sync();})();
+  function sync() {
+    const hidden = document.hidden;
+    const covered = !!byId('intro-stage') || arena.inert || active('movieFinal') ||
+      active('dlPhase') || active('hall92') || active('chronosEvent', 'visible') ||
+      active('c91oOverlay', 'show') || active('finish', 'visible');
+    const pauseArena = covered || hidden;
+    // Compare lives inside the arena. Its card animations must continue.
+    const pauseAtmosphere = pauseArena || active('compare', 'visible');
+    const pauseFinish = hidden || !active('finish', 'visible') || active('dlPhase') || active('movieFinal');
+
+    body.classList.toggle('bobrs-pause-arena', pauseArena);
+    body.classList.toggle('bobrs-pause-atmosphere', pauseAtmosphere);
+    body.classList.toggle('bobrs-pause-finish', pauseFinish);
+    body.classList.toggle('bobrs-page-hidden', hidden);
+    byId('dlPhase').classList.toggle('bobrs-fx-active', !!byId('dlFx')?.classList.contains('draft-impact'));
+
+    const key = String(pauseArena) + String(pauseAtmosphere) + String(hidden);
+    if (key !== previous) {
+      previous = key;
+      document.dispatchEvent(new Event('bobrs-visibility-sync'));
+    }
+  }
+
+  const observer = new MutationObserver(sync);
+  for (const id of ['intro-stage', 'movieFinal', 'dlPhase', 'hall92', 'chronosEvent',
+    'c91oOverlay', 'finish', 'dlFx', 'compare']) {
+    const element = byId(id);
+    if (element) {
+      observer.observe(element, {
+        attributes: true,
+        attributeFilter: ['class', 'inert'],
+        childList: id === 'dlFx',
+      });
+    }
+  }
+  observer.observe(arena, { attributes: true, attributeFilter: ['inert'] });
+  observer.observe(body, { childList: true });
+  document.addEventListener('visibilitychange', sync);
+  sync();
+})();

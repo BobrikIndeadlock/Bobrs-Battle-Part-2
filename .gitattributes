@@ -1,0 +1,11 @@
+# Preserve the original file bytes across checkouts on different operating systems.
+* -text
+
+# Keep video assets in Git LFS. Git checks them out at their original paths.
+*.[mM][pP]4 filter=lfs diff=lfs merge=lfs -text
+*.[wW][eE][bB][mM] filter=lfs diff=lfs merge=lfs -text
+*.[mM][oO][vV] filter=lfs diff=lfs merge=lfs -text
+*.[mM]4[vV] filter=lfs diff=lfs merge=lfs -text
+*.[oO][gG][vV] filter=lfs diff=lfs merge=lfs -text
+*.[mM][kK][vV] filter=lfs diff=lfs merge=lfs -text
+*.[aA][vV][iI] filter=lfs diff=lfs merge=lfs -text

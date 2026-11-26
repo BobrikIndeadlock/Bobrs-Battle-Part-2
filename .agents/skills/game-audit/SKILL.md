@@ -11,4 +11,4 @@ Inspect repository and README; establish baseline and scope. Test intro, hall, g
 
 ## Project constraints
 
-Work in the existing index.html, code/ and media/ structure. Keep the game local and offline; no server, public hosting or online mode. Do not change unrelated mechanics or replace approved assets without explicit approval. Use a scoped diff and document tests and limitations. Coordinate with game-audit after implementation.
+Work in the existing index.html, code/ and media/ structure. Keep the game local and offline; no server, public hosting or online mode. Do not change unrelated mechanics or replace approved assets without explicit approval. Use a scoped diff and document tests and limitations.

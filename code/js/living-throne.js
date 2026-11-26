@@ -19,11 +19,7 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const compact = matchMedia('(max-width: 850px), (max-height: 500px)');
   const images = new Map();
-  const spirits = [...scene.querySelectorAll('.makarych-spirit img')].map(image => {
-    const animated = image.getAttribute('src');
-    const name = animated.split('/').at(-1).replace('.webp', '');
-    return { image, animated, still: 'media/throne/' + name + '-still.webp' };
-  });
+  const captains = createCaptainAtmosphere(context);
   const candleLights = [
     { image: 'candle-left-front', x: 0, y: 645, phase: 1.3 },
     { image: 'candle-left-inner', x: 324, y: 620, phase: 3.6 },
@@ -117,6 +113,7 @@
         draw('ember', x, y, opacity * atmosphereOpacity, size, size * 1.55);
       }
     }
+    captains.paint(time, scene.dataset.paletteSide, reduced.matches, compact.matches);
     context.globalAlpha = 1;
   }
 
@@ -144,12 +141,6 @@
   function sync() {
     const covered = isCovered();
     const useStill = covered || reduced.matches;
-    spirits.forEach(({ image, animated, still }, index) => {
-      const duplicateOutOfView = index >= (compact.matches ? 2 : 3);
-      const source = useStill || duplicateOutOfView ? still : animated;
-      if (image.getAttribute('src') !== source) image.setAttribute('src', source);
-    });
-
     if (useStill) {
       if (frame) cancelAnimationFrame(frame);
       frame = 0;
@@ -179,7 +170,7 @@
   const assets = [...candleLights.map(light => light.image), 'window-cool', 'window-moon',
     'masonry-shadow', 'chain-reflection', 'fog-haze', 'fog-floor', 'ember'];
   const basePath = 'media/throne/';
-  Promise.all(assets.map(async name => {
+  const roomReady = Promise.all(assets.map(async name => {
     const image = new Image();
     image.src = basePath + name + '.webp';
     try {
@@ -188,7 +179,8 @@
     } catch (error) {
       console.warn('Throne atmosphere asset unavailable:', name, error);
     }
-  })).then(() => {
+  }));
+  Promise.all([roomReady, captains.ready]).then(() => {
     ready = true;
     sync();
   });

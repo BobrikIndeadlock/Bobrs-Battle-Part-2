@@ -10,7 +10,6 @@ body.bobrs-pause-finish #finish,body.bobrs-pause-finish #finish *,body.bobrs-pau
 #c91oOverlay:not(.show),#c91oOverlay:not(.show) *,#c91oOverlay:not(.show) *::before,#c91oOverlay:not(.show) *::after{animation-play-state:paused!important}
 
 body.bobrs-pause-atmosphere #livingAtmosphere *,
-body.bobrs-pause-atmosphere #scene .makarych-spirit,
 body.bobrs-pause-atmosphere #scene .turn-light83 *::before,
 body.bobrs-pause-atmosphere #scene .turn-light83 .motes83 i {
   animation-play-state: paused !important;

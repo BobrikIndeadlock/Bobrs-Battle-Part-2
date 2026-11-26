@@ -1,0 +1,110 @@
+[
+  {
+    "profile": "desktop",
+    "version": "before",
+    "width": 1440,
+    "height": 810,
+    "throttle": 1,
+    "shots": {
+      "first": {
+        "p95": 50,
+        "frames": 150,
+        "gapsAbove50": 2,
+        "styleMs": 40
+      },
+      "rewind": {
+        "p95": 33.4,
+        "frames": 170,
+        "gapsAbove50": 0,
+        "styleMs": 24
+      },
+      "second": {
+        "p95": 50,
+        "frames": 129,
+        "gapsAbove50": 3,
+        "styleMs": 27
+      }
+    }
+  },
+  {
+    "profile": "desktop",
+    "version": "after",
+    "width": 1440,
+    "height": 810,
+    "throttle": 1,
+    "shots": {
+      "first": {
+        "p95": 33.3,
+        "frames": 185,
+        "gapsAbove50": 1,
+        "styleMs": 41
+      },
+      "rewind": {
+        "p95": 33.4,
+        "frames": 152,
+        "gapsAbove50": 0,
+        "styleMs": 27
+      },
+      "second": {
+        "p95": 50,
+        "frames": 115,
+        "gapsAbove50": 1,
+        "styleMs": 27
+      }
+    }
+  },
+  {
+    "profile": "mobile",
+    "version": "before",
+    "width": 390,
+    "height": 844,
+    "throttle": 4,
+    "shots": {
+      "first": {
+        "p95": 16.8,
+        "frames": 208,
+        "gapsAbove50": 0,
+        "styleMs": 187
+      },
+      "rewind": {
+        "p95": 16.7,
+        "frames": 210,
+        "gapsAbove50": 0,
+        "styleMs": 156
+      },
+      "second": {
+        "p95": 16.8,
+        "frames": 208,
+        "gapsAbove50": 0,
+        "styleMs": 98
+      }
+    }
+  },
+  {
+    "profile": "mobile",
+    "version": "after",
+    "width": 390,
+    "height": 844,
+    "throttle": 4,
+    "shots": {
+      "first": {
+        "p95": 16.8,
+        "frames": 203,
+        "gapsAbove50": 1,
+        "styleMs": 182
+      },
+      "rewind": {
+        "p95": 16.7,
+        "frames": 207,
+        "gapsAbove50": 1,
+        "styleMs": 133
+      },
+      "second": {
+        "p95": 16.8,
+        "frames": 191,
+        "gapsAbove50": 2,
+        "styleMs": 185
+      }
+    }
+  }
+]

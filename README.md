@@ -26,3 +26,9 @@
 
 - [Пробуждение, призыв и затухание · общий и крупный планы](Bobrs-Battle-Part-2-Grimoire.mp4)
 - [Аудит гримуара и замеры](QA-grimoire.md)
+
+## Сцены Хроноса
+
+- [Первая сцена · вмешательство, перемотка и печать](Bobrs-Battle-Part-2-Chronos-Rewind.mp4)
+- [Вторая сцена · последняя карточка](Bobrs-Battle-Part-2-Chronos-Last-Card.mp4)
+- [Аудит обеих сцен и замеры](QA-chronos.md)

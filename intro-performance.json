@@ -1,0 +1,122 @@
+[
+  {
+    "profile": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 810,
+      "deviceScaleFactor": 1,
+      "cpu": 1
+    },
+    "version": "before",
+    "buffer": [
+      1438,
+      810
+    ],
+    "idle": {
+      "duration": 2508,
+      "p95": 33.3,
+      "intervals": 133,
+      "over50": 0,
+      "scriptMs": 27,
+      "styleMs": 10
+    },
+    "opening": {
+      "duration": 7057,
+      "p95": 50,
+      "intervals": 248,
+      "over50": 4,
+      "scriptMs": 16,
+      "styleMs": 32
+    }
+  },
+  {
+    "profile": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 810,
+      "deviceScaleFactor": 1,
+      "cpu": 1
+    },
+    "version": "after",
+    "buffer": [
+      824,
+      464
+    ],
+    "idle": {
+      "duration": 2512,
+      "p95": 50,
+      "intervals": 109,
+      "over50": 0,
+      "scriptMs": 19,
+      "styleMs": 11
+    },
+    "opening": {
+      "duration": 6069,
+      "p95": 50,
+      "intervals": 173,
+      "over50": 5,
+      "scriptMs": 30,
+      "styleMs": 59
+    }
+  },
+  {
+    "profile": {
+      "name": "mobile",
+      "width": 812,
+      "height": 375,
+      "deviceScaleFactor": 2,
+      "cpu": 4
+    },
+    "version": "before",
+    "buffer": [
+      999,
+      563
+    ],
+    "idle": {
+      "duration": 2505,
+      "p95": 16.8,
+      "intervals": 148,
+      "over50": 0,
+      "scriptMs": 131,
+      "styleMs": 57
+    },
+    "opening": {
+      "duration": 7059,
+      "p95": 16.8,
+      "intervals": 421,
+      "over50": 0,
+      "scriptMs": 80,
+      "styleMs": 263
+    }
+  },
+  {
+    "profile": {
+      "name": "mobile",
+      "width": 812,
+      "height": 375,
+      "deviceScaleFactor": 2,
+      "cpu": 4
+    },
+    "version": "after",
+    "buffer": [
+      544,
+      306
+    ],
+    "idle": {
+      "duration": 2516,
+      "p95": 16.8,
+      "intervals": 150,
+      "over50": 0,
+      "scriptMs": 56,
+      "styleMs": 53
+    },
+    "opening": {
+      "duration": 6039,
+      "p95": 16.8,
+      "intervals": 355,
+      "over50": 0,
+      "scriptMs": 236,
+      "styleMs": 509
+    }
+  }
+]

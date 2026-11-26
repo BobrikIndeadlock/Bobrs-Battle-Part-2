@@ -15,3 +15,8 @@
 
 - [Непрерывная запись с исходной моделью огоньков](Bobrs-Battle-Part-2-Summoning-Original-Orbs.mp4)
 - [Аудит исправления и замеры](QA-summoning-original-orbs.md)
+
+## Вход в замок
+
+- [Полная видеодемонстрация вступления](Bobrs-Battle-Part-2-Castle-Entrance.mp4)
+- [Аудит и замеры](QA-castle-entrance.md)

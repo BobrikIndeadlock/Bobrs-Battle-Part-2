@@ -11,22 +11,6 @@
 .face .back-footer{position:absolute;bottom:10%;font-size:clamp(5px,.55vw,10px);letter-spacing:.12em;color:#af765d}
 #grid .tile:disabled{pointer-events:none}
 
-/* ACT II — cinematic ten-flame grimoire ritual (GPU-light on iPhone). */
-.bobrs-summon-orb{width:clamp(17px,1.9vw,30px);height:clamp(17px,1.9vw,30px);animation-name:ritualOrbFlight;animation-duration:3s;animation-timing-function:cubic-bezier(.23,.52,.24,1);animation-fill-mode:both;filter:drop-shadow(0 0 7px #ffc15e) drop-shadow(0 0 16px #f04d20);background:radial-gradient(circle at 38% 34%,#ffffff 0%,#fff8d2 12%,#ffe58a 25%,#ffae36 43%,#f65116 65%,#a40c16 81%,transparent 94%)}
-.bobrs-summon-orb::before{inset:-100% -55% -60%;opacity:.9;clip-path:polygon(50% 100%,25% 74%,10% 40%,34% 51%,28% 3%,56% 36%,79% 0,72% 52%,97% 29%,78% 81%);animation-duration:.46s}
-.bobrs-summon-orb .hell-tail{height:clamp(70px,9vw,142px);width:clamp(16px,2vw,28px);opacity:.85;background:linear-gradient(to bottom,#fff2aa 0%,#ffa339bd 17%,#ef461bb0 43%,#a20d3444 67%,transparent 100%);filter:blur(5px);animation-duration:.52s}
-.bobrs-summon-orb .summon-wake{position:absolute;left:50%;top:100%;width:clamp(8px,1vw,18px);height:clamp(88px,10vw,155px);transform:translateX(-50%) rotate(var(--lean));transform-origin:top center;pointer-events:none;border-radius:90% 90% 70% 70%;background:linear-gradient(180deg,#fffae29c,#ff8b286b 28%,#be214633 60%,transparent);filter:blur(8px);animation:ritualWake .64s ease-in-out infinite alternate;animation-delay:var(--flickerDelay)}
-.bobrs-summon-orb .summon-halo{position:absolute;inset:-60%;border-radius:50%;background:radial-gradient(circle,#fff6be40 0%,#ffae2345 32%,#e1232924 58%,transparent 72%);animation:ritualHalo 1.45s ease-in-out infinite alternate;pointer-events:none}
-.stage-fx.summon-charged .bobrs-summon-orb{filter:drop-shadow(0 0 12px #ffe7ae) drop-shadow(0 0 25px #ff5a29);transition:filter .4s}
-@keyframes ritualOrbFlight{0%{opacity:0;transform:translate(-50%,30px) scale(.12)}7%{opacity:1}27%{transform:translate(calc(var(--dx20) + var(--curve)),calc(var(--dy27) - 75px)) scale(.91)}57%{transform:translate(var(--dx70),calc(var(--dy70) - 38px)) scale(1.13)}82%{opacity:1;transform:translate(var(--dx),calc(var(--dy) - 16px)) scale(1.1)}100%{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)}}
-@keyframes ritualWake{from{opacity:.43;transform:translateX(-50%) rotate(var(--lean)) scaleX(.7) scaleY(.77)}to{opacity:.85;transform:translateX(-50%) rotate(var(--lean)) scaleX(1.18) scaleY(1.18)}}
-@keyframes ritualHalo{from{opacity:.35;transform:scale(.8)}to{opacity:.9;transform:scale(1.32)}}
-.summon-impact-flash{background:radial-gradient(ellipse at 50% 50%,#ffffff 0%,#fffdf0 26%,#ffe6b5 55%,#ef8d44 78%,#4a1230 100%);animation-duration:1.03s}
-.summon-impact-flash::before{content:'';position:absolute;inset:-20%;background:repeating-conic-gradient(from 4deg at 50% 50%,#fff8eebd 0deg 7deg,transparent 9deg 25deg);mix-blend-mode:screen;animation:ritualFlashRays 1.03s ease-out both}
-@keyframes ritualFlashRays{0%{opacity:0;transform:scale(.12) rotate(-12deg)}18%{opacity:.85}100%{opacity:0;transform:scale(1.4) rotate(18deg)}}
-@media(max-width:850px){.bobrs-summon-orb .summon-wake{height:66px}.bobrs-summon-orb .hell-tail{height:72px}.bobrs-summon-orb .summon-halo{inset:-40%}}
-@media(prefers-reduced-motion:reduce){.bobrs-summon-orb .summon-wake,.bobrs-summon-orb .summon-halo{animation:none}}
-
 /* === Stage 3: cinematic pair reveal === */
 .compare.arcane-cinematic{overflow:hidden}
 .compare-stage-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
@@ -78,14 +62,7 @@
 #book:disabled,.grimoire:disabled{pointer-events:none!important;touch-action:none!important}
 #grid{position:relative;z-index:26;pointer-events:auto!important}
 #grid>.tile:not(:disabled){pointer-events:auto!important;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
-#fx,.stage-fx,.bobrs-shuffle-layer,.summon-impact-flash{pointer-events:none!important}
-/* The tenth spark must be rendered exactly like the others. */
-#fx>.bobrs-summon-orb{visibility:visible!important}
-/* Use a direct opacity handoff for the flash, avoiding Safari animation glitches. */
-.summon-impact-flash.bobrs-force-flash{animation:none!important;opacity:0!important;transition:opacity .13s ease-out!important;background:#fff5df!important;will-change:opacity;}
-.summon-impact-flash.bobrs-force-flash.bobrs-flash-on{opacity:1!important}
-.summon-impact-flash.bobrs-force-flash.bobrs-flash-off{opacity:0!important;transition:opacity .55s ease-out!important}
-.summon-impact-flash.bobrs-force-flash::before{display:none!important}
+#fx,.stage-fx,.bobrs-shuffle-layer{pointer-events:none!important}
 
 /* === Card back variant 1 integration + hover/full-bleed fixes === */
 .tile{padding:0;overflow:visible;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(0)}

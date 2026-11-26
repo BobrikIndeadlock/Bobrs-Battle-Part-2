@@ -142,106 +142,44 @@ function captainUpdate(){captainTurn=turn%2;for(let i=0;i<2;i++){$('chrono84-'+i
 function backMarkup(){return '<div class="face card-back-face"><img class="card-back-image" src="media/images/draft-card-back.png" alt="" draggable="false"></div>'}
 function displayGrid(){const grid=$('grid');grid.replaceChildren();for(let i=0;i<available.length;i++){const c=available[i];const blocked=isHeroChainedForCaptain(c,captainTurn);const b=document.createElement('button');b.type='button';b.className='tile'+(available.length===1?' legendary':'')+(blocked?' chronos-sealed':'');b.setAttribute('aria-label',blocked?('Карта '+c.name+' запечатана Кроносом'):('Закрытая карта '+(i+1)));b.innerHTML=backMarkup();if(blocked){const image=b.querySelector('.card-back-image');if(image)image.src=chronosSealedBack;}b.style.animationDelay=(i*.038)+'s';b.onclick=()=>tapCard(c.id);b.disabled=state!=='choose'||!playableCards().some(card=>card.id===c.id);if(blocked){b.title='Кронос запечатал эту карту. Она недоступна для '+currentName();b.setAttribute('aria-disabled','true')}grid.append(b)}}
 function currentName(){return captains[captainTurn]}
-function waitForOrbArrival(orb,fallbackMs){
- return new Promise(resolve=>{
-  if(!orb){resolve();return}
-  let complete=false,timer=null;
-  const onEnd=e=>{if(e.target===orb&&(e.animationName==='ritualOrbFlight'||e.animationName==='hellSparkFlight'))finish()};
-  const finish=()=>{if(complete)return;complete=true;clearTimeout(timer);orb.removeEventListener('animationend',onEnd);resolve()};
-  orb.addEventListener('animationend',onEnd);
-  timer=setTimeout(finish,fallbackMs);
- });
-}
-async function handoffSummonSequence(fx,grid){
- let flash=null;
- try{
-  // Display the flash in its own composited frame, before changing cards.
-  flash=document.createElement('div');
-  flash.className='summon-impact-flash bobrs-force-flash';
-  flash.setAttribute('aria-hidden','true');
-  document.body.append(flash);
-  void flash.offsetWidth;
-  flash.classList.add('bobrs-flash-on');
-  await delay(190);
-  // Deal while the screen is opaque: no abrupt jump from sparks to cards.
-  fx.replaceChildren();fx.classList.remove('summon-charged');
-  state='choose';
-  displayGrid();
-  grid.querySelectorAll('.tile').forEach(card=>{card.disabled=false;card.removeAttribute('aria-disabled')});
-  captainUpdate();
-  status('Ход '+currentName()+' · нажмите на две закрытые карты');
-  flash.classList.remove('bobrs-flash-on');flash.classList.add('bobrs-flash-off');
-  await delay(590);
- }catch(err){console.error('Bobrs summon handoff:',err)}
- finally{
-  flash?.remove();fx.replaceChildren();fx.classList.remove('summon-charged');
-  if(state==='summoning')state='choose';
-  if(grid.children.length!==available.length)displayGrid();
-  grid.querySelectorAll('.tile').forEach(card=>{card.disabled=false;card.removeAttribute('aria-disabled')});
-  captainUpdate();
-  if(state==='choose'){status('Ход '+currentName()+' · нажмите на две закрытые карты');skipBlockedTurnIfNeeded();}
- }
-}
 async function summon(){
  if(state!=='idle')return;
+ const controller=new AbortController();
+ summonController=controller;
  state='summoning';
  $('book').disabled=true;
  available=shuffle(baseCharacters).slice(0,10);
  teams=[[],[]];turn=0;selectedPair=[];pair=[];duoLock=[null,null];chronosSecretPlayed=false;hideChronosEvent();randomizeScriptedDuoPicks();
  captainUpdate();
  status('Гримуар пробуждается…');
+
  const fx=$('fx'),grid=$('grid');
- fx.replaceChildren();fx.classList.remove('summon-charged');grid.replaceChildren();
- const scene=$('scene').getBoundingClientRect(),bounds=$('center').getBoundingClientRect();
- const total=10,flight=2400,interval=180,afterLastOrbDelay=1300;
- let lastOrb=null;
+ grid.classList.add('summon-preparing');
+ displayGrid();
+ for(const card of grid.children)card.classList.add('summoned-tile');
  try{
-  // Compute ten distinct 5x2 endpoints and render them all before the flight begins.
-  const fragment=document.createDocumentFragment();
-  for(let i=0;i<total;i++){
-   const orb=document.createElement('div');
-   orb.className='orb bobrs-summon-orb';
-   orb.dataset.orbNumber=String(i+1);
-   orb.setAttribute('aria-hidden','true');
-   orb.style.animationDuration=flight+'ms';
-   const col=i%5,row=Math.floor(i/5);
-   const x=bounds.left+(col+.5)*bounds.width/5-scene.left;
-   const y=bounds.top+(row+.5)*bounds.height/2-scene.top;
-   const dx=x-scene.width*.5,dy=y-scene.height*.88;
-   orb.style.setProperty('--dx',dx+'px');
-   orb.style.setProperty('--dy',dy+'px');
-   orb.style.setProperty('--dx20',(dx*.2)+'px');
-   orb.style.setProperty('--dx70',(dx*.7)+'px');
-   orb.style.setProperty('--dy27',(dy*.27)+'px');
-   orb.style.setProperty('--dy70',(dy*.7)+'px');
-   orb.style.setProperty('--lean',((col-2)*6)+'deg');
-   orb.style.setProperty('--curve',((col-2)*18)+'px');
-   orb.style.setProperty('--flickerDelay',(-i*.13)+'s');
-   orb.style.animationDelay=(i*interval)+'ms';
-   const tail=document.createElement('span');tail.className='hell-tail';orb.append(tail);
-   const wake=document.createElement('span');wake.className='summon-wake';orb.append(wake);
-   const halo=document.createElement('span');halo.className='summon-halo';orb.append(halo);
-   for(let j=0;j<2;j++){
-    const ember=document.createElement('i');ember.className='hell-ember';
-    ember.style.setProperty('--ex',((j?1:-1)*(13+j*9))+'px');
-    ember.style.setProperty('--ey',(-(34+j*20))+'px');
-    ember.style.setProperty('--delay',(-j*.17)+'s');
-    ember.style.setProperty('--t',(.7+j*.15)+'s');
-    ember.style.setProperty('--s',(3+j*2)+'px');
-    orb.append(ember);
-   }
-   fragment.append(orb);
-   if(i===total-1)lastOrb=orb;
+  await summoningRitual.play({
+   scene:$('scene'),grid,layer:fx,signal:controller.signal,
+   onCharge:()=>status('Все десять огней заняли свои места…'),
+   onReveal:()=>{
+    grid.classList.replace('summon-preparing','summon-materializing');
+    status('Карты обретают форму…');
+   },
+  });
+ }catch(error){
+  console.warn('Summoning effects unavailable:',error);
+ }finally{
+  if(summonController===controller){
+   summonController=null;
+   fx.replaceChildren();
+   state='choose';
+   for(const card of grid.children)card.disabled=false;
+   grid.classList.remove('summon-preparing','summon-materializing');
+   captainUpdate();
+   status('Ход '+currentName()+' · нажмите на две закрытые карты');
+   skipBlockedTurnIfNeeded();
   }
-  // Attach last-orb completion listener before starting animations.
-  fx.append(fragment);
-  const arrived=waitForOrbArrival(lastOrb,flight+(total-1)*interval+250);
-  await arrived;
-  fx.classList.add('summon-charged');
-  status('Все десять огней заняли свои места…');
-  await delay(afterLastOrbDelay);
- }catch(err){console.error('Bobrs summon animation:',err)}
- await handoffSummonSequence(fx,grid);
+ }
 }
 
 function tapCard(id){
@@ -415,6 +353,7 @@ async function choose(id){
  }else turn++;
  if(!available.length){state='done';captainUpdate();showFinish();return}
  state='shuffling';captainUpdate();status('Оставшиеся карты собираются в колоду…');let grid=$('grid');const oldTiles=[...grid.children],gridRect=grid.getBoundingClientRect();const pileX=gridRect.left+gridRect.width/2,pileY=gridRect.top+gridRect.height/2;oldTiles.forEach((el,i)=>{const rect=el.getBoundingClientRect();el.style.animation='none';el.style.transition='transform .65s cubic-bezier(.4,0,.2,1),opacity .6s';el.style.zIndex=String(i+1);el.style.transform=`translate(${pileX-(rect.left+rect.width/2)}px,${pileY-(rect.top+rect.height/2)}px) scale(.76) rotate(${(i%2?1:-1)*(8+i*3)}deg)`;el.style.opacity='.95'});await delay(690);status('Колода перемешивается…');oldTiles.forEach((el,i)=>{el.style.transition='transform .2s ease-in-out';el.style.transform+=` rotate(${(i%2?1:-1)*85}deg)`});await delay(260);available=shuffle(available);displayGrid();[...grid.children].forEach((el,i)=>{const rr=el.getBoundingClientRect();el.style.animation='none';el.style.transition='none';el.style.opacity='.7';el.style.transform=`translate(${pileX-(rr.left+rr.width/2)}px,${pileY-(rr.top+rr.height/2)}px) scale(.75) rotate(${(i-5)*12}deg)`});void grid.offsetWidth;[...grid.children].forEach((el,i)=>{el.style.transition=`transform .65s cubic-bezier(.16,.75,.3,1) ${i*35}ms, opacity .5s ${i*35}ms`;el.style.transform='translate(0,0) scale(1) rotate(0deg)';el.style.opacity='1'});await delay(1020);if(!chronosSecretPlayed&&teams[0].length+teams[1].length===9&&available.length===1){chronosSecretPlayed=true;state='cutscene';displayGrid();try{await window.playChronosSecret91()}catch(err){console.error('Chronos secret:',err)}}state='choose';captainUpdate();displayGrid();status('Ход '+currentName()+(playableCards().length===1?' · нажмите на доступную карту':' · нажмите на две закрытые карты'));skipBlockedTurnIfNeeded()}
+let summonController=null;
 let vsFinishToken=0;
 function skipVsIntro(){const finish=$('finish');finish.classList.add('vs-intro','vs-armies','vs-ready');finish.querySelectorAll('.vs-small-card,.vs-team').forEach(el=>{el.style.animation='none';el.style.opacity='1';el.style.transform='none';el.style.filter='none'});finish.querySelectorAll('.vs-captain,.vs-mark,.vs-headline').forEach(el=>{el.style.animation='none';el.style.opacity='1';el.style.transform='none';el.style.filter='none'});vsFinishToken++}
 function showFinish(){
@@ -438,7 +377,7 @@ function showFinish(){
 }
 function showMoviePoster(){const m=$('movieFinal');if(!m.classList.contains('active'))return;$('movieVideo').pause();m.classList.add('poster');$('moviePlay').style.display='none'}
 $('movieVideo').onended=showMoviePoster;$('movieVideo').onerror=showMoviePoster;$('movieSkip').onclick=showMoviePoster;$('moviePlay').onclick=()=>{$('movieVideo').play().then(()=>{$('moviePlay').style.display='none'}).catch(()=>{})};$('movieContinue').onclick=()=>{$('movieFinal').className='';$('finish').classList.add('visible');skipVsIntro()};$('vsSkip').onclick=skipVsIntro;
-function reset(){$('movieVideo').pause();$('movieFinal').className='';vsFinishToken++;$('finish').classList.remove('visible','vs-intro','vs-armies','vs-ready');$('compare').classList.remove('visible','arcane-cinematic','arcane-ready','arcane-flare','arcane-selectable','arcane-resolving');$('scene').classList.remove('arcane-choosing');$('fx').replaceChildren();hideChronosEvent();available=[];teams=[[],[]];selectedPair=[];turn=0;state='idle';duoLock=[null,null];chronosSecretPlayed=false;$('book').disabled=false;$('grid').replaceChildren();captainUpdate();status('Нажмите на гримуар, чтобы призвать десять карт')}
+function reset(){summonController?.abort();summonController=null;$('grid').classList.remove('summon-preparing','summon-materializing');$('movieVideo').pause();$('movieFinal').className='';vsFinishToken++;$('finish').classList.remove('visible','vs-intro','vs-armies','vs-ready');$('compare').classList.remove('visible','arcane-cinematic','arcane-ready','arcane-flare','arcane-selectable','arcane-resolving');$('scene').classList.remove('arcane-choosing');$('fx').replaceChildren();hideChronosEvent();available=[];teams=[[],[]];selectedPair=[];turn=0;state='idle';duoLock=[null,null];chronosSecretPlayed=false;$('book').disabled=false;$('grid').replaceChildren();captainUpdate();status('Нажмите на гримуар, чтобы призвать десять карт')}
 $('book').onclick=summon;$('restart').onclick=reset;captainUpdate();status('Нажмите на гримуар, чтобы призвать десять карт');
 window.BobrsNewDraft={restart:reset,phase:()=>state,teams:()=>teams.map(t=>[...t])};
 

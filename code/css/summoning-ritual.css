@@ -1,0 +1,43 @@
+/* Scoped to the grimoire sequence. The real card backs retain their usual art and hitboxes. */
+#fx .summoning-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#grid.summon-preparing > .tile {
+  opacity: 0 !important;
+  visibility: hidden;
+  animation-name: none;
+}
+
+#grid > .summoned-tile:not(.arcane-picked) {
+  animation-name: none;
+}
+
+#grid.summon-materializing > .summoned-tile {
+  animation-name: summon-card-materialize;
+  animation-duration: .68s;
+  animation-timing-function: cubic-bezier(.21, .68, .22, 1);
+  animation-fill-mode: both;
+}
+
+@keyframes summon-card-materialize {
+  from { opacity: 0; transform: translateY(5%) scale(.94); }
+  52% { opacity: .82; }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #grid.summon-materializing > .summoned-tile {
+    animation-name: summon-card-static-fade;
+    animation-duration: .26s;
+    animation-delay: 0s !important;
+  }
+
+  @keyframes summon-card-static-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}

@@ -1,1 +1,12 @@
-#intro-life82{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;transition:opacity 1.2s ease}#intro-gate{z-index:4}#intro-stage.open #intro-life82{opacity:0}@media(prefers-reduced-motion:reduce){#intro-life82{display:none}}
+#intro-life82 {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #intro-life82 { display: none; }
+}

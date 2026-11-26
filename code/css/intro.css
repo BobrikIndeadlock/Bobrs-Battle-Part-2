@@ -1,2 +1,207 @@
-#intro-stage{position:fixed;z-index:2147483647;inset:0;display:grid;place-items:center;overflow:hidden;background:#090407}#intro-world{position:relative;width:max(100vw,177.68vh);height:max(100vh,56.28vw);flex:none;justify-self:center;align-self:center;transform-origin:50% 54%;transition:transform 4.5s cubic-bezier(.45,.02,.65,1) 2s} .intro-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none}#intro-inside{filter:brightness(.55);transition:filter 4s}#intro-left,#intro-right{transition:transform 3.8s cubic-bezier(.45,.05,.25,1),filter 3.8s;backface-visibility:hidden}#intro-left{transform-origin:31.55% 50%;transform:scaleX(1)}#intro-right{transform-origin:68.45% 50%;transform:scaleX(1)}#intro-gate{position:absolute;left:31%;top:27%;width:38%;height:50%;border:0;background:transparent;cursor:pointer;z-index:4}#intro-stage.open #intro-left{transform:perspective(950px) rotateY(83deg) scaleX(1);filter:brightness(.35)}#intro-stage.open #intro-right{transform:perspective(950px) rotateY(-83deg) scaleX(1);filter:brightness(.35)}#intro-stage.open #intro-world{transform:scale(3.2)}#intro-stage.open #intro-inside{filter:brightness(1)}#intro-stage.open #intro-gate{pointer-events:none}#intro-end{position:absolute;inset:0;background:center/cover no-repeat;opacity:0;pointer-events:none;transition:opacity 1.5s}#intro-stage.done #intro-end{opacity:1}#intro-replay{position:fixed;bottom:15px;right:15px;z-index:10;background:#170a10d9;color:#e9c9a3;border:1px solid #9c6947;padding:10px 16px;border-radius:4px;cursor:pointer}#intro-stage:not(.done) #intro-replay{display:none}@media(orientation:portrait){#intro-world{width:100vw;height:56.28vw}}#intro-stage.open #intro-closed{visibility:hidden}#intro-world{width:min(100vw,177.586vh);height:min(100vh,56.31vw)}
-#intro-stage{transition:opacity .8s; isolation:isolate}#intro-stage.exit{opacity:0;pointer-events:none}
+#intro-stage {
+  position: fixed;
+  z-index: 2147483647;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  background: #070309;
+  --intro-entry-time: 6000ms;
+}
+
+#intro-forecourt {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+}
+
+#intro-world {
+  position: relative;
+  width: min(100vw, 177.586dvh);
+  aspect-ratio: 1648 / 928;
+  transform-origin: 50% 51%;
+}
+
+/* Match the portrait arena, which occupies the same landscape strip at the top. */
+@media (orientation: portrait) {
+  #intro-forecourt {
+    bottom: auto;
+    aspect-ratio: 1648 / 928;
+    overflow: hidden;
+  }
+}
+
+.intro-layer,
+.intro-doors,
+.intro-door {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.intro-doors {
+  perspective: var(--intro-perspective, 1000px);
+  perspective-origin: 50% 51%;
+}
+
+.intro-door {
+  transform-style: preserve-3d;
+  --swing: 78deg;
+}
+#intro-left { transform-origin: 31.55% 50%; }
+#intro-right {
+  transform-origin: 68.45% 50%;
+  --swing: -78deg;
+}
+.intro-door .intro-layer { backface-visibility: hidden; }
+
+/* The narrow side surface only becomes visible as the leaf turns. */
+.intro-door::after {
+  content: "";
+  position: absolute;
+  top: 25%;
+  bottom: 23.15%;
+  left: 50%;
+  width: .75%;
+  background: linear-gradient(90deg, #130d10, #432724 57%, #151115);
+  transform: translateX(-50%) rotateY(90deg);
+  opacity: 0;
+}
+#intro-stage.open .intro-door::after { opacity: .84; }
+
+.intro-metal {
+  position: absolute;
+  top: 24.14%;
+  height: 53.23%;
+  pointer-events: none;
+  backface-visibility: hidden;
+  opacity: .42;
+}
+#intro-left .intro-metal { left: 31.31%; width: 18.93%; }
+#intro-right .intro-metal { left: 49.76%; width: 19.05%; }
+
+#intro-arch { z-index: 1; }
+#intro-closed { z-index: 2; }
+
+#intro-gate {
+  position: absolute;
+  z-index: 5;
+  left: 31.55%;
+  top: 24.8%;
+  width: 36.9%;
+  height: 52.14%;
+  clip-path: polygon(0 100%, 0 34%, 5% 21%, 13% 12%, 26% 5%, 40% 1%,
+    50% 0, 60% 1%, 74% 5%, 87% 12%, 95% 21%, 100% 34%, 100% 100%);
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+#intro-gate:focus-visible {
+  outline: none;
+  background: rgba(243, 170, 114, .075);
+}
+@media (hover: hover) and (pointer: fine) {
+  #intro-gate:hover { background: rgba(246, 153, 108, .025); }
+}
+
+#intro-interior {
+  position: absolute;
+  left: var(--hall-left, 0px);
+  top: var(--hall-top, 0px);
+  width: var(--hall-width, 100%);
+  height: var(--hall-height, 100%);
+  transform-origin: 0 0;
+  transform: var(--start-view, none);
+}
+#intro-inside {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+#intro-interior::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #130811;
+  opacity: .48;
+}
+
+#intro-stage.open {
+  animation: intro-handoff var(--intro-entry-time) linear both;
+}
+#intro-stage.open #intro-closed {
+  transition: opacity 180ms ease-in;
+  opacity: 0;
+}
+#intro-stage.open #intro-gate { visibility: hidden; }
+#intro-stage.open .intro-door {
+  animation: intro-heavy-door 3650ms cubic-bezier(.35, .15, .30, 1) both;
+}
+#intro-stage.open #intro-right { animation-delay: 120ms; }
+#intro-stage.open .intro-metal {
+  animation: intro-door-glint 3700ms ease-in-out both;
+}
+#intro-stage.open #intro-world {
+  animation: intro-approach var(--intro-entry-time) cubic-bezier(.34, .10, .28, 1) both;
+}
+#intro-stage.open #intro-interior {
+  animation: intro-interior-register var(--intro-entry-time) ease-in-out both;
+}
+#intro-stage.open #intro-interior::after {
+  animation: intro-interior-light var(--intro-entry-time) linear both;
+}
+
+@keyframes intro-heavy-door {
+  0%, 9% { transform: rotateY(0deg); }
+  25% { transform: rotateY(calc(var(--swing) * .13)); }
+  68% { transform: rotateY(calc(var(--swing) * .85)); }
+  91%, 100% { transform: rotateY(var(--swing)); }
+}
+@keyframes intro-door-glint {
+  0% { opacity: .42; }
+  36% { opacity: .65; }
+  100% { opacity: .24; }
+}
+@keyframes intro-approach {
+  0%, 23% { transform: scale(1); }
+  45% { transform: scale(1.13); }
+  78% { transform: scale(var(--intro-zoom-mid, 2.5)); }
+  93%, 100% { transform: scale(var(--intro-zoom, 3.4)); }
+}
+@keyframes intro-interior-register {
+  0%, 33% { transform: var(--start-view, none); }
+  83%, 100% { transform: none; }
+}
+@keyframes intro-interior-light {
+  0%, 15% { opacity: .48; }
+  53% { opacity: .27; }
+  82%, 100% { opacity: 0; }
+}
+@keyframes intro-handoff {
+  0%, 83% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #intro-stage { --intro-entry-time: 460ms; }
+  #intro-stage.open { animation-name: intro-quiet-handoff; }
+  #intro-stage.open #intro-world,
+  #intro-stage.open #intro-interior,
+  #intro-stage.open #intro-interior::after,
+  #intro-stage.open .intro-door,
+  #intro-stage.open .intro-metal { animation: none; }
+  #intro-stage.open #intro-closed { opacity: 1; transition: none; }
+  @keyframes intro-quiet-handoff {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+}

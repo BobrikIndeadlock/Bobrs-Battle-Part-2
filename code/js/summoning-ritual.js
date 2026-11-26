@@ -1,7 +1,7 @@
 const summoningRitual = (() => {
   const media = 'media/summoning/';
   const filenames = {
-    flame: 'flame-atlas.webp', haze: 'ember-haze.webp',
+    haze: 'ember-haze.webp',
     light: 'stone-light.webp', rays: 'vault-rays.webp', wave: 'resonance.webp',
     book: 'book-light.webp', left: 'left-light.webp', right: 'right-light.webp',
     ember: '../throne/ember.webp',
@@ -55,7 +55,7 @@ const summoningRitual = (() => {
         x1: 480 + spread * (index < 5 ? 26 : 19), y1: 379 + index % 3 * 7,
         x2: endX + spread * 19, y2: endY - (index < 5 ? 42 : 27),
         x3: endX, y3: endY,
-        variation: noise(index + 1), depth: index < 5 ? .85 : 1,
+        variation: noise(index + 1),
       };
     });
   }
@@ -66,21 +66,6 @@ const summoningRitual = (() => {
       if (!image || alpha <= 0) return;
       context.globalAlpha = clamp(alpha);
       context.drawImage(image, x, y, w, h);
-    }
-
-    function flame(x, y, size, angle, frame, alpha) {
-      const image = textures.get('flame');
-      if (!image || alpha <= 0) return;
-      const w = image.width / 4;
-      const h = image.height / 3;
-      const height = size * h / w;
-      context.save();
-      context.globalAlpha = clamp(alpha);
-      context.translate(x, y);
-      context.rotate(angle);
-      context.drawImage(image, frame % 4 * w, Math.floor(frame / 4) * h, w, h,
-        -size * .5, -height * .66, size, height);
-      context.restore();
     }
 
     function spark(path, age, index, burst, strength) {
@@ -94,50 +79,19 @@ const summoningRitual = (() => {
       plate('ember', x, y, size, size * 1.45, (1 - progress) ** 1.7 * strength);
     }
 
-    function fire(path, index, time) {
+    function trail(path, index, time) {
       const age = time - firstEmission - index * spacing;
-      if (age <= 0) return;
-      const falloff = 1 - smooth((time - impact + 30) / 570);
-      if (!falloff) return;
-      const launch = smooth(age / 140);
-      const flightAmount = clamp(age / flight);
-      const settled = age > flight;
-      const body = point(path, age);
-      const next = point(path, age + 20);
-      const lift = smooth((age - flight) / 360);
-      const charge = smooth((time - 4100) / (impact - 4100));
-      const float = settled ? Math.sin((age - flight) / 220 + path.variation * 6) * lift : 0;
-      const x = body.x + float * 2.5;
-      const y = body.y + float * 4.5;
-      const tilt = Math.atan2(next.x - body.x, Math.max(0.02, body.y - next.y)) * .57;
-      const angle = settled ? float * .12 : tilt * (1 - smooth((age - flight + 420) / 420));
-      const pulse = 1 + Math.sin(age / 113 + index) * .08 + Math.sin(age / 71) * .045;
-      const size = (24 + path.variation * 7) * path.depth * pulse *
-        (.82 + .18 * smooth(age / 280) + charge * .22);
-      const frame = Math.floor(age / (62 + path.variation * 23) + index * 3) % 12;
-
-      if (!settled || age < flight + 330) {
-        const motion = Math.sin(Math.PI * flightAmount) * .56 + .18;
-        for (let i = compact ? 3 : 5; i >= 1; i--) {
-          const lag = i * 40;
-          if (age <= lag) continue;
-          const tail = point(path, age - lag);
-          plate('haze', tail.x - 16 - i * 2, tail.y - 10,
-            31 + i * 4, 28 + i * 3, motion * falloff * (1 - i / 6) * .7);
-          if (i < 4) flame(tail.x, tail.y, size * (1 - i * .18), angle + i * .10,
-            (frame + 12 - i) % 12, motion * falloff * (1 - i / 4) * .55);
-        }
+      if (age <= 0 || age >= flight + 310) return;
+      const travel = clamp(age / flight);
+      const strength = Math.sin(Math.PI * travel) * .37 + .10;
+      const dissolve = 1 - smooth((age - flight + 50) / 360);
+      for (let i = compact ? 3 : 5; i >= 1; i--) {
+        const lag = i * 47;
+        if (age <= lag) continue;
+        const tail = point(path, age - lag);
+        plate('haze', tail.x - 12 - i, tail.y - 8, 24 + i * 3.2, 18 + i * 2.8,
+          strength * dissolve * (1 - i / 6) * smooth(age / 330));
       }
-
-      const sparkCount = compact ? 3 : 5;
-      for (let i = 0; i < sparkCount; i++) {
-        spark(path, age, i, settled, launch * falloff * (.6 + charge * .22));
-      }
-
-      flame(x, y, size, angle, frame, launch * falloff);
-      // Smaller live filament inside the moving silhouette.
-      flame(x + 1, y + 3, size * .50, angle * .8, (frame + 7) % 12,
-        launch * falloff * (.36 + charge * .24));
     }
 
     return (time, paths, reduced) => {
@@ -180,7 +134,7 @@ const summoningRitual = (() => {
         plate('rays', 0, 0, sceneWidth, sceneHeight, charge * .11);
       }
 
-      paths.forEach((path, index) => fire(path, index, time));
+      paths.forEach((path, index) => trail(path, index, time));
 
       if (sinceImpact >= 200 && residual > 0) {
         paths.forEach((path, index) => {
@@ -196,9 +150,63 @@ const summoningRitual = (() => {
     };
   }
 
+  function mountOrbs(layer, cards) {
+    return Array.from(cards, (_, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'summoning-flight';
+      wrapper.hidden = true;
+      wrapper.setAttribute('aria-hidden', 'true');
+      const orb = document.createElement('div');
+      orb.className = 'orb bobrs-summon-orb';
+      orb.dataset.orbNumber = String(index + 1);
+      orb.style.setProperty('--lean', (index % 5 - 2) * 6 + 'deg');
+      orb.style.setProperty('--flickerDelay', -index * .13 + 's');
+      for (const part of ['hell-tail', 'summon-wake', 'summon-halo']) {
+        const element = document.createElement('span');
+        element.className = part;
+        orb.append(element);
+      }
+      for (let i = 0; i < 2; i++) {
+        const ember = document.createElement('i');
+        ember.className = 'hell-ember';
+        ember.style.setProperty('--ex', (i ? 1 : -1) * (13 + i * 9) + 'px');
+        ember.style.setProperty('--ey', -34 - i * 20 + 'px');
+        ember.style.setProperty('--delay', -i * .17 + 's');
+        ember.style.setProperty('--t', .7 + i * .15 + 's');
+        ember.style.setProperty('--s', 3 + i * 2 + 'px');
+        orb.append(ember);
+      }
+      wrapper.append(orb);
+      layer.append(wrapper);
+      return wrapper;
+    });
+  }
+
+  function placeOrbs(orbs, paths, time, scale) {
+    const fade = 1 - smooth((time - impact + 20) / 430);
+    paths.forEach((path, index) => {
+      const wrapper = orbs[index];
+      const age = time - firstEmission - index * spacing;
+      if (age <= 0 || !fade) {
+        if (!wrapper.hidden) wrapper.hidden = true;
+        return;
+      }
+
+      if (wrapper.hidden) wrapper.hidden = false;
+      const body = point(path, age);
+      const hover = Math.max(0, age - flight);
+      const sway = Math.sin(hover / 340 + path.variation * 6) * smooth(hover / 460);
+      const x = (body.x + sway * 2.2) * scale.x;
+      const y = (body.y + sway * (2.8 + path.variation)) * scale.y;
+      const size = .15 + .85 * smooth(age / 325);
+      wrapper.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${size})`;
+      wrapper.style.opacity = smooth(age / 180) * fade;
+    });
+  }
+
   async function play({ scene, grid, layer, signal, onCharge, onReveal }) {
     await loaded;
-    if (signal.aborted || document.hidden || !textures.has('flame')) return;
+    if (signal.aborted || document.hidden) return;
 
     const compact = matchMedia('(max-width: 850px), (max-height: 500px)').matches;
     const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -212,8 +220,15 @@ const summoningRitual = (() => {
     context.scale(canvas.width / sceneWidth, canvas.height / sceneHeight);
     layer.append(canvas);
 
-    let paths = getPaths(scene, grid);
-    const observer = new ResizeObserver(() => { paths = getPaths(scene, grid); });
+    const orbs = reduced.matches ? [] : mountOrbs(layer, grid.children);
+    let paths, scale;
+    const measure = () => {
+      paths = getPaths(scene, grid);
+      const frame = scene.getBoundingClientRect();
+      scale = { x: frame.width / sceneWidth, y: frame.height / sceneHeight };
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
     observer.observe(scene);
     observer.observe(grid);
     const paint = painter(context, compact);
@@ -238,6 +253,8 @@ const summoningRitual = (() => {
         document.removeEventListener('visibilitychange', visibilityChanged);
         reduced.removeEventListener('change', motionChanged);
         canvas.remove();
+        orbs.forEach(orb => orb.remove());
+        layer.classList.remove('summon-charged');
         resolve();
       }
 
@@ -245,8 +262,8 @@ const summoningRitual = (() => {
         if (document.hidden) finish();
       }
 
-      function motionChanged(event) {
-        if (event.matches) finish();
+      function motionChanged() {
+        finish();
       }
 
       function draw(now) {
@@ -260,6 +277,7 @@ const summoningRitual = (() => {
         try {
           if (!charged && !still && time >= firstEmission + 9 * spacing + flight) {
             charged = true;
+            layer.classList.add('summon-charged');
             onCharge();
           }
           if (!revealed && time >= (still ? 90 : reveal)) {
@@ -269,6 +287,7 @@ const summoningRitual = (() => {
           const gap = lastPaint === null ? interval : now - lastPaint;
           if (gap >= interval - .4) {
             paint(time, paths, still);
+            if (orbs.length) placeOrbs(orbs, paths, time, scale);
             lastPaint = now - Math.max(0, gap - interval) % interval;
           }
           frame = requestAnimationFrame(draw);

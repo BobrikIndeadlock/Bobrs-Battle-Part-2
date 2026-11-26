@@ -1,0 +1,142 @@
+[
+  {
+    "mode": "desktop",
+    "variant": "before",
+    "rate": 1,
+    "records": [
+      {
+        "seconds": 5.028499999999815,
+        "draws": 118,
+        "buffer": [
+          1440,
+          810
+        ],
+        "cssAnimations": 59,
+        "samples": 206,
+        "p95": 33.4,
+        "above50": 1,
+        "scriptMs": 73,
+        "styleMs": 138
+      },
+      {
+        "seconds": 5.001999999999814,
+        "draws": 115,
+        "buffer": [
+          1440,
+          810
+        ],
+        "cssAnimations": 59,
+        "samples": 193,
+        "p95": 49.9,
+        "above50": 2,
+        "scriptMs": 64,
+        "styleMs": 168
+      }
+    ]
+  },
+  {
+    "mode": "desktop",
+    "variant": "after",
+    "rate": 1,
+    "records": [
+      {
+        "seconds": 5.008199999999813,
+        "draws": 120,
+        "buffer": [
+          960,
+          540
+        ],
+        "cssAnimations": 6,
+        "samples": 300,
+        "p95": 16.7,
+        "above50": 0,
+        "scriptMs": 39,
+        "styleMs": 26
+      },
+      {
+        "seconds": 5.0102999999999085,
+        "draws": 121,
+        "buffer": [
+          960,
+          540
+        ],
+        "cssAnimations": 6,
+        "samples": 300,
+        "p95": 16.7,
+        "above50": 0,
+        "scriptMs": 46,
+        "styleMs": 27
+      }
+    ]
+  },
+  {
+    "mode": "mobile",
+    "variant": "before",
+    "rate": 4,
+    "records": [
+      {
+        "seconds": 5.007699999999813,
+        "draws": 89,
+        "buffer": [
+          1332,
+          749
+        ],
+        "cssAnimations": 59,
+        "samples": 88,
+        "p95": 100,
+        "above50": 25,
+        "scriptMs": 258,
+        "styleMs": 393
+      },
+      {
+        "seconds": 5.0002999999997195,
+        "draws": 111,
+        "buffer": [
+          1332,
+          749
+        ],
+        "cssAnimations": 59,
+        "samples": 113,
+        "p95": 66.6,
+        "above50": 8,
+        "scriptMs": 288,
+        "styleMs": 345
+      }
+    ]
+  },
+  {
+    "mode": "mobile",
+    "variant": "after",
+    "rate": 4,
+    "records": [
+      {
+        "seconds": 5.009799999999814,
+        "draws": 101,
+        "buffer": [
+          640,
+          360
+        ],
+        "cssAnimations": 4,
+        "samples": 297,
+        "p95": 16.8,
+        "above50": 0,
+        "scriptMs": 127,
+        "styleMs": 82
+      },
+      {
+        "seconds": 5.011399999999721,
+        "draws": 100,
+        "buffer": [
+          640,
+          360
+        ],
+        "cssAnimations": 4,
+        "samples": 298,
+        "p95": 16.7,
+        "above50": 0,
+        "scriptMs": 112,
+        "styleMs": 107
+      }
+    ]
+  }
+]

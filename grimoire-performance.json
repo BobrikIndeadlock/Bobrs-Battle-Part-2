@@ -1,0 +1,210 @@
+[
+  {
+    "profile": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 810,
+      "dpr": 1,
+      "throttle": 1
+    },
+    "version": "before",
+    "buffer": [
+      960,
+      540
+    ],
+    "runs": [
+      {
+        "idle": {
+          "duration": 2512,
+          "frames": 150,
+          "p95": 16.7,
+          "over50": 0,
+          "scriptMs": 24,
+          "styleMs": 0
+        },
+        "active": {
+          "duration": 6845,
+          "frames": 236,
+          "p95": 66.6,
+          "over50": 13,
+          "scriptMs": 72,
+          "styleMs": 169
+        }
+      },
+      {
+        "idle": {
+          "duration": 2508,
+          "frames": 150,
+          "p95": 16.7,
+          "over50": 0,
+          "scriptMs": 23,
+          "styleMs": 9
+        },
+        "active": {
+          "duration": 6846,
+          "frames": 246,
+          "p95": 50.1,
+          "over50": 11,
+          "scriptMs": 69,
+          "styleMs": 158
+        }
+      }
+    ]
+  },
+  {
+    "profile": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 810,
+      "dpr": 1,
+      "throttle": 1
+    },
+    "version": "after",
+    "buffer": [
+      960,
+      540
+    ],
+    "runs": [
+      {
+        "idle": {
+          "duration": 2510,
+          "frames": 150,
+          "p95": 16.7,
+          "over50": 0,
+          "scriptMs": 27,
+          "styleMs": 0
+        },
+        "active": {
+          "duration": 6843,
+          "frames": 249,
+          "p95": 50,
+          "over50": 4,
+          "scriptMs": 88,
+          "styleMs": 164
+        }
+      },
+      {
+        "idle": {
+          "duration": 2500,
+          "frames": 150,
+          "p95": 16.7,
+          "over50": 0,
+          "scriptMs": 27,
+          "styleMs": 11
+        },
+        "active": {
+          "duration": 6839,
+          "frames": 248,
+          "p95": 50,
+          "over50": 3,
+          "scriptMs": 77,
+          "styleMs": 157
+        }
+      }
+    ]
+  },
+  {
+    "profile": {
+      "name": "mobile",
+      "width": 812,
+      "height": 375,
+      "dpr": 2,
+      "throttle": 4
+    },
+    "version": "before",
+    "buffer": [
+      640,
+      360
+    ],
+    "runs": [
+      {
+        "idle": {
+          "duration": 2504,
+          "frames": 148,
+          "p95": 16.7,
+          "over50": 0,
+          "scriptMs": 100,
+          "styleMs": 0
+        },
+        "active": {
+          "duration": 6858,
+          "frames": 264,
+          "p95": 50,
+          "over50": 7,
+          "scriptMs": 287,
+          "styleMs": 891
+        }
+      },
+      {
+        "idle": {
+          "duration": 2510,
+          "frames": 150,
+          "p95": 16.8,
+          "over50": 0,
+          "scriptMs": 58,
+          "styleMs": 37
+        },
+        "active": {
+          "duration": 6843,
+          "frames": 294,
+          "p95": 50,
+          "over50": 5,
+          "scriptMs": 239,
+          "styleMs": 811
+        }
+      }
+    ]
+  },
+  {
+    "profile": {
+      "name": "mobile",
+      "width": 812,
+      "height": 375,
+      "dpr": 2,
+      "throttle": 4
+    },
+    "version": "after",
+    "buffer": [
+      640,
+      360
+    ],
+    "runs": [
+      {
+        "idle": {
+          "duration": 2501,
+          "frames": 146,
+          "p95": 16.7,
+          "over50": 1,
+          "scriptMs": 94,
+          "styleMs": 0
+        },
+        "active": {
+          "duration": 6833,
+          "frames": 255,
+          "p95": 66.6,
+          "over50": 13,
+          "scriptMs": 268,
+          "styleMs": 789
+        }
+      },
+      {
+        "idle": {
+          "duration": 2506,
+          "frames": 150,
+          "p95": 16.8,
+          "over50": 0,
+          "scriptMs": 67,
+          "styleMs": 32
+        },
+        "active": {
+          "duration": 6834,
+          "frames": 287,
+          "p95": 50,
+          "over50": 7,
+          "scriptMs": 260,
+          "styleMs": 840
+        }
+      }
+    ]
+  }
+]

@@ -21,3 +21,8 @@
 - [Видеодемонстрация исправленного пролёта камеры](Bobrs-Battle-Part-2-Castle-Camera.mp4)
 - [Аудит пролёта и замеры](QA-castle-camera.md)
 - [Вступление до исправления камеры](Bobrs-Battle-Part-2-Castle-Entrance.mp4)
+
+## Магический гримуар
+
+- [Пробуждение, призыв и затухание · общий и крупный планы](Bobrs-Battle-Part-2-Grimoire.mp4)
+- [Аудит гримуара и замеры](QA-grimoire.md)

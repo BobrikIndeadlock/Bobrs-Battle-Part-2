@@ -24,6 +24,8 @@ const summoningRitual = (() => {
   const spacing = 185;
   const flight = 2320;
   const impact = 5300;
+  const fadeStart = impact - 20;
+  const fadeDuration = 430;
   const reveal = impact + 110;
   const duration = 6800;
   const clamp = value => Math.min(1, Math.max(0, value));
@@ -42,8 +44,7 @@ const summoningRitual = (() => {
     };
   }
 
-  function getPaths(scene, grid) {
-    const frame = scene.getBoundingClientRect();
+  function getPaths(frame, grid) {
     if (!frame.width || !frame.height) return [];
     return Array.from(grid.children, (card, index) => {
       const rect = card.getBoundingClientRect();
@@ -154,8 +155,8 @@ const summoningRitual = (() => {
     return Array.from(cards, (_, index) => {
       const wrapper = document.createElement('div');
       wrapper.className = 'summoning-flight';
-      wrapper.hidden = true;
       wrapper.setAttribute('aria-hidden', 'true');
+      wrapper.style.setProperty('--flight-delay', (firstEmission + index * spacing) + 'ms');
       const orb = document.createElement('div');
       orb.className = 'orb bobrs-summon-orb';
       orb.dataset.orbNumber = String(index + 1);
@@ -182,26 +183,33 @@ const summoningRitual = (() => {
     });
   }
 
-  function placeOrbs(orbs, paths, time, scale) {
-    const fade = 1 - smooth((time - impact + 20) / 430);
-    paths.forEach((path, index) => {
-      const wrapper = orbs[index];
-      const age = time - firstEmission - index * spacing;
-      if (age <= 0 || !fade) {
-        if (!wrapper.hidden) wrapper.hidden = true;
-        return;
-      }
-
-      if (wrapper.hidden) wrapper.hidden = false;
+  function flightKeyframes(path, scale, emission, lifetime) {
+    function pose(age) {
       const body = point(path, age);
       const hover = Math.max(0, age - flight);
       const sway = Math.sin(hover / 340 + path.variation * 6) * smooth(hover / 460);
       const x = (body.x + sway * 2.2) * scale.x;
       const y = (body.y + sway * (2.8 + path.variation)) * scale.y;
       const size = .15 + .85 * smooth(age / 325);
-      wrapper.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${size})`;
-      wrapper.style.opacity = smooth(age / 180) * fade;
-    });
+      const fade = 1 - smooth((emission + age - fadeStart) / fadeDuration);
+      return {
+        offset: age / lifetime,
+        transform: `translate3d(${x}px, ${y}px, 0) scale(${size})`,
+        opacity: smooth(age / 180) * fade,
+      };
+    }
+
+    // Use closer samples for the quick fades and interpolate every pose on the browser's timeline.
+    const keyframes = [pose(0)];
+    let start = 0;
+    for (const [end, interval] of [[325, 1000 / 60], [fadeStart - emission, 40], [lifetime, 1000 / 60]]) {
+      const steps = Math.ceil((end - start) / interval);
+      for (let step = 1; step <= steps; step++) {
+        keyframes.push(pose(step === steps ? end : start + (end - start) * step / steps));
+      }
+      start = end;
+    }
+    return keyframes;
   }
 
   async function play({ scene, grid, layer, signal, onCharge, onReveal, onBookFrame }) {
@@ -222,11 +230,32 @@ const summoningRitual = (() => {
 
     const orbs = reduced.matches ? [] : mountOrbs(layer, grid.children);
     const bookTiming = { firstEmission, spacing, count: orbs.length, reveal };
-    let paths, scale;
+    let started = null;
+    let paths = [];
+    let scale;
+    let flights = [];
     const measure = () => {
-      paths = getPaths(scene, grid);
       const frame = scene.getBoundingClientRect();
-      scale = { x: frame.width / sceneWidth, y: frame.height / sceneHeight };
+      const nextScale = { x: frame.width / sceneWidth, y: frame.height / sceneHeight };
+      const nextPaths = getPaths(frame, grid);
+      if (scale?.x === nextScale.x && scale.y === nextScale.y && paths.length === nextPaths.length &&
+          paths.every((path, index) => path.x3 === nextPaths[index].x3 && path.y3 === nextPaths[index].y3)) return;
+      paths = nextPaths;
+      scale = nextScale;
+      if (!orbs.length || !paths.length) return;
+      flights = paths.map((path, index) => {
+        const delay = firstEmission + index * spacing;
+        const lifetime = fadeStart + fadeDuration - delay;
+        const keyframes = flightKeyframes(path, scale, delay, lifetime);
+        const animation = flights[index];
+        if (animation) {
+          animation.effect.setKeyframes(keyframes);
+          return animation;
+        }
+        const next = orbs[index].animate(keyframes, { delay, duration: lifetime, fill: 'both' });
+        if (started !== null) next.startTime = started;
+        return next;
+      });
     };
     measure();
     const observer = new ResizeObserver(measure);
@@ -239,12 +268,17 @@ const summoningRitual = (() => {
       let lastPaint = null;
       let charged = false;
       let revealed = false;
-      let started = null;
       const interval = 1000 / (compact ? 24 : 30);
       const watchdog = setTimeout(finish, duration + 1400);
       signal.addEventListener('abort', finish, { once: true });
       document.addEventListener('visibilitychange', visibilityChanged);
       reduced.addEventListener('change', motionChanged);
+
+      function removeOrbs() {
+        flights.forEach(animation => animation.cancel());
+        flights = [];
+        orbs.splice(0).forEach(orb => orb.remove());
+      }
 
       function finish() {
         cancelAnimationFrame(frame);
@@ -254,7 +288,7 @@ const summoningRitual = (() => {
         document.removeEventListener('visibilitychange', visibilityChanged);
         reduced.removeEventListener('change', motionChanged);
         canvas.remove();
-        orbs.forEach(orb => orb.remove());
+        removeOrbs();
         layer.classList.remove('summon-charged');
         resolve();
       }
@@ -268,7 +302,10 @@ const summoningRitual = (() => {
       }
 
       function draw(now) {
-        started ??= now;
+        if (started === null) {
+          started = now;
+          flights.forEach(animation => { animation.startTime = started; });
+        }
         const time = now - started;
         const still = reduced.matches;
         if (time >= (still ? 720 : duration)) {
@@ -285,11 +322,11 @@ const summoningRitual = (() => {
             revealed = true;
             onReveal();
           }
+          if (orbs.length && time >= fadeStart + fadeDuration) removeOrbs();
           const gap = lastPaint === null ? interval : now - lastPaint;
           if (gap >= interval - .4) {
             if (!still) onBookFrame?.(time, bookTiming);
             paint(time, paths, still);
-            if (orbs.length) placeOrbs(orbs, paths, time, scale);
             lastPaint = now - Math.max(0, gap - interval) % interval;
           }
           frame = requestAnimationFrame(draw);

@@ -4,6 +4,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  will-change: transform;
 }
 
 #grid.summon-preparing > .tile {
@@ -273,6 +274,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  opacity: 0;
   pointer-events: none;
   will-change: transform, opacity;
 }
@@ -282,17 +284,19 @@
   translate: -50% -50%;
 }
 
-#fx .summoning-flight[hidden] .orb,
-#fx .summoning-flight[hidden] .orb::before,
-#fx .summoning-flight[hidden] .orb::after,
-#fx .summoning-flight[hidden] .orb > * {
-  animation-play-state: paused;
-}
-
 #fx .summoning-flight .orb::before,
 #fx .summoning-flight .orb::after,
-#fx .summoning-flight .hell-tail {
-  animation-delay: var(--flickerDelay);
+#fx .summoning-flight .hell-tail,
+#fx .summoning-flight .summon-wake {
+  animation-delay: calc(var(--flight-delay) + var(--flickerDelay));
+}
+
+#fx .summoning-flight .hell-ember {
+  animation-delay: calc(var(--flight-delay) + var(--delay, 0s));
+}
+
+#fx .summoning-flight .summon-halo {
+  animation-delay: var(--flight-delay);
 }
 
 #fx.summon-charged .summon-halo {

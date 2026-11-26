@@ -56,76 +56,82 @@ function adjustScriptedHiddenPick(id){
 function getCounterpartName(name){return name==='Грит'?'Аптека':name==='Аптека'?'Грит':null}
 function isHeroChainedForCaptain(hero,captIndex){return !!hero&&duoLock[captIndex]===hero.name}
 function currentCaptainHasPlayableCard(){return available.some(card=>!isHeroChainedForCaptain(card,captainTurn))}
-function hideChronosEvent(){const event=$('chronosEvent');event.classList.remove('visible','grayfall','show-figure','rewind-active','rewind-fading');$('chronosText').innerHTML='';event.setAttribute('aria-hidden','true')}
-async function typeChronosLine(container,text,delayMs=520,pauseAfter=-1){
- const paragraph=document.createElement('p');
- container.append(paragraph);
- const words=text.trim().split(/\s+/).filter(Boolean);
- for(let i=0;i<words.length;i++){
-  if(i>0)paragraph.append(document.createTextNode(' '));
-  const span=document.createElement('span');
-  span.className='word';
-  span.textContent=words[i];
-  paragraph.append(span);
-  await delay(i===pauseAfter?1500:delayMs);
- }
- return paragraph;
-}
-async function revealChronosSeal(hero){
- // Show the same red-gold back transforming into the approved Chronos back.
- // This short visual is separate from the real deck, so it cannot leak the hero's face.
- const stage=document.createElement('div');
- stage.className='chronos-seal-reveal';stage.setAttribute('aria-hidden','true');
- const card=document.createElement('div');card.className='seal-card';card.innerHTML=backMarkup();
- const light=document.createElement('div');light.className='seal-light';
- const pulse=document.createElement('div');pulse.className='seal-pulse';
- card.append(light,pulse);stage.append(card);document.body.append(stage);
- try{
-  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
-  stage.classList.add('seal-show');
-  await delay(850);
-  const image=card.querySelector('.card-back-image');
-  if(image)image.src=chronosSealedBack;
-  stage.classList.add('seal-trigger');
-  await delay(1650);
-  stage.classList.add('seal-leave');
-  await delay(850);
- }finally{stage.remove()}
-}
-async function playChronosIntervention(captIndex,invalidHero){
- const keptHero=teams[captIndex].find(h=>duoPairNames.includes(h.name)&&h.id!==invalidHero.id) || teams[captIndex].find(h=>duoPairNames.includes(h.name));
+function hideChronosEvent(){
  const event=$('chronosEvent');
+ event.classList.remove('visible','grayfall','show-figure','rewind-active','rewind-fading','chronos-release');
+ $('chronosText').replaceChildren();
+ event.setAttribute('aria-hidden','true');
+}
+let chronosController=null;
+async function runChronos(play){
+ const controller=new AbortController();
+ chronosController=controller;
+ try{
+  await play(controller.signal);
+  return !controller.signal.aborted;
+ }catch(error){
+  if(!controller.signal.aborted)throw error;
+  return false;
+ }finally{
+  if(chronosController===controller)chronosController=null;
+ }
+}
+async function playChronosIntervention(captIndex,invalidHero,signal){
+ const event=$('chronosEvent');
+ const cinema=window.chronosCinema;
  hideChronosEvent();
  state='cutscene';
  status('Нарушено древнее правило…');
  $('book').disabled=true;
  $('grid').querySelectorAll('.tile').forEach(card=>card.disabled=true);
- event.setAttribute('aria-hidden','false');
- event.classList.add('visible','grayfall');
- await delay(4900);
- event.classList.add('show-figure');
- await delay(1900);
- const box=$('chronosText');
- box.innerHTML='';
- await typeChronosLine(box,'Жалкое насекомое, ты и правда думал что я позволю тебе взять их обоих?',340,1);
- await delay(1200);
- await typeChronosLine(box,'Развлеките меня как подобает смертным.',460);
- await delay(2900);
- event.classList.remove('show-figure');
- event.classList.add('rewind-active');
- await delay(4800);
- event.classList.add('rewind-fading');
- await delay(1100);
- hideChronosEvent();
- const removeIndex=teams[captIndex].findIndex(h=>h.id===invalidHero.id);
- if(removeIndex!==-1)teams[captIndex].splice(removeIndex,1);
- available=shuffle([...available,invalidHero]);
- duoLock[captIndex]=invalidHero.name;
- await revealChronosSeal(invalidHero);
- captainUpdate();
- status('Время отмотано назад · Кронос запечатал карту «'+invalidHero.name+'» для '+currentName());
- state='shuffling';
- return keptHero;
+ let echo;
+ try{
+  if(cinema){
+   try{
+    const [verdict, challenge]=cinema.prepare($('chronosText'),[
+     'Жалкое насекомое, ты и правда думал что я позволю тебе взять их обоих?',
+     'Развлеките меня как подобает смертным.',
+    ]);
+    event.setAttribute('aria-hidden','false');
+    event.classList.add('visible','grayfall');
+    await cinema.wait(4900,signal);
+    event.classList.add('show-figure');
+    await cinema.wait(1900,signal);
+    await cinema.speak(verdict,index=>index===1?1500:340,signal);
+    await cinema.wait(1200,signal);
+    await cinema.speak(challenge,()=>460,signal);
+    await cinema.wait(2900,signal);
+    event.classList.remove('show-figure');
+    event.classList.add('rewind-active');
+    const slots=$('teamTiny'+captIndex).children;
+    const slot=[...slots].find(item=>item.dataset.hero===String(invalidHero.id));
+    echo=cinema.rewindCard(slot);
+    await cinema.wait(4800,signal);
+    echo?.remove();
+    event.classList.add('rewind-fading');
+    await cinema.wait(1100,signal);
+   }catch(error){
+    if(signal.aborted)throw error;
+    console.warn('Chronos presentation unavailable:',error);
+   }
+  }
+  const removeIndex=teams[captIndex].findIndex(h=>h.id===invalidHero.id);
+  if(removeIndex!==-1)teams[captIndex].splice(removeIndex,1);
+  available=shuffle([...available,invalidHero]);
+  duoLock[captIndex]=invalidHero.name;
+  try{
+   await cinema?.seal(chronosSealedBack,$('grid'),()=>event.classList.add('chronos-release'),signal);
+  }catch(error){
+   if(signal.aborted)throw error;
+   console.warn('Chronos seal presentation unavailable:',error);
+  }
+  captainUpdate();
+  status('Время отмотано назад · Кронос запечатал карту «'+invalidHero.name+'» для '+currentName());
+  state='shuffling';
+ }finally{
+  echo?.remove();
+  hideChronosEvent();
+ }
 }
 function skipBlockedTurnIfNeeded(){
  if(state!=='choose')return false;
@@ -350,12 +356,15 @@ async function choose(id){
  const captainDuo=teams[choosingCaptain].filter(member=>duoPairNames.includes(member.name));
  if(captainDuo.length>=2){
    status('Древнее правило нарушено…');
-   await delay(3700);
-   await playChronosIntervention(choosingCaptain,hero);
+   const completed=await runChronos(async signal=>{
+    if(window.chronosCinema)await window.chronosCinema.wait(3700,signal);
+    await playChronosIntervention(choosingCaptain,hero,signal);
+   });
+   if(!completed)return;
    // Rewound selection does not consume the captain's turn.
  }else turn++;
  if(!available.length){state='done';captainUpdate();showFinish();return}
- state='shuffling';captainUpdate();status('Оставшиеся карты собираются в колоду…');let grid=$('grid');const oldTiles=[...grid.children],gridRect=grid.getBoundingClientRect();const pileX=gridRect.left+gridRect.width/2,pileY=gridRect.top+gridRect.height/2;oldTiles.forEach((el,i)=>{const rect=el.getBoundingClientRect();el.style.animation='none';el.style.transition='transform .65s cubic-bezier(.4,0,.2,1),opacity .6s';el.style.zIndex=String(i+1);el.style.transform=`translate(${pileX-(rect.left+rect.width/2)}px,${pileY-(rect.top+rect.height/2)}px) scale(.76) rotate(${(i%2?1:-1)*(8+i*3)}deg)`;el.style.opacity='.95'});await delay(690);status('Колода перемешивается…');oldTiles.forEach((el,i)=>{el.style.transition='transform .2s ease-in-out';el.style.transform+=` rotate(${(i%2?1:-1)*85}deg)`});await delay(260);available=shuffle(available);displayGrid();[...grid.children].forEach((el,i)=>{const rr=el.getBoundingClientRect();el.style.animation='none';el.style.transition='none';el.style.opacity='.7';el.style.transform=`translate(${pileX-(rr.left+rr.width/2)}px,${pileY-(rr.top+rr.height/2)}px) scale(.75) rotate(${(i-5)*12}deg)`});void grid.offsetWidth;[...grid.children].forEach((el,i)=>{el.style.transition=`transform .65s cubic-bezier(.16,.75,.3,1) ${i*35}ms, opacity .5s ${i*35}ms`;el.style.transform='translate(0,0) scale(1) rotate(0deg)';el.style.opacity='1'});await delay(1020);if(!chronosSecretPlayed&&teams[0].length+teams[1].length===9&&available.length===1){chronosSecretPlayed=true;state='cutscene';displayGrid();try{await window.playChronosSecret91()}catch(err){console.error('Chronos secret:',err)}}state='choose';captainUpdate();displayGrid();status('Ход '+currentName()+(playableCards().length===1?' · нажмите на доступную карту':' · нажмите на две закрытые карты'));skipBlockedTurnIfNeeded()}
+ state='shuffling';captainUpdate();status('Оставшиеся карты собираются в колоду…');let grid=$('grid');const oldTiles=[...grid.children],gridRect=grid.getBoundingClientRect();const pileX=gridRect.left+gridRect.width/2,pileY=gridRect.top+gridRect.height/2;oldTiles.forEach((el,i)=>{const rect=el.getBoundingClientRect();el.style.animation='none';el.style.transition='transform .65s cubic-bezier(.4,0,.2,1),opacity .6s';el.style.zIndex=String(i+1);el.style.transform=`translate(${pileX-(rect.left+rect.width/2)}px,${pileY-(rect.top+rect.height/2)}px) scale(.76) rotate(${(i%2?1:-1)*(8+i*3)}deg)`;el.style.opacity='.95'});await delay(690);status('Колода перемешивается…');oldTiles.forEach((el,i)=>{el.style.transition='transform .2s ease-in-out';el.style.transform+=` rotate(${(i%2?1:-1)*85}deg)`});await delay(260);available=shuffle(available);displayGrid();[...grid.children].forEach((el,i)=>{const rr=el.getBoundingClientRect();el.style.animation='none';el.style.transition='none';el.style.opacity='.7';el.style.transform=`translate(${pileX-(rr.left+rr.width/2)}px,${pileY-(rr.top+rr.height/2)}px) scale(.75) rotate(${(i-5)*12}deg)`});void grid.offsetWidth;[...grid.children].forEach((el,i)=>{el.style.transition=`transform .65s cubic-bezier(.16,.75,.3,1) ${i*35}ms, opacity .5s ${i*35}ms`;el.style.transform='translate(0,0) scale(1) rotate(0deg)';el.style.opacity='1'});await delay(1020);if(!chronosSecretPlayed&&teams[0].length+teams[1].length===9&&available.length===1){chronosSecretPlayed=true;state='cutscene';displayGrid();try{if(!await runChronos(signal=>window.playChronosSecret91(signal)))return}catch(err){console.error('Chronos secret:',err)}}state='choose';captainUpdate();displayGrid();status('Ход '+currentName()+(playableCards().length===1?' · нажмите на доступную карту':' · нажмите на две закрытые карты'));skipBlockedTurnIfNeeded()}
 let summonController=null;
 let vsFinishToken=0;
 function skipVsIntro(){const finish=$('finish');finish.classList.add('vs-intro','vs-armies','vs-ready');finish.querySelectorAll('.vs-small-card,.vs-team').forEach(el=>{el.style.animation='none';el.style.opacity='1';el.style.transform='none';el.style.filter='none'});finish.querySelectorAll('.vs-captain,.vs-mark,.vs-headline').forEach(el=>{el.style.animation='none';el.style.opacity='1';el.style.transform='none';el.style.filter='none'});vsFinishToken++}
@@ -380,7 +389,7 @@ function showFinish(){
 }
 function showMoviePoster(){const m=$('movieFinal');if(!m.classList.contains('active'))return;$('movieVideo').pause();m.classList.add('poster');$('moviePlay').style.display='none'}
 $('movieVideo').onended=showMoviePoster;$('movieVideo').onerror=showMoviePoster;$('movieSkip').onclick=showMoviePoster;$('moviePlay').onclick=()=>{$('movieVideo').play().then(()=>{$('moviePlay').style.display='none'}).catch(()=>{})};$('movieContinue').onclick=()=>{$('movieFinal').className='';$('finish').classList.add('visible');skipVsIntro()};$('vsSkip').onclick=skipVsIntro;
-function reset(){summonController?.abort();summonController=null;$('grid').classList.remove('summon-preparing','summon-materializing');$('movieVideo').pause();$('movieFinal').className='';vsFinishToken++;$('finish').classList.remove('visible','vs-intro','vs-armies','vs-ready');$('compare').classList.remove('visible','arcane-cinematic','arcane-ready','arcane-flare','arcane-selectable','arcane-resolving');$('scene').classList.remove('arcane-choosing');$('fx').replaceChildren();hideChronosEvent();available=[];teams=[[],[]];selectedPair=[];turn=0;state='idle';duoLock=[null,null];chronosSecretPlayed=false;$('book').disabled=false;$('grid').replaceChildren();captainUpdate();status('Нажмите на гримуар, чтобы призвать десять карт')}
+function reset(){chronosController?.abort();summonController?.abort();summonController=null;$('grid').classList.remove('summon-preparing','summon-materializing');$('movieVideo').pause();$('movieFinal').className='';vsFinishToken++;$('finish').classList.remove('visible','vs-intro','vs-armies','vs-ready');$('compare').classList.remove('visible','arcane-cinematic','arcane-ready','arcane-flare','arcane-selectable','arcane-resolving');$('scene').classList.remove('arcane-choosing');$('fx').replaceChildren();hideChronosEvent();available=[];teams=[[],[]];selectedPair=[];turn=0;state='idle';duoLock=[null,null];chronosSecretPlayed=false;$('book').disabled=false;$('grid').replaceChildren();captainUpdate();status('Нажмите на гримуар, чтобы призвать десять карт')}
 $('book').onclick=summon;$('restart').onclick=reset;captainUpdate();status('Нажмите на гримуар, чтобы призвать десять карт');
 window.BobrsNewDraft={restart:reset,phase:()=>state,teams:()=>teams.map(t=>[...t])};
 

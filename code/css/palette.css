@@ -14,7 +14,6 @@
 .compare .reveal-card .arcane-rim{border-color:rgba(var(--glow),.55);box-shadow:0 0 22px rgba(var(--glow),.35)}
 .compare .reveal-card .arcane-name{background:linear-gradient(var(--tint),#09060b);border-color:var(--accent);color:var(--light)}
 .compare.arcane-ready .choice-hint strong,.compare-title{color:var(--light)!important}
-#chronosPortrait{filter:drop-shadow(0 0 18px rgba(var(--c-rgb),.28)) drop-shadow(0 0 36px rgba(var(--c-rgb),.12))}
 #chronosText{color:var(--c-light)!important;border-color:rgba(var(--c-rgb),.4)!important}
 /* The approved blue sealed-card art and blue time fissures remain unchanged. */
 #finish{background:radial-gradient(ellipse at 22% 45%,rgba(var(--m-rgb),.18),transparent 65%),radial-gradient(ellipse at 78% 45%,rgba(var(--a-rgb),.18),transparent 65%),#0a070d}

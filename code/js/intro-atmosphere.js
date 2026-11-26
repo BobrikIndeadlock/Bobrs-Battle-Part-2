@@ -33,6 +33,7 @@
   let frame = 0;
   let last = 0;
   let opened = null;
+  let cameraPosition = () => 0;
   const clamp = value => Math.min(1, Math.max(0, value));
   const smooth = value => {
     const t = clamp(value);
@@ -71,7 +72,9 @@
     const time = now / 1000;
     const passage = opened === null ? 0 : (now - opened) / 1000;
     const reveal = smooth((passage - .3) / 3.0);
+    const distance = cameraPosition();
     const departure = 1 - smooth((passage - 3.4) / 1.9);
+    const fogDeparture = 1 - smooth((distance - .60) / .39);
     const live = (seed) => .54 + Math.sin(time * 4.3 + seed) * .09 +
       Math.sin(time * 9.1 + seed * 2) * .06 + Math.cos(time * 2.2 + seed) * .11;
     const left = live(.8) * departure;
@@ -80,8 +83,12 @@
     context.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
     context.clearRect(0, 0, width, height);
 
-    layer('mist', -104 + 35 * Math.sin(time * .22), 268, (.18 + reveal * .13) * departure, 513, 122);
-    layer('mist', 413 - 29 * Math.sin(time * .19 + 1.6), 268, (.16 + reveal * .12) * departure, 501, 123);
+    // The distant mist stays inside the arch while the nearer bank slips past the viewer.
+    const distant = 1 / (1 + distance * .42);
+    layer('mist', -104 + 35 * Math.sin(time * .22) + distance * 37, 268 - distance * 8,
+      (.18 + reveal * .13) * fogDeparture, 513 * distant, 122 * distant);
+    layer('mist', 413 - 29 * Math.sin(time * .19 + 1.6) + distance * 69, 268 - distance * 6,
+      (.16 + reveal * .12) * fogDeparture, 501 * distant, 123 * distant);
     layer('arch', 192, 101, (.36 + reveal * .52) * departure);
     layer('left', 0, 173, left);
     layer('right', 613, 173, right);
@@ -107,8 +114,10 @@
       layer('ember', x, y, Math.sin(Math.PI * age) * .48 * departure, 1.2 + index % 3 * .28, 3);
     }
 
-    layer('mist', 169 + 41 * Math.sin(time * .26) + reveal * 44, 357 - reveal * 19,
-      (.20 + reveal * .18) * departure, 465, 135);
+    const near = distance * distance;
+    layer('mist', 169 + 41 * Math.sin(time * .26) + reveal * 44 - near * 155,
+      357 - reveal * 19 + near * 82,
+      (.20 + reveal * .18) * fogDeparture * (1 - near), 465 + near * 320, 135 + near * 90);
     context.globalAlpha = 1;
   }
 
@@ -122,7 +131,10 @@
     else if (!frame) frame = requestAnimationFrame(render);
   }
 
-  stage.addEventListener('intro:open', () => { opened = performance.now(); }, { once: true });
+  stage.addEventListener('intro:open', event => {
+    opened = performance.now();
+    cameraPosition = event.detail.cameraPosition;
+  }, { once: true });
   stage.addEventListener('intro:complete', () => {
     stop();
     compact.removeEventListener('change', fit);

@@ -1,9 +1,57 @@
+/* Keep the existing spirit artwork at the pedestal and outside the card grid. */
+#scene .makarych-spirit {
+  mix-blend-mode: normal;
+  filter: none;
+  animation-name: spiritFloat, throne-spirit-presence;
+}
 
-/* Every effect is painted in a dedicated image-registered canvas; controls remain clickable. */
-#livingAtmosphere canvas{z-index:5;mix-blend-mode:screen;pointer-events:none!important}
-#livingAtmosphere{contain:paint;pointer-events:none!important}
-#livingAtmosphere .living-vault-light{opacity:.23!important}
-#livingAtmosphere .living-haze{opacity:.55}
-#livingAtmosphere .living-haze.second{opacity:.32}
-#livingAtmosphere .living-red-ritual{opacity:.3}
-@media(prefers-reduced-motion:reduce){#livingAtmosphere canvas{display:none}}
+#scene .makarych-spirit.spirit-left {
+  --left: 5%;
+  --top: 61%;
+  --w: 8%;
+  --h: 18%;
+}
+
+#scene .makarych-spirit.spirit-right {
+  --left: 19%;
+  --top: 62%;
+  --w: 7.5%;
+  --h: 17%;
+}
+
+#scene .spirit-extra ~ .spirit-extra {
+  display: none;
+}
+
+@keyframes throne-spirit-presence {
+  0%, 100% { opacity: 0; }
+  28% { opacity: .32; }
+  54% { opacity: .52; }
+  78% { opacity: .26; }
+}
+
+#scene .turn-light83 .motes83 {
+  display: none;
+}
+
+#scene .turn-light83 .aura83::before {
+  animation: none;
+  opacity: .38;
+}
+
+@media (max-width: 850px), (max-height: 500px) {
+  #scene .spirit-extra {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #scene .makarych-spirit {
+    animation: none;
+    opacity: .28;
+  }
+
+  #scene .spirit-extra {
+    display: none;
+  }
+}

@@ -26,21 +26,25 @@
   let elapsed = 0;
   let started = false;
   let loaded = false;
+  let loading = false;
 
   const files = [...candles.map(([name]) => [name, base + name + '.webp']),
     ...banners.map(([name]) => [name, base + name + '.webp']),
     ['fog', 'media/throne/fog-haze.webp'], ['floor', 'media/throne/fog-floor.webp']];
-  Promise.all(files.map(async ([name, source]) => {
-    const image = new Image();
-    image.src = source;
-    try {
-      await image.decode();
-      images.set(name, image);
-    } catch {}
-  })).then(() => {
-    loaded = true;
-    sync();
-  });
+  function loadTextures() {
+    loading = true;
+    Promise.all(files.map(async ([name, source]) => {
+      const image = new Image();
+      image.src = source;
+      try {
+        await image.decode();
+        images.set(name, image);
+      } catch {}
+    })).then(() => {
+      loaded = true;
+      sync();
+    });
+  }
 
   function draw(name, x, y, width, height, alpha) {
     const image = images.get(name);
@@ -75,7 +79,7 @@
   }
 
   function active() {
-    return phase.classList.contains('draft-active');
+    return phase.classList.contains('active') && phase.classList.contains('draft-active');
   }
 
   function tick(now) {
@@ -94,12 +98,21 @@
 
   function sync() {
     const visible = active();
+    if (!loading && phase.classList.contains('active')) loadTextures();
     if (!loaded || !visible || document.hidden || effect.classList.contains('draft-impact')) {
       if (frame) cancelAnimationFrame(frame);
       frame = 0;
+      if (!visible && canvas.width !== 1) {
+        canvas.width = 1;
+        canvas.height = 1;
+        started = false;
+      }
       return;
     }
     if (!started) {
+      const small = compact.matches || reduced.matches;
+      canvas.width = small ? 600 : 960;
+      canvas.height = small ? 338 : 540;
       paint(elapsed / 1000);
       started = true;
     }
@@ -114,9 +127,6 @@
   }
 
   function resize() {
-    const small = compact.matches || reduced.matches;
-    canvas.width = small ? 600 : 960;
-    canvas.height = small ? 338 : 540;
     started = false;
     sync();
   }

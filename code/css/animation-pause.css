@@ -1,4 +1,7 @@
 
+body.bobrs-page-hidden *,
+body.bobrs-page-hidden *::before,
+body.bobrs-page-hidden *::after,
 body.bobrs-pause-arena main.arena,body.bobrs-pause-arena main.arena *,body.bobrs-pause-arena main.arena *::before,body.bobrs-pause-arena main.arena *::after,body.bobrs-pause-arena main.arena::before,body.bobrs-pause-arena main.arena::after,
 body.bobrs-pause-finish #finish,body.bobrs-pause-finish #finish *,body.bobrs-pause-finish #finish *::before,body.bobrs-pause-finish #finish *::after,
 #dlPhase:not(.active),#dlPhase:not(.active) *,#dlPhase:not(.active) *::before,#dlPhase:not(.active) *::after,

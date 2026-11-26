@@ -18,6 +18,7 @@
     body.classList.toggle('bobrs-pause-arena', pauseArena);
     body.classList.toggle('bobrs-pause-atmosphere', pauseAtmosphere);
     body.classList.toggle('bobrs-pause-finish', pauseFinish);
+    body.classList.toggle('bobrs-page-hidden', hidden);
     byId('dlPhase').classList.toggle('bobrs-fx-active', !!byId('dlFx')?.classList.contains('draft-impact'));
 
     const key = String(pauseArena) + String(pauseAtmosphere) + String(hidden);

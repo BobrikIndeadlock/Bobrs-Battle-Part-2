@@ -1,0 +1,38 @@
+[
+  {
+    "profile": "desktop",
+    "width": 1440,
+    "height": 810,
+    "cpu": 1,
+    "gate": {
+      "duration": 6263,
+      "p95": 66.6,
+      "frameCount": 173,
+      "over50": 9
+    },
+    "summoning": {
+      "duration": 6816,
+      "p95": 50,
+      "frameCount": 241,
+      "over50": 7
+    }
+  },
+  {
+    "profile": "phone",
+    "width": 390,
+    "height": 844,
+    "cpu": 4,
+    "gate": {
+      "duration": 6055,
+      "p95": 16.8,
+      "frameCount": 361,
+      "over50": 0
+    },
+    "summoning": {
+      "duration": 6825,
+      "p95": 49.9,
+      "frameCount": 329,
+      "over50": 7
+    }
+  }
+]

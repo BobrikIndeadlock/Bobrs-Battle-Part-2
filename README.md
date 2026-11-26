@@ -1,4 +1,12 @@
-Сборка для локального тестирования ветки `gothic-visual-upgrade` (`3100bf7`). В `main` доступна исходная версия.
+# Bobrs Battle Part 2 · Gothic Final
+
+[Скачать финальную сборку (ZIP, 57,0 МиБ)](Bobrs-Battle-Part-2-Gothic-Final.zip)
+
+Распакуйте архив целиком и откройте `index.html`. На iPhone откройте его через HTML Web Preview с доступом к соседним папкам `code/` и `media/`.
+
+Исходный коммит сборки `5267f4f0704474a6b3c6dfd58341f047e14381e7` находится в ветке `gothic-visual-upgrade`. [Финальный аудит](QA-gothic-final.md) · [Хеши файлов в ZIP](Final-build-files.SHA256) · [SHA-256 архива](SHA256SUMS)
+
+## Предварительная сборка и материалы этапов
 
 - `Bobrs-Battle-Part-2-Gothic-Preview.zip` — игра с исходным видеороликом. Распакуйте архив целиком и откройте `index.html`.
 - `Throne-Room-Before-After.zip` — восемь кадров до и после, включая драфт и мобильные размеры.

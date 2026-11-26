@@ -1,0 +1,60 @@
+[
+  {
+    "version": "before",
+    "snapshots": [
+      {
+        "run": 1,
+        "nodes": 1209,
+        "documents": 1,
+        "jsEventListeners": 69,
+        "heapKb": 3381,
+        "hiddenCards": 2
+      },
+      {
+        "run": 4,
+        "nodes": 1209,
+        "documents": 1,
+        "jsEventListeners": 69,
+        "heapKb": 3482,
+        "hiddenCards": 2
+      },
+      {
+        "run": 8,
+        "nodes": 1209,
+        "documents": 1,
+        "jsEventListeners": 69,
+        "heapKb": 3535,
+        "hiddenCards": 2
+      }
+    ]
+  },
+  {
+    "version": "after",
+    "snapshots": [
+      {
+        "run": 1,
+        "nodes": 1175,
+        "documents": 1,
+        "jsEventListeners": 71,
+        "heapKb": 3389,
+        "hiddenCards": 0
+      },
+      {
+        "run": 4,
+        "nodes": 1175,
+        "documents": 1,
+        "jsEventListeners": 71,
+        "heapKb": 3500,
+        "hiddenCards": 0
+      },
+      {
+        "run": 8,
+        "nodes": 1175,
+        "documents": 1,
+        "jsEventListeners": 71,
+        "heapKb": 3554,
+        "hiddenCards": 0
+      }
+    ]
+  }
+]

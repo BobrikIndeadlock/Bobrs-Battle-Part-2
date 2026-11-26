@@ -1,0 +1,186 @@
+[
+  {
+    "profile": "desktop",
+    "version": "before",
+    "width": 1440,
+    "height": 810,
+    "throttle": 1,
+    "preload": {
+      "filmState": 4,
+      "cathedralDecodes": 6,
+      "cathedralPixels": 202800
+    },
+    "first": {
+      "duration": 3311,
+      "frames": 198,
+      "p95": 16.7,
+      "long": 0,
+      "scriptMs": 32,
+      "styleMs": 21
+    },
+    "draft": {
+      "duration": 3305,
+      "frames": 189,
+      "p95": 16.8,
+      "long": 1,
+      "scriptMs": 20,
+      "styleMs": 31
+    },
+    "impact": {
+      "duration": 2097,
+      "frames": 122,
+      "p95": 16.7,
+      "long": 0,
+      "scriptMs": 7,
+      "styleMs": 22
+    },
+    "closedCanvas": [
+      960,
+      540
+    ],
+    "heapKb": 2300,
+    "dom": {
+      "documents": 1,
+      "nodes": 1505,
+      "jsEventListeners": 112
+    }
+  },
+  {
+    "profile": "desktop",
+    "version": "after",
+    "width": 1440,
+    "height": 810,
+    "throttle": 1,
+    "preload": {
+      "filmState": 0,
+      "cathedralDecodes": 0,
+      "cathedralPixels": 1
+    },
+    "first": {
+      "duration": 3309,
+      "frames": 197,
+      "p95": 16.7,
+      "long": 0,
+      "scriptMs": 29,
+      "styleMs": 17
+    },
+    "draft": {
+      "duration": 3315,
+      "frames": 193,
+      "p95": 16.7,
+      "long": 1,
+      "scriptMs": 23,
+      "styleMs": 43
+    },
+    "impact": {
+      "duration": 2104,
+      "frames": 123,
+      "p95": 16.7,
+      "long": 0,
+      "scriptMs": 8,
+      "styleMs": 25
+    },
+    "closedCanvas": [
+      1,
+      1
+    ],
+    "heapKb": 2303,
+    "dom": {
+      "documents": 1,
+      "nodes": 1505,
+      "jsEventListeners": 116
+    }
+  },
+  {
+    "profile": "phone",
+    "version": "before",
+    "width": 390,
+    "height": 844,
+    "throttle": 4,
+    "preload": {
+      "filmState": 4,
+      "cathedralDecodes": 6,
+      "cathedralPixels": 202800
+    },
+    "first": {
+      "duration": 3303,
+      "frames": 191,
+      "p95": 16.8,
+      "long": 1,
+      "scriptMs": 125,
+      "styleMs": 95
+    },
+    "draft": {
+      "duration": 3313,
+      "frames": 196,
+      "p95": 16.7,
+      "long": 1,
+      "scriptMs": 79,
+      "styleMs": 145
+    },
+    "impact": {
+      "duration": 2107,
+      "frames": 124,
+      "p95": 16.8,
+      "long": 0,
+      "scriptMs": 28,
+      "styleMs": 90
+    },
+    "closedCanvas": [
+      600,
+      338
+    ],
+    "heapKb": 2280,
+    "dom": {
+      "documents": 1,
+      "nodes": 1503,
+      "jsEventListeners": 112
+    }
+  },
+  {
+    "profile": "phone",
+    "version": "after",
+    "width": 390,
+    "height": 844,
+    "throttle": 4,
+    "preload": {
+      "filmState": 0,
+      "cathedralDecodes": 0,
+      "cathedralPixels": 1
+    },
+    "first": {
+      "duration": 3311,
+      "frames": 192,
+      "p95": 16.7,
+      "long": 2,
+      "scriptMs": 93,
+      "styleMs": 77
+    },
+    "draft": {
+      "duration": 3317,
+      "frames": 199,
+      "p95": 16.7,
+      "long": 0,
+      "scriptMs": 90,
+      "styleMs": 215
+    },
+    "impact": {
+      "duration": 2106,
+      "frames": 123,
+      "p95": 16.7,
+      "long": 0,
+      "scriptMs": 25,
+      "styleMs": 103
+    },
+    "closedCanvas": [
+      1,
+      1
+    ],
+    "heapKb": 2287,
+    "dom": {
+      "documents": 1,
+      "nodes": 1503,
+      "jsEventListeners": 116
+    }
+  }
+]

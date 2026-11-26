@@ -1,0 +1,126 @@
+[
+  {
+    "profile": "desktop",
+    "version": "before",
+    "width": 1440,
+    "height": 810,
+    "throttle": 1,
+    "first": {
+      "duration": 3306,
+      "frames": 198,
+      "p95": 16.8,
+      "long": 0,
+      "scriptMs": 30,
+      "styleMs": 19
+    },
+    "draft": {
+      "duration": 3308,
+      "frames": 186,
+      "p95": 16.8,
+      "long": 1,
+      "scriptMs": 7,
+      "styleMs": 39
+    },
+    "impact": {
+      "duration": 4953,
+      "frames": 297,
+      "p95": 16.7,
+      "long": 0,
+      "scriptMs": 33,
+      "styleMs": 49
+    }
+  },
+  {
+    "profile": "desktop",
+    "version": "after",
+    "width": 1440,
+    "height": 810,
+    "throttle": 1,
+    "first": {
+      "duration": 3310,
+      "frames": 198,
+      "p95": 16.7,
+      "long": 0,
+      "scriptMs": 30,
+      "styleMs": 21
+    },
+    "draft": {
+      "duration": 3312,
+      "frames": 186,
+      "p95": 16.8,
+      "long": 1,
+      "scriptMs": 19,
+      "styleMs": 32
+    },
+    "impact": {
+      "duration": 2103,
+      "frames": 123,
+      "p95": 16.8,
+      "long": 0,
+      "scriptMs": 8,
+      "styleMs": 24
+    }
+  },
+  {
+    "profile": "phone",
+    "version": "before",
+    "width": 390,
+    "height": 844,
+    "throttle": 4,
+    "first": {
+      "duration": 3308,
+      "frames": 196,
+      "p95": 16.7,
+      "long": 0,
+      "scriptMs": 138,
+      "styleMs": 74
+    },
+    "draft": {
+      "duration": 3315,
+      "frames": 198,
+      "p95": 16.7,
+      "long": 0,
+      "scriptMs": 22,
+      "styleMs": 150
+    },
+    "impact": {
+      "duration": 4994,
+      "frames": 298,
+      "p95": 16.8,
+      "long": 0,
+      "scriptMs": 146,
+      "styleMs": 194
+    }
+  },
+  {
+    "profile": "phone",
+    "version": "after",
+    "width": 390,
+    "height": 844,
+    "throttle": 4,
+    "first": {
+      "duration": 3316,
+      "frames": 191,
+      "p95": 16.8,
+      "long": 1,
+      "scriptMs": 128,
+      "styleMs": 59
+    },
+    "draft": {
+      "duration": 3308,
+      "frames": 199,
+      "p95": 16.8,
+      "long": 0,
+      "scriptMs": 68,
+      "styleMs": 105
+    },
+    "impact": {
+      "duration": 2120,
+      "frames": 124,
+      "p95": 16.8,
+      "long": 0,
+      "scriptMs": 32,
+      "styleMs": 97
+    }
+  }
+]

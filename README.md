@@ -32,3 +32,9 @@
 - [Первая сцена · вмешательство, перемотка и печать](Bobrs-Battle-Part-2-Chronos-Rewind.mp4)
 - [Вторая сцена · последняя карточка](Bobrs-Battle-Part-2-Chronos-Last-Card.mp4)
 - [Аудит обеих сцен и замеры](QA-chronos.md)
+
+## Интерфейсы обоих драфтов
+
+- [Первый драфт · составы на пьедесталах и откат Хроноса](Bobrs-Battle-Part-2-First-Draft.mp4)
+- [Deadlock · монета, пик, бан и финальный экран](Bobrs-Battle-Part-2-Deadlock-Draft.mp4)
+- [Аудит обоих интерфейсов и замеры](QA-draft-interfaces.md)

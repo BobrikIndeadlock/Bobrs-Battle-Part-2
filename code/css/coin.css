@@ -1,0 +1,18 @@
+
+#dlPhase .dl-coin-stage{gap:24px;perspective:1000px}
+#dlPhase .dl-coin{--coin-size:clamp(160px,min(43vw,39vh),330px);width:var(--coin-size);height:var(--coin-size);position:relative;flex:none;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transform:rotateY(0deg);filter:none;overflow:visible;isolation:auto;}
+#dlPhase .dl-coin::before,#dlPhase .dl-coin::after{content:none}
+#dlPhase .dl-face{position:absolute;inset:0;border:0;border-radius:50%;overflow:hidden;box-shadow:none;background:#352014;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform:translateZ(var(--coin-half,8px));}
+#dlPhase .dl-face.back{transform:rotateY(180deg) translateZ(var(--coin-half,8px))}
+#dlPhase .dl-face img{display:block;position:absolute;width:109%;height:109%;max-width:none;left:-4.5%;top:-2%;object-fit:fill;pointer-events:none;border:0;border-radius:0;transform:none;}
+#dlPhase .dl-face.back img{top:-2.5%}
+#dlPhase .dl-face::before,#dlPhase .dl-face::after{content:none}
+#dlPhase .dl-coin-edge{position:absolute;left:50%;top:50%;width:var(--edge-width,8px);height:var(--edge-depth,16px);background:linear-gradient(180deg,#c3975e 0%,#815027 15%,#492711 28%,#a87842 45%,#63401e 62%,#3c210f 80%,#ae8050 100%);transform-origin:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none;}
+#dlPhase .dl-coin-edge:nth-child(2n){background:linear-gradient(180deg,#d2aa70,#5a3017 20%,#916239 49%,#4b2a13 78%,#b58b55)}
+#dlPhase .dl-coin.heads{transform:rotateY(0deg)}#dlPhase .dl-coin.tails{transform:rotateY(180deg)}
+#dlPhase .dl-coin.spinning{animation-duration:4.6s;animation-timing-function:cubic-bezier(.15,.5,.18,1);animation-fill-mode:forwards}
+#dlPhase .dl-coin.spinning.heads{animation-name:dlSpinHeads}#dlPhase .dl-coin.spinning.tails{animation-name:dlSpinTails}
+@keyframes dlSpinHeads{0%{transform:translateY(0) rotateY(0)}38%{transform:translateY(-65px) rotateY(1080deg)}100%{transform:translateY(0) rotateY(2520deg)}}
+@keyframes dlSpinTails{0%{transform:translateY(0) rotateY(0)}38%{transform:translateY(-65px) rotateY(1080deg)}100%{transform:translateY(0) rotateY(2700deg)}}
+@media(prefers-reduced-motion:reduce){#dlPhase .dl-coin.spinning{animation-duration:.15s}}
+#dlPhase .dl-hero[hidden]{display:none!important}

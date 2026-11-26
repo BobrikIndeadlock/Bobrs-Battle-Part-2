@@ -1,0 +1,15 @@
+(()=>{
+const stage=document.getElementById('intro-stage'),world=document.getElementById('intro-world'),art=document.getElementById('intro-closed');if(!stage||!world||!art)return;
+const canvas=document.createElement('canvas');canvas.id='intro-life82';canvas.setAttribute('aria-hidden','true');world.insertBefore(canvas,document.getElementById('intro-gate'));const c=canvas.getContext('2d');if(!c)return;
+const mist=new Image();mist.src='media/images/intro-mist.webp';const motion=matchMedia('(prefers-reduced-motion: reduce)');
+const W=1440,H=811;let raf,last=0,seed=82;const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};
+const origins=[[164,443],[1270,443],[426,515],[1014,515]];
+const sparks=Array.from({length:50},(_,i)=>({o:origins[i%4],phase:rand(),life:2.7+rand()*4,drift:(rand()-.5)*145,r:.55+rand()*1.6,offset:(rand()-.5)*58}));
+function fit(){let w=Math.max(1,world.clientWidth),h=Math.max(1,world.clientHeight),d=Math.min(devicePixelRatio||1,1.5);canvas.width=Math.round(w*d);canvas.height=Math.round(h*d)}
+function glow(x,y,rx,ry,strength,color){c.save();c.translate(x,y);c.scale(rx,ry);let g=c.createRadialGradient(0,0,0,0,0,1);g.addColorStop(0,`rgba(${color},${strength})`);g.addColorStop(.38,`rgba(${color},${strength*.35})`);g.addColorStop(1,`rgba(${color},0)`);c.fillStyle=g;c.fillRect(-1,-1,2,2);c.restore()}
+function frame(now){raf=0;if(!stage.isConnected||stage.classList.contains('open')){window.removeEventListener('resize',fit);return}if(document.hidden||motion.matches)return;raf=requestAnimationFrame(frame);if(now-last<32)return;last=now;const t=now/1000;c.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);c.clearRect(0,0,W,H);
+if(mist.complete&&mist.naturalWidth){c.globalAlpha=.22;c.drawImage(mist,-120+Math.sin(t*.09)*95,583,1090,245);c.globalAlpha=.29;c.drawImage(mist,485+Math.sin(t*.073+2)*95,600,1160,228);c.globalAlpha=.15;c.drawImage(mist,-130+Math.sin(t*.045)*90,5,900,100);c.drawImage(mist,880+Math.sin(t*.058)*60,2,690,105);c.globalAlpha=1;}
+// Local light follows the actual brazier positions. Gate center remains untouched.
+c.globalCompositeOperation='screen';origins.forEach(([x,y],i)=>{const f=.48+.22*Math.sin(t*8.7+i*4)+.18*Math.sin(t*13.2+i*2)+.12*Math.sin(t*3.2+i);glow(x,y-12,i<2?76:24,i<2?85:43,.20*f,'255,76,24');glow(x,y-23,i<2?34:12,i<2?52:24,.21*f,'255,161,72');});
+for(const p of sparks){const a=(t/p.life+p.phase)%1;const x=p.o[0]+p.offset+p.drift*a+Math.sin(a*7+p.phase*9)*10,y=p.o[1]-a*(115+p.life*14);const fade=Math.sin(Math.PI*a)*.75;c.fillStyle=`rgba(255,160,78,${fade})`;c.beginPath();c.ellipse(x,y,p.r,p.r*1.35,0,0,Math.PI*2);c.fill();}c.globalCompositeOperation='source-over';}
+fit();window.addEventListener('resize',fit,{passive:true});function syncIntro(){if(document.hidden||motion.matches||!stage.isConnected||stage.classList.contains('open')){if(raf)cancelAnimationFrame(raf);raf=0}else if(!raf)raf=requestAnimationFrame(frame)}document.addEventListener('visibilitychange',syncIntro);motion.addEventListener?.('change',syncIntro);syncIntro();})();

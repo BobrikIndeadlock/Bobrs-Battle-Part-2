@@ -1,0 +1,29 @@
+
+/* Local lighting over the original throne-room art. No changes to turn logic. */
+#scene .turn-light83{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.turn-light83 .side83{position:absolute;top:0;bottom:0;width:36%;pointer-events:none}
+.turn-light83 .side83.left{left:0;--rgb:157,75,231;--hot:209,144,255}
+.turn-light83 .side83.right{right:0;--rgb:225,43,68;--hot:255,105,122}
+.turn-light83 .shade83,.turn-light83 .aura83,.turn-light83 .motes83{position:absolute;inset:0;opacity:0;transition:opacity 1.5s ease-in-out;pointer-events:none}
+.turn-light83 .shade83{background:url("../../media/images/captain-shadow.png") center/100% 100% no-repeat}
+.turn-light83 .right .shade83{transform:scaleX(-1)}
+.turn-light83 .aura83{mix-blend-mode:normal;background:url("../../media/images/makarych-aura.png") center/100% 100% no-repeat}
+.turn-light83 .right .aura83{background-image:url("../../media/images/artemon-aura.png")}
+.turn-light83 .right .aura83{transform:scaleX(-1)}
+.turn-light83 .aura83::before{content:'';position:absolute;inset:0;background:url("../../media/images/makarych-aura-core.png") center/100% 100% no-repeat;animation:light83pulse 4s ease-in-out infinite;}
+.turn-light83 .right .aura83::before{background-image:url("../../media/images/artemon-aura-core.png")}
+@keyframes light83pulse{0%,100%{opacity:.35}50%{opacity:.95}}
+#scene[data-palette-side="0"] .left .aura83,#scene[data-palette-side="1"] .right .aura83,#scene[data-palette-side="0"] .left .motes83,#scene[data-palette-side="1"] .right .motes83{opacity:1}
+#scene[data-palette-side="0"] .right .shade83,#scene[data-palette-side="1"] .left .shade83{opacity:1}
+.motes83 i{position:absolute;left:var(--x);top:var(--y);width:var(--r);height:var(--r);border-radius:50%;background:rgb(var(--hot));box-shadow:0 0 6px 1px rgba(var(--rgb),.7);animation:light83mote var(--dur) var(--delay) linear infinite;opacity:0}
+@keyframes light83mote{0%{transform:translate(0,0);opacity:0}22%{opacity:.8}75%{opacity:.5}100%{transform:translate(var(--dx),-105px);opacity:0}}
+#scene .captain-count{transition:box-shadow 1.5s,border-color 1.5s}
+#scene .captain.active .captain-count{box-shadow:0 0 12px 2px rgba(var(--glow),.65),0 0 28px rgba(var(--glow),.45)!important}
+/* Deadlock: current class is set by the existing coin-aware turn controller. */
+#dlPhase #dlDraftScreen .dl-team{transition:box-shadow 1.5s,border-color 1.5s;isolation:isolate}
+#dlPhase #dlDraftScreen .dl-team.current{box-shadow:0 0 24px rgba(var(--glow),.52),inset 0 0 32px rgba(var(--glow),.19)!important}
+#dlPhase #dlDraftScreen .dl-team .dl-captain{transition:filter 1.5s;filter:brightness(.78) drop-shadow(0 0 7px rgba(var(--glow),.2))}
+#dlPhase #dlDraftScreen .dl-team.current .dl-captain{filter:brightness(1.08) drop-shadow(0 0 18px rgba(var(--glow),.8)) drop-shadow(0 0 30px rgba(var(--glow),.35))}
+#dlPhase #dlDraftScreen .dl-team h2{transition:box-shadow 1.5s,border-color 1.5s}
+#dlPhase #dlDraftScreen .dl-team.current h2{box-shadow:0 0 16px rgba(var(--glow),.65);border-color:var(--light)}
+@media(prefers-reduced-motion:reduce){.turn-light83 .aura83::before,.motes83 i{animation:none}.turn-light83 .shade83,.turn-light83 .aura83,.turn-light83 .motes83,#dlPhase #dlDraftScreen .dl-team,#dlPhase #dlDraftScreen .dl-team .dl-captain{transition:none}}

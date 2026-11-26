@@ -1,0 +1,35 @@
+
+/* Ambient FX are completely decorative and never intercept controls. */
+#livingAtmosphere{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:2;isolation:isolate}
+#livingAtmosphere>*,#livingAtmosphere canvas{pointer-events:none!important}
+#livingAtmosphere canvas{position:absolute;inset:0;width:100%;height:100%;z-index:3}
+#livingAtmosphere .living-vault-light{position:absolute;inset:-12% -10% 0;mix-blend-mode:screen;opacity:.42;
+ background:radial-gradient(ellipse 20% 45% at 50% 20%,rgba(236,40,57,.23),transparent 82%),
+ radial-gradient(ellipse 18% 52% at 15% 38%,rgba(100,60,230,.13),transparent 86%),
+ radial-gradient(ellipse 18% 47% at 86% 39%,rgba(242,35,58,.14),transparent 86%);
+ animation:livingLights 9s ease-in-out infinite alternate}
+#livingAtmosphere .living-haze{position:absolute;left:-20%;width:140%;height:24%;bottom:-9%;
+ background:radial-gradient(ellipse at center,rgba(203,169,165,.16) 0%,rgba(125,105,145,.1) 43%,transparent 72%);
+ filter:blur(19px);animation:livingMist 15s ease-in-out infinite alternate;opacity:.6;mix-blend-mode:screen}
+#livingAtmosphere .living-haze.second{bottom:-3%;height:15%;opacity:.44;filter:blur(13px);animation-duration:21s;animation-direction:alternate-reverse}
+#livingAtmosphere .living-red-ritual{position:absolute;left:40%;top:68%;width:20%;height:27%;border-radius:50%;
+ background:radial-gradient(ellipse,rgba(255,38,24,.14),rgba(230,34,22,.048) 49%,transparent 71%);
+ mix-blend-mode:screen;animation:livingHeart 3.5s ease-in-out infinite alternate}
+#livingAtmosphere .living-candle-light{position:absolute;width:13%;height:26%;bottom:5%;opacity:.18;mix-blend-mode:screen;
+ background:radial-gradient(ellipse at bottom,rgba(255,165,63,.65),rgba(255,70,36,.08) 43%,transparent 69%);
+ animation:livingCandle 2.7s steps(17,end) infinite alternate}
+#livingAtmosphere .living-candle-light.left{left:4%}
+#livingAtmosphere .living-candle-light.right{right:5%;animation-delay:-1.3s;filter:hue-rotate(-20deg)}
+#livingAtmosphere .living-sigil{position:absolute;left:39%;bottom:6%;width:22%;height:14%;border-radius:50%;
+ background:radial-gradient(ellipse,rgba(251,58,29,.18) 0%,rgba(255,26,16,.075) 40%,transparent 72%);
+ filter:blur(8px);mix-blend-mode:screen;animation:livingSigil 2.8s ease-in-out infinite alternate}
+@keyframes livingLights{0%{opacity:.26;transform:translateY(0) scale(1)}100%{opacity:.52;transform:translateY(2%) scale(1.05)}}
+@keyframes livingMist{0%{transform:translateX(-7%) scale(1)}100%{transform:translateX(7%) scale(1.12)}}
+@keyframes livingHeart{from{opacity:.30;transform:scale(.94)}to{opacity:.85;transform:scale(1.09)}}
+@keyframes livingCandle{0%{opacity:.12;transform:scaleX(.92)}50%{opacity:.28}100%{opacity:.17;transform:scaleX(1.1)}}
+@keyframes livingSigil{from{opacity:.18;transform:scale(.93)}to{opacity:.78;transform:scale(1.07)}}
+/* Keep the book clickable, with a responsive rune glow. */
+.scene .grimoire:not(:disabled){transition:filter .28s ease}
+.scene .grimoire:not(:disabled):hover,.scene .grimoire:not(:disabled):focus-visible{filter:drop-shadow(0 0 12px #fa5446) drop-shadow(0 0 28px #e84038)}
+@media(max-width:700px){#livingAtmosphere .living-haze{filter:blur(11px)}#livingAtmosphere .living-candle-light{opacity:.1}}
+@media(prefers-reduced-motion:reduce){#livingAtmosphere .living-vault-light,#livingAtmosphere .living-haze,#livingAtmosphere .living-red-ritual,#livingAtmosphere .living-candle-light,#livingAtmosphere .living-sigil{animation:none!important}}

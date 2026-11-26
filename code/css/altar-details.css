@@ -1,0 +1,34 @@
+
+#dlPhase:has(#dlDraftScreen.active){background:#100708 radial-gradient(ellipse at 50% 10%,#481614,#100708 65%);}
+#dlPhase:has(#dlDraftScreen.active)::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:url(../../media/images/altar-texture-one.jpg),url(../../media/images/altar-texture-two.jpg),url(../../media/images/altar-texture-three.jpg);background-position:left bottom,right bottom,70% top;background-size:24% auto,24% auto,23% auto;background-repeat:no-repeat;opacity:.85}
+#dlPhase:has(#dlDraftScreen.active) .dl-wrap{position:relative;max-width:1800px;padding:8px 2vw 18px}
+#dlPhase:has(#dlDraftScreen.active) .dl-head{height:clamp(55px,9vw,100px);background:url(../../media/images/altar-header.jpg) center top/auto 100% no-repeat;border:0;margin-bottom:8px}
+#dlPhase:has(#dlDraftScreen.active) .dl-head>*{display:none}
+#dlPhase #dlDraftScreen .dl-layout{grid-template-columns:minmax(0,1fr) minmax(0,2.2fr) minmax(0,1fr);gap:1.4vw;align-items:start}
+#dlPhase #dlDraftScreen .dl-team{background:linear-gradient(155deg,#210b0a,#100708 55%,#35100d);border:3px double #a77942;box-shadow:inset 0 0 28px #000,0 0 15px #000;padding:6px;min-width:0}
+#dlPhase #dlDraftScreen .dl-captain{height:clamp(120px,23vh,260px);width:100%;object-fit:contain;display:block;margin:auto}
+#dlPhase #dlDraftScreen h2,#dlPhase #dlDraftScreen h3,#dlPhase .dl-gothic-label{border:3px double #b17a43;background:linear-gradient(90deg,#150708,#42130e,#150708);color:#f6d9ac;font-family:Georgia,serif;text-shadow:0 2px #000;box-shadow:0 2px 9px #000;letter-spacing:.04em}
+#dlPhase #dlDraftScreen .dl-team h2{font-size:clamp(15px,2.2vw,32px);margin:0 0 5px}
+#dlPhase #dlDraftScreen .dl-player-roster{display:flex;flex-wrap:wrap;justify-content:center;gap:4px}
+#dlPhase #dlDraftScreen .dl-player-roster figure{width:calc(25% - 4px);font-size:clamp(8px,.8vw,13px)}
+#dlPhase #dlDraftScreen .dl-player-roster img{aspect-ratio:2/3;object-fit:contain;border:2px ridge #b4864c}
+#dlPhase #dlDraftScreen .dl-turn{display:flex;flex-direction:column;align-items:center;border:3px double #df9760;background:linear-gradient(90deg,#160707,#45110d,#160707);box-shadow:0 0 18px #f52c2355,inset 0 0 12px #7d2119;margin-bottom:8px}
+#dlPhase #dlDraftScreen .dl-turn strong{order:-1;margin:2px;font-family:Georgia;font-size:clamp(16px,2vw,30px)}
+#dlPhase #dlDraftScreen .dl-grid{grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;max-height:46vh;background:#110807e8;border:2px double #8d5d37;padding:5px}
+#dlPhase #dlDraftScreen .dl-hero{border:3px ridge #bb8b4e;box-shadow:0 0 0 1px #4a2818,inset 0 0 5px #000;background:#130909;border-radius:4px}
+#dlPhase #dlDraftScreen .dl-hero img{height:auto;aspect-ratio:1;object-fit:contain;background:#100a0a}
+#dlPhase #dlDraftScreen .dl-hero span{font-size:clamp(8px,.85vw,13px);padding:3px 0}
+#dlPhase #dlDraftScreen .dl-tools{gap:5px;margin-bottom:5px}#dlPhase #dlDraftScreen .dl-search{padding:5px;min-width:60px}#dlPhase #dlDraftScreen .dl-btn{padding:7px 10px;font-size:11px}
+#dlPhase #dlDraftScreen .dl-confirm{margin:6px 0}#dlPhase #dlDraftScreen .dl-history{display:none}
+#dlPhase #dlDraftScreen .dl-central-bans{background:#120909;border:3px double #a67948;margin-bottom:8px}
+#dlPhase #dlDraftScreen .dl-central-bans .dl-ban-mini:not(.empty):after{content:"";background:linear-gradient(135deg,transparent 46%,#ff3026 48%,#ff3026 51%,transparent 53%)}
+#dlPhase #dlDraftScreen .dl-order{background:#100807;border:3px double #b17e46;gap:5px;padding:6px}
+#dlPhase #dlDraftScreen .dl-order-item{border:0;background:transparent;font-size:clamp(8px,.8vw,13px);padding:0;color:#f4d9b0}
+#dlPhase #dlDraftScreen .dl-order-item b{font-size:0;aspect-ratio:1;max-width:49px;margin:2px auto;background:url(../../media/images/altar-pick-icon.jpg) center/100% 100% no-repeat;border:1px solid #9c6b3b;border-radius:4px}
+#dlPhase #dlDraftScreen .dl-order-item.ban b{background-image:url(../../media/images/altar-ban-icon.jpg)}
+#dlPhase #dlDraftScreen .dl-order-item.now b{box-shadow:0 0 10px 3px #ffae50;border-color:#ffe2a4}
+#dlPhase #dlDraftScreen .dl-order-item.now{box-shadow:none;background:transparent}
+#dlPhase #dlDraftScreen #dlPicks0,#dlPhase #dlDraftScreen #dlPicks1{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px}
+#dlPhase #dlDraftScreen .dl-slot{display:flex;flex-direction:column;justify-content:center;min-height:35px;padding:2px;border:1px solid #805a38;font-size:9px;text-align:center;overflow:hidden}
+#dlPhase #dlDraftScreen .dl-slot img{width:100%;height:36px;object-fit:contain}
+@media(max-width:850px) and (orientation:portrait){#dlPhase #dlDraftScreen .dl-layout{grid-template-columns:1fr 1fr;gap:7px}#dlPhase #dlDraftScreen .dl-team{grid-row:1}#dlPhase #dlDraftScreen .dl-center{grid-row:2;grid-column:1/-1}#dlPhase #dlDraftScreen .dl-captain{height:100px}#dlPhase #dlDraftScreen .dl-grid{grid-template-columns:repeat(5,minmax(0,1fr));max-height:50vh}#dlPhase #dlDraftScreen .dl-order{grid-template-columns:repeat(9,minmax(0,1fr))}}

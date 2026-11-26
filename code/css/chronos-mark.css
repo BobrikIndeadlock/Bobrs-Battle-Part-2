@@ -1,0 +1,10 @@
+
+#scene .chronos-mark84{position:absolute;top:.25%;width:25.6%;aspect-ratio:1;z-index:2;pointer-events:none;opacity:0;visibility:hidden;transform:scale(.94);transition:opacity 1.65s ease,transform 1.65s ease,visibility 0s linear 1.65s;isolation:isolate}
+#scene .mark-side-0{left:1.4%}#scene .mark-side-1{right:1.4%}
+#scene .chronos-mark84.mark-active{visibility:visible;opacity:1;transform:scale(1);transition:opacity 1.65s ease,transform 1.65s ease,visibility 0s}
+.chronos-mark84 svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 2px #ffb64e) drop-shadow(0 0 7px #dc8b2866)}
+.c84-body{animation:c84-breathe 5s ease-in-out infinite;animation-play-state:paused}.c84-wheel{transform-origin:200px 200px;animation:c84-rewind 42s linear infinite;animation-play-state:paused}
+.c84-arc{animation:c84-electric 3.9s var(--delay) infinite;animation-play-state:paused}.c84-spark{animation:c84-twinkle var(--duration) var(--delay) ease-in-out infinite;animation-play-state:paused}
+.mark-active .c84-body,.mark-active .c84-wheel,.mark-active .c84-arc,.mark-active .c84-spark{animation-play-state:running}
+@keyframes c84-rewind{to{transform:rotate(-360deg)}}@keyframes c84-breathe{0%,100%{opacity:.76}50%{opacity:1}}@keyframes c84-electric{0%,71%,84%,100%{opacity:0}74%,80%{opacity:1}77%{opacity:.24}}@keyframes c84-twinkle{0%,100%{opacity:.12}45%{opacity:.95}70%{opacity:.35}}
+@media(prefers-reduced-motion:reduce){#scene .chronos-mark84{transition:none}.c84-body,.c84-wheel,.c84-arc,.c84-spark{animation:none}}

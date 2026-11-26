@@ -1,0 +1,29 @@
+
+#hall92Entry{position:absolute;left:47.15%;top:15.8%;width:5.8%;height:15%;padding:0;border:0;background:transparent;z-index:8;cursor:pointer;border-radius:3px;touch-action:manipulation}
+#hall92Entry:hover,#hall92Entry:focus-visible{box-shadow:0 0 14px #e8ad4c88;outline:1px solid #f5d49888;outline-offset:2px}
+#hall92Veil{position:fixed;inset:0;background:#050306;opacity:0;visibility:hidden;pointer-events:none;z-index:2147483644;transition:opacity .85s ease,visibility 0s linear .85s}
+#hall92Veil.active{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .85s ease}
+#hall92{position:fixed;inset:0;z-index:2147483643;display:grid;place-items:center;background:#070507;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 1s ease,visibility 0s linear 1s;overflow:hidden}
+#hall92.active{opacity:1;visibility:visible;pointer-events:auto;transition:opacity 1s ease}
+#hall92World{position:relative;width:min(100vw,177.6833dvh);aspect-ratio:1672/941;overflow:hidden;isolation:isolate;transform:scale(1.04);transition:transform 1.5s cubic-bezier(.2,.6,.2,1);background:#120c0a}
+#hall92.active #hall92World{transform:scale(1)}
+#hall92Art{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none}
+#hall92Grit{position:absolute;left:33.3%;top:24.1%;width:11.2%;height:27.6%;z-index:4;border:0;background:transparent;cursor:pointer;padding:0;touch-action:manipulation}
+#hall92Grit:hover,#hall92Grit:focus-visible{outline:1px solid #f2c565;box-shadow:0 0 20px #eebc6166;outline-offset:3px}
+.h92fog{position:absolute;left:-15%;bottom:-2%;width:72%;height:31%;background:url('../../media/images/hall-mist.webp') center/100% 100% no-repeat;pointer-events:none;animation:h92drift 19s ease-in-out infinite alternate;opacity:.85;z-index:2}
+.h92fog.right{left:44%;bottom:0;animation-duration:24s;animation-direction:alternate-reverse;opacity:.7;transform:scaleX(-1)}
+@keyframes h92drift{from{translate:-6% 1%}to{translate:11% -2%}}
+.h92light{position:absolute;width:15%;height:22%;pointer-events:none;background:radial-gradient(ellipse,#ffae4870 0%,#ee841e19 37%,transparent 70%);mix-blend-mode:screen;animation:h92flame 2.4s ease-in-out infinite;z-index:1}
+@keyframes h92flame{0%,100%{opacity:.22;transform:scale(.94)}25%{opacity:.48;transform:scale(1.05,.96)}48%{opacity:.3;transform:scale(.97,1.04)}72%{opacity:.56;transform:scale(1.07)}}
+#hall92Dust{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+#hall92Dust i{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);background:#ffe4a5;border-radius:50%;box-shadow:0 0 5px #eaae4e;opacity:0;animation:h92dust var(--d) var(--delay) linear infinite}
+@keyframes h92dust{0%{opacity:0;transform:translate(0,15px)}20%{opacity:.65}80%{opacity:.35}100%{opacity:0;transform:translate(var(--dx),-75px)}}
+#hall92:not(.active) .h92fog,#hall92:not(.active) .h92light,#hall92:not(.active) #hall92Dust i{animation-play-state:paused}
+.h92button{position:absolute;z-index:7;bottom:max(14px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);border:1px solid #a67b3e;border-radius:5px;background:linear-gradient(#342316,#100b08);color:#f4d5a1;box-shadow:0 2px 18px #000b,inset 0 0 12px #b5883422;padding:10px 19px;font:600 clamp(12px,1.4vw,17px)/1.2 Georgia,serif;white-space:nowrap;cursor:pointer}
+#hall92Detail{position:absolute;inset:0;display:grid;place-items:center;z-index:9;background:#080509d9;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .65s ease,visibility 0s linear .65s}
+#hall92Detail.active{visibility:visible;opacity:1;pointer-events:auto;transition:opacity .65s ease}
+#hall92Card{height:min(82dvh,calc(100vw * 1.465));max-width:92vw;object-fit:contain;transform:scale(.55);transform-origin:50% 50%;transition:transform .85s cubic-bezier(.2,.65,.2,1);filter:drop-shadow(0 0 20px #e6ad4650)}
+#hall92Detail.active #hall92Card{transform:scale(1)}
+#hall92CloseCard{bottom:max(9px,env(safe-area-inset-bottom))}
+@media(orientation:portrait){#hall92Card{height:min(76dvh,calc(94vw * 1.465))}}
+@media(prefers-reduced-motion:reduce){#hall92,#hall92World,#hall92Veil,#hall92Card,#hall92Detail{transition-duration:.01s!important}.h92fog,.h92light,#hall92Dust i{animation:none}}

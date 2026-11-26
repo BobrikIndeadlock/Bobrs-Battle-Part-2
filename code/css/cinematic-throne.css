@@ -1,0 +1,9 @@
+
+/* Every effect is painted in a dedicated image-registered canvas; controls remain clickable. */
+#livingAtmosphere canvas{z-index:5;mix-blend-mode:screen;pointer-events:none!important}
+#livingAtmosphere{contain:paint;pointer-events:none!important}
+#livingAtmosphere .living-vault-light{opacity:.23!important}
+#livingAtmosphere .living-haze{opacity:.55}
+#livingAtmosphere .living-haze.second{opacity:.32}
+#livingAtmosphere .living-red-ritual{opacity:.3}
+@media(prefers-reduced-motion:reduce){#livingAtmosphere canvas{display:none}}

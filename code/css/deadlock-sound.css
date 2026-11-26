@@ -1,0 +1,1 @@
+#dlPhase #battleSoundToggle{position:fixed;top:8px;right:8px;z-index:100; padding:6px 9px;font-size:10px;background:#170b0de8;border-color:#a77942}#dlPhase #battleSoundToggle[aria-pressed="true"]{color:#ffe2a4;border-color:#e4bc77}#dlPhase:has(.dl-fx[style]) #battleSoundToggle{visibility:hidden}

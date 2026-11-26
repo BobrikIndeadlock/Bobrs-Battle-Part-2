@@ -1,0 +1,1 @@
+document.getElementById('portrait0').src="media/images/makarych.jpg";document.getElementById('portrait1').src="media/images/artemon.jpg";

@@ -18,5 +18,6 @@
 
 ## Вход в замок
 
-- [Полная видеодемонстрация вступления](Bobrs-Battle-Part-2-Castle-Entrance.mp4)
-- [Аудит и замеры](QA-castle-entrance.md)
+- [Видеодемонстрация исправленного пролёта камеры](Bobrs-Battle-Part-2-Castle-Camera.mp4)
+- [Аудит пролёта и замеры](QA-castle-camera.md)
+- [Вступление до исправления камеры](Bobrs-Battle-Part-2-Castle-Entrance.mp4)

@@ -13,6 +13,5 @@
 
 ## Ритуал десяти огней
 
-- [Непрерывная запись призыва из игры](Bobrs-Battle-Part-2-Summoning-Demo.mp4)
-- [Аудит и замеры](QA-summoning.md)
-- [Промт для исходной графики пламени](Prompts-summoning-vfx.md)
+- [Непрерывная запись с исходной моделью огоньков](Bobrs-Battle-Part-2-Summoning-Original-Orbs.mp4)
+- [Аудит исправления и замеры](QA-summoning-original-orbs.md)

@@ -1,0 +1,106 @@
+[
+  {
+    "profile": {
+      "key": "desktop",
+      "width": 1440,
+      "height": 810,
+      "dpr": 1,
+      "throttle": 1
+    },
+    "version": "before",
+    "runs": [
+      {
+        "ms": 6843,
+        "p95": 16.8,
+        "over50": 0,
+        "scriptMs": 142,
+        "styleMs": 30
+      },
+      {
+        "ms": 6834,
+        "p95": 16.8,
+        "over50": 0,
+        "scriptMs": 108,
+        "styleMs": 18
+      }
+    ]
+  },
+  {
+    "profile": {
+      "key": "desktop",
+      "width": 1440,
+      "height": 810,
+      "dpr": 1,
+      "throttle": 1
+    },
+    "version": "after",
+    "runs": [
+      {
+        "ms": 6833,
+        "p95": 50,
+        "over50": 7,
+        "scriptMs": 77,
+        "styleMs": 159
+      },
+      {
+        "ms": 6843,
+        "p95": 50,
+        "over50": 5,
+        "scriptMs": 69,
+        "styleMs": 147
+      }
+    ]
+  },
+  {
+    "profile": {
+      "key": "mobile",
+      "width": 812,
+      "height": 375,
+      "dpr": 2,
+      "throttle": 4
+    },
+    "version": "before",
+    "runs": [
+      {
+        "ms": 6844,
+        "p95": 16.8,
+        "over50": 1,
+        "scriptMs": 376,
+        "styleMs": 98
+      },
+      {
+        "ms": 6838,
+        "p95": 16.8,
+        "over50": 0,
+        "scriptMs": 320,
+        "styleMs": 71
+      }
+    ]
+  },
+  {
+    "profile": {
+      "key": "mobile",
+      "width": 812,
+      "height": 375,
+      "dpr": 2,
+      "throttle": 4
+    },
+    "version": "after",
+    "runs": [
+      {
+        "ms": 6847,
+        "p95": 50.1,
+        "over50": 11,
+        "scriptMs": 281,
+        "styleMs": 831
+      },
+      {
+        "ms": 6838,
+        "p95": 50,
+        "over50": 3,
+        "scriptMs": 194,
+        "styleMs": 899
+      }
+    ]
+  }
+]

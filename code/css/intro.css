@@ -150,15 +150,6 @@
 #intro-stage.open .intro-metal {
   animation: intro-door-glint 3700ms ease-in-out both;
 }
-#intro-stage.open #intro-forecourt {
-  perspective: var(--intro-perspective, 1000px);
-  perspective-origin: var(--intro-eye-left, 50%) var(--intro-eye-top, 51%);
-}
-#intro-stage.open #intro-world,
-#intro-stage.open .intro-doors {
-  transform-style: preserve-3d;
-}
-#intro-stage.open .intro-doors { perspective: none; }
 #intro-stage.open #intro-world,
 #intro-stage.open #intro-interior { will-change: transform; }
 #intro-stage.open #intro-interior::after {

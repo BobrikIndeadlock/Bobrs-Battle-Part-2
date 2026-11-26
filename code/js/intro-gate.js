@@ -2,15 +2,17 @@
   const stage = document.getElementById('intro-stage');
   const forecourt = document.getElementById('intro-forecourt');
   const world = document.getElementById('intro-world');
+  const doors = world?.querySelector('.intro-doors');
   const interior = document.getElementById('intro-interior');
   const gate = document.getElementById('intro-gate');
   const arena = document.querySelector('.arena');
-  if (!stage || !forecourt || !world || !interior || !gate || !arena) return;
+  if (!stage || !forecourt || !world || !doors || !interior || !gate || !arena) return;
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const sampleCount = 90;
   let geometry;
   let approach;
+  let doorProjection;
   let interiorApproach;
   let watchdog = 0;
   let keyboard = false;
@@ -33,16 +35,17 @@
 
   function cameraFrames(plane) {
     const { hall, width, height, x, y, perspective } = geometry;
-    const endZ = perspective * .935;
     const startCenterX = x + width / 2 - hall.left - hall.width / 2;
     const startCenterY = y + height / 2 - hall.top - hall.height / 2;
 
     return Array.from({ length: sampleCount + 1 }, (_, index) => {
       const offset = index / sampleCount;
       const distance = distanceAt(offset);
-      if (plane === world) {
-        return { offset, transform: `translateZ(${endZ * distance}px)` };
-      }
+      // Project the flat forecourt and the hinged leaves from the same eye position.
+      // Keeping the forecourt flat avoids rerasterizing it inside the door's 3D context.
+      const depth = perspective * (1 - .935 * distance);
+      if (plane === world) return { offset, transform: `scale(${perspective / depth})` };
+      if (plane === doors) return { offset, perspective: `${depth}px` };
 
       // The painted interior is the distant plane. Its motion converges on the
       // exact rectangle of the game arena as the nearer arch passes out of view.
@@ -74,11 +77,10 @@
     stage.style.setProperty('--start-view',
       `translate(${x - hall.left}px, ${y - hall.top}px) scale(${width / hall.width}, ${height / hall.height})`);
     stage.style.setProperty('--intro-perspective', perspective + 'px');
-    stage.style.setProperty('--intro-eye-left', x - court.left + width * .5 + 'px');
-    stage.style.setProperty('--intro-eye-top', y - court.top + height * .51 + 'px');
 
     // Changing orientation updates the projection without restarting its clock.
     approach?.effect.setKeyframes(cameraFrames(world));
+    doorProjection?.effect.setKeyframes(cameraFrames(doors));
     interiorApproach?.effect.setKeyframes(cameraFrames(interior));
   }
 
@@ -90,8 +92,10 @@
 
   function stopCamera() {
     approach?.cancel();
+    doorProjection?.cancel();
     interiorApproach?.cancel();
     approach = null;
+    doorProjection = null;
     interiorApproach = null;
   }
 
@@ -130,6 +134,7 @@
     if (!reduced.matches && geometry && typeof world.animate === 'function') {
       const options = { duration, easing: 'linear', fill: 'both' };
       approach = world.animate(cameraFrames(world), options);
+      doorProjection = doors.animate(cameraFrames(doors), options);
       interiorApproach = interior.animate(cameraFrames(interior), options);
     }
     stage.dispatchEvent(new CustomEvent('intro:open', { detail: { cameraPosition } }));

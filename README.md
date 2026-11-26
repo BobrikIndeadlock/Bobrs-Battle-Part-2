@@ -4,7 +4,7 @@
 
 Распакуйте архив целиком и откройте `index.html`. На iPhone откройте его через HTML Web Preview с доступом к соседним папкам `code/` и `media/`.
 
-Исходный коммит сборки `2bf80f31cdcba918340bfa64b0e694eae9130995` находится в ветке `gothic-visual-upgrade`. [Аудит плавности призыва](QA-summoning-smoothness.md) · [Финальный аудит игры](QA-gothic-final.md) · [Хеши файлов в ZIP](Final-build-files.SHA256) · [SHA-256 архива](SHA256SUMS)
+Сборка `v2.0-gothic-final` создана из коммита `d64a9f65091cecd1758d7b04848c06095ce5c6a2` в `main`. [Заключительный аудит](QA-v2.0-gothic-final.md) · [Хеши файлов в ZIP](Final-build-files.SHA256) · [SHA-256 архива](SHA256SUMS)
 
 ## Предварительная сборка и материалы этапов
 

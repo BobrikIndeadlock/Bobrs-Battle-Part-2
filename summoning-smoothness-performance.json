@@ -1,0 +1,1552 @@
+{
+  "baselineCommit": "5267f4f0704474a6b3c6dfd58341f047e14381e7",
+  "finalCommit": "2bf80f31cdcba918340bfa64b0e694eae9130995",
+  "engine": "Chromium 151 software rendering",
+  "before": [
+    {
+      "label": "desktop",
+      "cpu": 1,
+      "events": {
+        "charged": 4283.200000000001,
+        "reveal": 5533.200000000001,
+        "choose": 6833.1
+      },
+      "tasks": [
+        [
+          1495.3,
+          55
+        ],
+        [
+          5921.4,
+          93
+        ]
+      ],
+      "whole": {
+        "fps": 32.2,
+        "median": 33.2,
+        "p95": 66.6,
+        "worst": 266.7,
+        "count": 220,
+        "over25": 113,
+        "over50": 11
+      },
+      "emissions": {
+        "fps": 35.2,
+        "median": 16.8,
+        "p95": 50,
+        "worst": 150,
+        "count": 71,
+        "over25": 34,
+        "over50": 2
+      },
+      "atSpawn": [
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 36,
+          "median": 33.3,
+          "p95": 50,
+          "worst": 50,
+          "count": 6,
+          "over25": 3,
+          "over50": 0
+        },
+        {
+          "fps": 40,
+          "median": 33.3,
+          "p95": 33.4,
+          "worst": 33.4,
+          "count": 6,
+          "over25": 3,
+          "over50": 0
+        },
+        {
+          "fps": 36,
+          "median": 33.3,
+          "p95": 33.4,
+          "worst": 33.4,
+          "count": 6,
+          "over25": 4,
+          "over50": 0
+        },
+        {
+          "fps": 25,
+          "median": 33.3,
+          "p95": 83.3,
+          "worst": 83.3,
+          "count": 5,
+          "over25": 4,
+          "over50": 1
+        },
+        {
+          "fps": 10.9,
+          "median": 150,
+          "p95": 150,
+          "worst": 150,
+          "count": 2,
+          "over25": 2,
+          "over50": 1
+        },
+        {
+          "fps": 27.3,
+          "median": 33.3,
+          "p95": 50,
+          "worst": 50,
+          "count": 5,
+          "over25": 5,
+          "over50": 0
+        },
+        {
+          "fps": 27.3,
+          "median": 33.4,
+          "p95": 50,
+          "worst": 50,
+          "count": 5,
+          "over25": 5,
+          "over50": 0
+        }
+      ],
+      "orbMotion": [
+        {
+          "first": 283.4,
+          "update": {
+            "fps": 25.1,
+            "median": 33.4,
+            "p95": 83.3,
+            "worst": 150,
+            "count": 56,
+            "over25": 48,
+            "over50": 7
+          }
+        },
+        {
+          "first": 450.1,
+          "update": {
+            "fps": 24.4,
+            "median": 33.4,
+            "p95": 83.3,
+            "worst": 150,
+            "count": 55,
+            "over25": 47,
+            "over50": 7
+          }
+        },
+        {
+          "first": 650,
+          "update": {
+            "fps": 23.6,
+            "median": 33.4,
+            "p95": 83.3,
+            "worst": 150,
+            "count": 52,
+            "over25": 45,
+            "over50": 8
+          }
+        },
+        {
+          "first": 816.7,
+          "update": {
+            "fps": 23.6,
+            "median": 33.4,
+            "p95": 66.7,
+            "worst": 150,
+            "count": 53,
+            "over25": 46,
+            "over50": 8
+          }
+        },
+        {
+          "first": 1033.4,
+          "update": {
+            "fps": 23.5,
+            "median": 33.4,
+            "p95": 66.7,
+            "worst": 150,
+            "count": 52,
+            "over25": 47,
+            "over50": 7
+          }
+        },
+        {
+          "first": 1200,
+          "update": {
+            "fps": 23.1,
+            "median": 33.4,
+            "p95": 66.6,
+            "worst": 150,
+            "count": 52,
+            "over25": 49,
+            "over50": 6
+          }
+        },
+        {
+          "first": 1400,
+          "update": {
+            "fps": 23.4,
+            "median": 33.4,
+            "p95": 66.6,
+            "worst": 150,
+            "count": 50,
+            "over25": 49,
+            "over50": 4
+          }
+        },
+        {
+          "first": 1666.7,
+          "update": {
+            "fps": 24.5,
+            "median": 33.4,
+            "p95": 66.6,
+            "worst": 66.6,
+            "count": 47,
+            "over25": 46,
+            "over50": 3
+          }
+        },
+        {
+          "first": 1783.3,
+          "update": {
+            "fps": 21.8,
+            "median": 33.4,
+            "p95": 66.6,
+            "worst": 266.7,
+            "count": 48,
+            "over25": 46,
+            "over50": 5
+          }
+        },
+        {
+          "first": 1966.7,
+          "update": {
+            "fps": 21.7,
+            "median": 33.4,
+            "p95": 66.7,
+            "worst": 266.7,
+            "count": 48,
+            "over25": 46,
+            "over50": 6
+          }
+        }
+      ],
+      "errors": [],
+      "requests": []
+    },
+    {
+      "label": "phone",
+      "cpu": 4,
+      "events": {
+        "charged": 4249.800000000001,
+        "reveal": 5533.1,
+        "choose": 6833
+      },
+      "tasks": [
+        [
+          94.2,
+          78
+        ],
+        [
+          1835.9,
+          111
+        ],
+        [
+          3953.8,
+          152
+        ],
+        [
+          4107.9,
+          78
+        ],
+        [
+          4816.9,
+          55
+        ],
+        [
+          6100.8,
+          78
+        ],
+        [
+          6181.4,
+          59
+        ]
+      ],
+      "whole": {
+        "fps": 45.8,
+        "median": 16.7,
+        "p95": 50.1,
+        "worst": 149.9,
+        "count": 313,
+        "over25": 40,
+        "over50": 13
+      },
+      "emissions": {
+        "fps": 52.1,
+        "median": 16.7,
+        "p95": 33.3,
+        "worst": 100,
+        "count": 106,
+        "over25": 7,
+        "over50": 2
+      },
+      "atSpawn": [
+        {
+          "fps": 24,
+          "median": 33.3,
+          "p95": 100,
+          "worst": 100,
+          "count": 4,
+          "over25": 2,
+          "over50": 1
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 46.7,
+          "median": 16.7,
+          "p95": 33.4,
+          "worst": 33.4,
+          "count": 7,
+          "over25": 2,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 16.4,
+          "median": 50.1,
+          "p95": 99.9,
+          "worst": 99.9,
+          "count": 3,
+          "over25": 3,
+          "over50": 1
+        }
+      ],
+      "orbMotion": [
+        {
+          "first": 349.9,
+          "update": {
+            "fps": 23.7,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 116.7,
+            "count": 51,
+            "over25": 49,
+            "over50": 2
+          }
+        },
+        {
+          "first": 483.3,
+          "update": {
+            "fps": 23.5,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 116.7,
+            "count": 52,
+            "over25": 50,
+            "over50": 2
+          }
+        },
+        {
+          "first": 683.3,
+          "update": {
+            "fps": 23.6,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 116.7,
+            "count": 52,
+            "over25": 51,
+            "over50": 1
+          }
+        },
+        {
+          "first": 816.6,
+          "update": {
+            "fps": 23.6,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 116.7,
+            "count": 53,
+            "over25": 52,
+            "over50": 1
+          }
+        },
+        {
+          "first": 1016.6,
+          "update": {
+            "fps": 23.6,
+            "median": 33.4,
+            "p95": 50,
+            "worst": 116.7,
+            "count": 52,
+            "over25": 51,
+            "over50": 1
+          }
+        },
+        {
+          "first": 1183.3,
+          "update": {
+            "fps": 23.6,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 116.7,
+            "count": 53,
+            "over25": 52,
+            "over50": 1
+          }
+        },
+        {
+          "first": 1399.9,
+          "update": {
+            "fps": 23.5,
+            "median": 49.9,
+            "p95": 50.1,
+            "worst": 116.7,
+            "count": 52,
+            "over25": 51,
+            "over50": 1
+          }
+        },
+        {
+          "first": 1566.6,
+          "update": {
+            "fps": 23.6,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 116.7,
+            "count": 53,
+            "over25": 52,
+            "over50": 1
+          }
+        },
+        {
+          "first": 1766.5,
+          "update": {
+            "fps": 23.6,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 116.7,
+            "count": 50,
+            "over25": 49,
+            "over50": 1
+          }
+        },
+        {
+          "first": 1983.3,
+          "update": {
+            "fps": 22.3,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 250,
+            "count": 49,
+            "over25": 48,
+            "over50": 1
+          }
+        }
+      ],
+      "errors": [],
+      "requests": []
+    },
+    {
+      "label": "phone-60hz",
+      "cpu": 1,
+      "events": {
+        "charged": 4249.799999999999,
+        "reveal": 5466.5,
+        "choose": 6833
+      },
+      "tasks": [],
+      "whole": {
+        "fps": 57.1,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 83.4,
+        "count": 390,
+        "over25": 15,
+        "over50": 1
+      },
+      "emissions": {
+        "fps": 60,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 16.8,
+        "count": 121,
+        "over25": 0,
+        "over50": 0
+      },
+      "atSpawn": [
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        }
+      ],
+      "orbMotion": [
+        {
+          "first": 266.7,
+          "update": {
+            "fps": 24.1,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 50.1,
+            "count": 53,
+            "over25": 53,
+            "over50": 0
+          }
+        },
+        {
+          "first": 483.3,
+          "update": {
+            "fps": 23.9,
+            "median": 49.9,
+            "p95": 50.1,
+            "worst": 50.1,
+            "count": 53,
+            "over25": 53,
+            "over50": 0
+          }
+        },
+        {
+          "first": 650,
+          "update": {
+            "fps": 23.9,
+            "median": 49.9,
+            "p95": 50.1,
+            "worst": 50.1,
+            "count": 53,
+            "over25": 53,
+            "over50": 0
+          }
+        },
+        {
+          "first": 816.6,
+          "update": {
+            "fps": 24,
+            "median": 49.9,
+            "p95": 50.1,
+            "worst": 50.1,
+            "count": 54,
+            "over25": 54,
+            "over50": 0
+          }
+        },
+        {
+          "first": 1016.6,
+          "update": {
+            "fps": 24.1,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 50.1,
+            "count": 53,
+            "over25": 53,
+            "over50": 0
+          }
+        },
+        {
+          "first": 1183.3,
+          "update": {
+            "fps": 24,
+            "median": 49.9,
+            "p95": 50.1,
+            "worst": 50.1,
+            "count": 54,
+            "over25": 54,
+            "over50": 0
+          }
+        },
+        {
+          "first": 1399.9,
+          "update": {
+            "fps": 23.9,
+            "median": 49.9,
+            "p95": 50.1,
+            "worst": 50.1,
+            "count": 53,
+            "over25": 53,
+            "over50": 0
+          }
+        },
+        {
+          "first": 1566.5,
+          "update": {
+            "fps": 24,
+            "median": 49.9,
+            "p95": 50.1,
+            "worst": 50.1,
+            "count": 54,
+            "over25": 54,
+            "over50": 0
+          }
+        },
+        {
+          "first": 1766.6,
+          "update": {
+            "fps": 24.1,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 50.1,
+            "count": 53,
+            "over25": 53,
+            "over50": 0
+          }
+        },
+        {
+          "first": 1933.2,
+          "update": {
+            "fps": 24.1,
+            "median": 33.4,
+            "p95": 50.1,
+            "worst": 50.1,
+            "count": 53,
+            "over25": 53,
+            "over50": 0
+          }
+        }
+      ],
+      "errors": [],
+      "requests": []
+    }
+  ],
+  "after": [
+    {
+      "label": "desktop",
+      "cpu": 1,
+      "events": {
+        "charged": 4299.800000000001,
+        "reveal": 5466.5,
+        "choose": 6833.1
+      },
+      "tasks": [],
+      "whole": {
+        "fps": 34.5,
+        "median": 33.2,
+        "p95": 50.1,
+        "worst": 100,
+        "count": 236,
+        "over25": 118,
+        "over50": 9
+      },
+      "emissions": {
+        "fps": 39.7,
+        "median": 16.7,
+        "p95": 50,
+        "worst": 50.1,
+        "count": 80,
+        "over25": 35,
+        "over50": 0
+      },
+      "atSpawn": [
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 48,
+          "median": 16.7,
+          "p95": 33.4,
+          "worst": 33.4,
+          "count": 8,
+          "over25": 2,
+          "over50": 0
+        },
+        {
+          "fps": 40,
+          "median": 33.3,
+          "p95": 33.4,
+          "worst": 33.4,
+          "count": 6,
+          "over25": 3,
+          "over50": 0
+        },
+        {
+          "fps": 36,
+          "median": 33.3,
+          "p95": 33.4,
+          "worst": 33.4,
+          "count": 6,
+          "over25": 4,
+          "over50": 0
+        },
+        {
+          "fps": 38.2,
+          "median": 33.3,
+          "p95": 33.4,
+          "worst": 33.4,
+          "count": 7,
+          "over25": 4,
+          "over50": 0
+        },
+        {
+          "fps": 27.3,
+          "median": 33.4,
+          "p95": 49.9,
+          "worst": 49.9,
+          "count": 5,
+          "over25": 5,
+          "over50": 0
+        },
+        {
+          "fps": 30,
+          "median": 33.3,
+          "p95": 33.4,
+          "worst": 33.4,
+          "count": 5,
+          "over25": 5,
+          "over50": 0
+        },
+        {
+          "fps": 25,
+          "median": 33.4,
+          "p95": 50,
+          "worst": 50,
+          "count": 5,
+          "over25": 5,
+          "over50": 0
+        }
+      ],
+      "orbMotion": [
+        {
+          "first": 250,
+          "update": {
+            "fps": 37.8,
+            "median": 16.7,
+            "p95": 50,
+            "worst": 50.1,
+            "count": 85,
+            "over25": 41,
+            "over50": 0
+          }
+        },
+        {
+          "first": 433.3,
+          "update": {
+            "fps": 34.4,
+            "median": 33.3,
+            "p95": 50,
+            "worst": 83.3,
+            "count": 78,
+            "over25": 45,
+            "over50": 1
+          }
+        },
+        {
+          "first": 616.7,
+          "update": {
+            "fps": 32,
+            "median": 33.3,
+            "p95": 50,
+            "worst": 83.3,
+            "count": 73,
+            "over25": 50,
+            "over50": 1
+          }
+        },
+        {
+          "first": 799.9,
+          "update": {
+            "fps": 29.3,
+            "median": 33.3,
+            "p95": 50.1,
+            "worst": 83.3,
+            "count": 67,
+            "over25": 53,
+            "over50": 2
+          }
+        },
+        {
+          "first": 983.3,
+          "update": {
+            "fps": 28.3,
+            "median": 33.3,
+            "p95": 50.1,
+            "worst": 83.3,
+            "count": 65,
+            "over25": 55,
+            "over50": 2
+          }
+        },
+        {
+          "first": 1183.3,
+          "update": {
+            "fps": 27.4,
+            "median": 33.3,
+            "p95": 50.1,
+            "worst": 83.3,
+            "count": 62,
+            "over25": 55,
+            "over50": 2
+          }
+        },
+        {
+          "first": 1366.6,
+          "update": {
+            "fps": 25.8,
+            "median": 33.4,
+            "p95": 66.7,
+            "worst": 83.3,
+            "count": 59,
+            "over25": 55,
+            "over50": 4
+          }
+        },
+        {
+          "first": 1566.6,
+          "update": {
+            "fps": 25.3,
+            "median": 33.3,
+            "p95": 83.3,
+            "worst": 83.3,
+            "count": 57,
+            "over25": 53,
+            "over50": 5
+          }
+        },
+        {
+          "first": 1733.3,
+          "update": {
+            "fps": 25.1,
+            "median": 33.4,
+            "p95": 83.3,
+            "worst": 83.3,
+            "count": 57,
+            "over25": 53,
+            "over50": 5
+          }
+        },
+        {
+          "first": 1916.6,
+          "update": {
+            "fps": 25.6,
+            "median": 33.4,
+            "p95": 83.3,
+            "worst": 83.3,
+            "count": 58,
+            "over25": 53,
+            "over50": 5
+          }
+        }
+      ],
+      "errors": [],
+      "requests": []
+    },
+    {
+      "label": "phone",
+      "cpu": 4,
+      "events": {
+        "charged": 4299.8,
+        "reveal": 5516.500000000001,
+        "choose": 6833.099999999999
+      },
+      "tasks": [
+        [
+          -2.1,
+          105
+        ],
+        [
+          177.1,
+          95
+        ],
+        [
+          281.1,
+          105
+        ],
+        [
+          1853.3,
+          55
+        ],
+        [
+          4083.8,
+          69
+        ],
+        [
+          4251.8,
+          57
+        ],
+        [
+          4523.6,
+          75
+        ],
+        [
+          4757.3,
+          54
+        ],
+        [
+          4866.6,
+          53
+        ],
+        [
+          4952.6,
+          59
+        ]
+      ],
+      "whole": {
+        "fps": 45.4,
+        "median": 16.7,
+        "p95": 50.1,
+        "worst": 150,
+        "count": 310,
+        "over25": 44,
+        "over50": 12
+      },
+      "emissions": {
+        "fps": 51.4,
+        "median": 16.7,
+        "p95": 33.2,
+        "worst": 116.7,
+        "count": 108,
+        "over25": 6,
+        "over50": 3
+      },
+      "atSpawn": [
+        {
+          "fps": 8.6,
+          "median": 116.7,
+          "p95": 116.7,
+          "worst": 116.7,
+          "count": 2,
+          "over25": 2,
+          "over50": 2
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 53.3,
+          "median": 16.7,
+          "p95": 33.2,
+          "worst": 33.2,
+          "count": 8,
+          "over25": 1,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 54,
+          "median": 16.7,
+          "p95": 33.3,
+          "worst": 33.3,
+          "count": 9,
+          "over25": 1,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 54,
+          "median": 16.7,
+          "p95": 33.3,
+          "worst": 33.3,
+          "count": 9,
+          "over25": 1,
+          "over50": 0
+        },
+        {
+          "fps": 43.6,
+          "median": 16.7,
+          "p95": 66.6,
+          "worst": 66.6,
+          "count": 8,
+          "over25": 1,
+          "over50": 1
+        }
+      ],
+      "orbMotion": [
+        {
+          "first": 266.7,
+          "update": {
+            "fps": 57.2,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 66.6,
+            "count": 124,
+            "over25": 4,
+            "over50": 1
+          }
+        },
+        {
+          "first": 433.3,
+          "update": {
+            "fps": 57.4,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 66.6,
+            "count": 131,
+            "over25": 4,
+            "over50": 1
+          }
+        },
+        {
+          "first": 616.6,
+          "update": {
+            "fps": 57.8,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 66.6,
+            "count": 132,
+            "over25": 3,
+            "over50": 1
+          }
+        },
+        {
+          "first": 800,
+          "update": {
+            "fps": 57.4,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 66.6,
+            "count": 131,
+            "over25": 4,
+            "over50": 1
+          }
+        },
+        {
+          "first": 983.3,
+          "update": {
+            "fps": 57.4,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 66.6,
+            "count": 132,
+            "over25": 4,
+            "over50": 1
+          }
+        },
+        {
+          "first": 1166.7,
+          "update": {
+            "fps": 57.4,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 66.6,
+            "count": 132,
+            "over25": 4,
+            "over50": 1
+          }
+        },
+        {
+          "first": 1366.7,
+          "update": {
+            "fps": 56.5,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 66.6,
+            "count": 129,
+            "over25": 6,
+            "over50": 1
+          }
+        },
+        {
+          "first": 1549.9,
+          "update": {
+            "fps": 56.9,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 66.6,
+            "count": 130,
+            "over25": 5,
+            "over50": 1
+          }
+        },
+        {
+          "first": 1733.3,
+          "update": {
+            "fps": 56.5,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 66.6,
+            "count": 129,
+            "over25": 6,
+            "over50": 1
+          }
+        },
+        {
+          "first": 1916.6,
+          "update": {
+            "fps": 56.1,
+            "median": 16.7,
+            "p95": 33.3,
+            "worst": 66.6,
+            "count": 128,
+            "over25": 7,
+            "over50": 1
+          }
+        }
+      ],
+      "errors": [],
+      "requests": []
+    },
+    {
+      "label": "phone-60hz",
+      "cpu": 1,
+      "events": {
+        "charged": 4266.5,
+        "reveal": 5466.4,
+        "choose": 6833
+      },
+      "tasks": [],
+      "whole": {
+        "fps": 56.6,
+        "median": 16.7,
+        "p95": 16.8,
+        "worst": 50.1,
+        "count": 387,
+        "over25": 18,
+        "over50": 0
+      },
+      "emissions": {
+        "fps": 60,
+        "median": 16.7,
+        "p95": 16.7,
+        "worst": 16.8,
+        "count": 121,
+        "over25": 0,
+        "over50": 0
+      },
+      "atSpawn": [
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 9,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.7,
+          "worst": 16.7,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        },
+        {
+          "fps": 60,
+          "median": 16.7,
+          "p95": 16.8,
+          "worst": 16.8,
+          "count": 10,
+          "over25": 0,
+          "over50": 0
+        }
+      ],
+      "orbMotion": [
+        {
+          "first": 250,
+          "update": {
+            "fps": 60,
+            "median": 16.7,
+            "p95": 16.7,
+            "worst": 16.8,
+            "count": 137,
+            "over25": 0,
+            "over50": 0
+          }
+        },
+        {
+          "first": 433.3,
+          "update": {
+            "fps": 60,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 16.8,
+            "count": 137,
+            "over25": 0,
+            "over50": 0
+          }
+        },
+        {
+          "first": 616.6,
+          "update": {
+            "fps": 60,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 16.8,
+            "count": 137,
+            "over25": 0,
+            "over50": 0
+          }
+        },
+        {
+          "first": 800,
+          "update": {
+            "fps": 60,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 16.8,
+            "count": 137,
+            "over25": 0,
+            "over50": 0
+          }
+        },
+        {
+          "first": 983.3,
+          "update": {
+            "fps": 60,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 16.8,
+            "count": 138,
+            "over25": 0,
+            "over50": 0
+          }
+        },
+        {
+          "first": 1166.6,
+          "update": {
+            "fps": 60,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 16.8,
+            "count": 138,
+            "over25": 0,
+            "over50": 0
+          }
+        },
+        {
+          "first": 1366.6,
+          "update": {
+            "fps": 60,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 16.8,
+            "count": 137,
+            "over25": 0,
+            "over50": 0
+          }
+        },
+        {
+          "first": 1549.9,
+          "update": {
+            "fps": 60,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 16.8,
+            "count": 137,
+            "over25": 0,
+            "over50": 0
+          }
+        },
+        {
+          "first": 1733.3,
+          "update": {
+            "fps": 59.6,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 33.3,
+            "count": 136,
+            "over25": 1,
+            "over50": 0
+          }
+        },
+        {
+          "first": 1916.6,
+          "update": {
+            "fps": 59.6,
+            "median": 16.7,
+            "p95": 16.8,
+            "worst": 33.3,
+            "count": 136,
+            "over25": 1,
+            "over50": 0
+          }
+        }
+      ],
+      "errors": [],
+      "requests": []
+    }
+  ]
+}

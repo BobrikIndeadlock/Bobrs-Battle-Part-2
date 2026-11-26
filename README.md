@@ -4,7 +4,7 @@
 
 Распакуйте архив целиком и откройте `index.html`. На iPhone откройте его через HTML Web Preview с доступом к соседним папкам `code/` и `media/`.
 
-Исходный коммит сборки `5267f4f0704474a6b3c6dfd58341f047e14381e7` находится в ветке `gothic-visual-upgrade`. [Финальный аудит](QA-gothic-final.md) · [Хеши файлов в ZIP](Final-build-files.SHA256) · [SHA-256 архива](SHA256SUMS)
+Исходный коммит сборки `2bf80f31cdcba918340bfa64b0e694eae9130995` находится в ветке `gothic-visual-upgrade`. [Аудит плавности призыва](QA-summoning-smoothness.md) · [Финальный аудит игры](QA-gothic-final.md) · [Хеши файлов в ZIP](Final-build-files.SHA256) · [SHA-256 архива](SHA256SUMS)
 
 ## Предварительная сборка и материалы этапов
 
@@ -21,6 +21,8 @@
 
 ## Ритуал десяти огней
 
+- [Финальная видеодемонстрация призыва в 60 FPS](Bobrs-Battle-Part-2-Summoning-60fps.mp4)
+- [Проверка плавности и замеры](QA-summoning-smoothness.md)
 - [Непрерывная запись с исходной моделью огоньков](Bobrs-Battle-Part-2-Summoning-Original-Orbs.mp4)
 - [Аудит исправления и замеры](QA-summoning-original-orbs.md)
 

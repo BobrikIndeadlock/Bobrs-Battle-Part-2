@@ -4,3 +4,9 @@
 - `Throne-Room-Before-After.zip` — восемь кадров до и после, включая драфт и мобильные размеры.
 - `before-desktop-idle.png` и `after-desktop-idle.png` — основной ракурс тронного зала.
 - `QA-gothic-visual-upgrade.md` и `performance.json` — изменения, проверки, ограничения и замеры.
+
+## Эффекты капитанов
+
+- [Видеодемонстрация, 24,4 секунды](Bobrs-Battle-Part-2-Captains-Demo.mp4)
+- [Результаты game-audit](QA-captains.md)
+- [Сырые замеры](captains-performance.json)

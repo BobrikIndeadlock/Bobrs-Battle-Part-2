@@ -4,7 +4,7 @@
  let roomTeams;
 
  function onlineAllowed(kind) {
-  return !animating && !flipping && maySend(kind);
+  return !animating && (!roomTeams || !flipping && maySend(kind));
  }
 
  function showCoinResult() {
@@ -40,6 +40,7 @@
   renderHeroes();
  }
 
+ function connectRoomControls() {
  $('dlFlip').onclick = () => { if (onlineAllowed('flip')) sendAction('flip'); };
  $('dlEnter').onclick = () => { if (onlineAllowed('start')) sendAction('start'); };
  $('dlConfirm').onclick = () => {
@@ -50,12 +51,14 @@
  $('dlBack').onclick = () => location.replace(location.pathname);
  $('dlUndo').hidden = true;
  $('dlPortraitUpload').closest('label').hidden = true;
+ }
 
  window.DeadlockRoomView = {
   open(teams, send, allowed) {
    roomTeams = teams;
    sendAction = send;
    maySend = allowed;
+   connectRoomControls();
    begin();
    fillRoomRosters();
    refreshRoomControls();

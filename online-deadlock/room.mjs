@@ -2,12 +2,19 @@ import { players } from './draft-data.mjs';
 import { applyAction, moveAt, newDraft, permits, validDraft, validTeams } from './rules.mjs';
 
 const $ = id => document.getElementById(id);
-const view = window.DeadlockRoomView;
 const version = 1;
 const idPattern = /^[a-f0-9]{32}$/;
 const token = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), byte =>
   byte.toString(16).padStart(2, '0')).join('');
-const peerId = room => 'bobrs-deadlock-' + room;
+export const roomToken = token;
+const legacyGame = {
+  view: window.DeadlockRoomView,
+  initial: newDraft,
+  valid: validDraft,
+  validTeams,
+  permits,
+  apply: applyAction,
+};
 
 function launch() {
   if (!location.hash) return null;
@@ -39,17 +46,19 @@ function seatKey(room) {
   return key;
 }
 
-function openRoom({ side, room, teams: initialTeams }) {
+export function openRoom({ side, room, teams: initialTeams, game = legacyGame, invitationKey = 'room' }) {
+  const { view } = game;
+  const peerId = (invitationKey === 'campaign' ? 'bobrs-campaign-' : 'bobrs-deadlock-') + room;
   if (typeof window.Peer !== 'function' || typeof RTCPeerConnection !== 'function') {
     throw new Error('Этот браузер не предоставил PeerJS или WebRTC. Откройте ссылку в браузере с WebRTC.');
   }
 
   const host = side === 0;
-  const peer = new window.Peer(host ? peerId(room) : undefined);
+  const peer = new window.Peer(host ? peerId : undefined);
   const myKey = host ? null : seatKey(room);
   let guestKey = null;
   let teams = initialTeams;
-  let authority = host ? newDraft() : null;
+  let authority = host ? game.initial() : null;
   let link = null;
   let dialing = null;
   let retryTimer = 0;
@@ -62,15 +71,18 @@ function openRoom({ side, room, teams: initialTeams }) {
   let latest = null;
   let shown = null;
   let rendering = false;
+  let peerRev = -1;
 
   const role = host ? 'Макарыч' : 'Артемон';
   const report = message => {
-    $('roomStatus').textContent = role + ' · ' + message;
-    $('lobbyStatus').textContent = message;
+    const status = role + ' · ' + message;
+    if ($('roomStatus').textContent !== status) $('roomStatus').textContent = status;
+    if ($('lobbyStatus')) $('lobbyStatus').textContent = message;
   };
   const connected = () => ready && link?.open;
-  const allowed = kind => Boolean(connected() && !pending && !rendering && shown?.rev === latest?.rev &&
-    permits(shown, side, kind));
+  const synced = () => !game.waitForPeer || !host || peerRev === authority.rev;
+  const allowed = (kind, hero) => Boolean(connected() && !pending && !rendering && shown?.rev === latest?.rev &&
+    synced() && game.permits(shown, side, kind, hero));
 
   function send(connection, type, data = {}) {
     if (!connection?.open) return false;
@@ -96,6 +108,11 @@ function openRoom({ side, room, teams: initialTeams }) {
         const animate = shown !== null && next.rev === shown.rev + 1;
         await view.paint(shown, next, { animate, moveAt });
         shown = next;
+        if (host && next === authority) {
+          const settled = game.settle?.(next);
+          if (settled) publish(settled);
+        }
+        if (!host && game.waitForPeer) send(link, 'shown', { rev: shown.rev });
       }
     } catch (error) {
       pending = true;
@@ -108,7 +125,7 @@ function openRoom({ side, room, teams: initialTeams }) {
   }
 
   function receive(draft) {
-    if (!validDraft(draft) || (latest && draft.rev < latest.rev)) return;
+    if (!game.valid(draft) || (latest && draft.rev < latest.rev)) return;
     pending = false;
     if (!latest || draft.rev > latest.rev) latest = draft;
     void render();
@@ -118,7 +135,7 @@ function openRoom({ side, room, teams: initialTeams }) {
   function showGame() {
     if (opened) return;
     opened = true;
-    $('roomLobby').hidden = true;
+    if ($('roomLobby')) $('roomLobby').hidden = true;
     $('roomBar').hidden = false;
     const roster = teams.map(team => team.map(id => players.find(player => player.id === id)));
     view.open(roster, submit, allowed);
@@ -130,15 +147,23 @@ function openRoom({ side, room, teams: initialTeams }) {
 
   function accept(sideOfSender, action) {
     if (!connected()) return;
-    const next = applyAction(authority, sideOfSender, action,
+    const next = synced() && game.apply(authority, sideOfSender, action,
       () => (crypto.getRandomValues(new Uint8Array(1))[0] & 1) ? 'tails' : 'heads');
-    if (next) authority = next;
-    receive(authority);
+    if (next) publish(next);
+    else {
+      receive(authority);
+      snapshot(link);
+    }
+  }
+
+  function publish(next) {
+    authority = next;
+    receive(next);
     snapshot(link);
   }
 
   function submit(kind, hero) {
-    if (!allowed(kind)) return;
+    if (!allowed(kind, hero)) return;
     pending = true;
     refresh();
     const action = { kind, hero, rev: latest.rev };
@@ -162,6 +187,7 @@ function openRoom({ side, room, teams: initialTeams }) {
     if (link === connection) link = null;
     if (dialing === connection) dialing = null;
     ready = false;
+    peerRev = -1;
     pending = false;
     refresh();
     if (host) report('Артемон отключился. Ожидаем переподключения.');
@@ -187,6 +213,7 @@ function openRoom({ side, room, teams: initialTeams }) {
         guestKey = message.key;
         const previous = link;
         link = connection;
+        peerRev = -1;
         if (previous && previous !== connection) previous.close();
         clearTimeout(expiry);
         lastPacket = Date.now();
@@ -198,6 +225,10 @@ function openRoom({ side, room, teams: initialTeams }) {
       }
       if (link !== connection || !ready) return;
       lastPacket = Date.now();
+      if (message.type === 'shown' && message.rev === authority.rev) {
+        peerRev = message.rev;
+        refresh();
+      }
       if (message.type === 'action') accept(1, message.action);
     });
     connection.on('close', () => { clearTimeout(expiry); lost(connection); });
@@ -207,7 +238,7 @@ function openRoom({ side, room, teams: initialTeams }) {
   function dial() {
     if (stopped || blocked || dialing || connected()) return;
     report(latest ? 'Восстанавливаем комнату…' : 'Устанавливаем связь с ведущим…');
-    const connection = peer.connect(peerId(room), { reliable: true, serialization: 'json' });
+    const connection = peer.connect(peerId, { reliable: true, serialization: 'json' });
     if (!connection) {
       retry('Сигнализация недоступна. Повторяем подключение…');
       return;
@@ -231,7 +262,7 @@ function openRoom({ side, room, teams: initialTeams }) {
         return;
       }
       lastPacket = Date.now();
-      if (message.type !== 'state' || !validTeams(message.teams) || !validDraft(message.draft)) return;
+      if (message.type !== 'state' || !game.validTeams(message.teams) || !game.valid(message.draft)) return;
       if (teams && JSON.stringify(teams) !== JSON.stringify(message.teams)) return;
       teams = message.teams;
       clearTimeout(expiry);
@@ -243,6 +274,9 @@ function openRoom({ side, room, teams: initialTeams }) {
       showGame();
       report('Макарыч подключён');
       receive(message.draft);
+      if (game.waitForPeer && shown?.rev === message.draft.rev) {
+        send(link, 'shown', { rev: shown.rev });
+      }
     });
     connection.on('close', () => { clearTimeout(expiry); lost(connection); });
     connection.on('error', () => { lost(connection); connection.close(); });
@@ -312,7 +346,7 @@ function openRoom({ side, room, teams: initialTeams }) {
     receive(authority);
     report('Подключаемся к PeerJS…');
     const invitation = new URL(location.href);
-    invitation.hash = new URLSearchParams({ room }).toString();
+    invitation.hash = new URLSearchParams({ [invitationKey]: room }).toString();
     const input = $('inviteUrl');
     input.value = invitation.href;
     $('roomInvite').hidden = false;
@@ -332,7 +366,7 @@ function openRoom({ side, room, teams: initialTeams }) {
 }
 
 try {
-  const options = launch();
+  const options = $('roomLobby') ? launch() : null;
   if (options) openRoom(options);
 } catch (error) {
   $('lobbyStatus').textContent = error.message;

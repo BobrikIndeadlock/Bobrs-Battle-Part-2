@@ -1,4 +1,4 @@
-name: Publish Deadlock room to GitHub Pages
+name: Publish Bobrs Battle Part 2 to GitHub Pages
 
 on:
   push:
@@ -29,6 +29,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
       - uses: actions/configure-pages@v5
       - run: python3 online-deadlock/build.py _site
       - run: node --test online-deadlock/rules.test.mjs

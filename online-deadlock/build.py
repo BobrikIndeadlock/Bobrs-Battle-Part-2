@@ -1,6 +1,7 @@
-"""Build the Deadlock-only GitHub Pages artifact from the game's approved assets."""
+"""Publish the full browser game and keep invitations from the original ZIP working."""
 
 import json
+import os
 import re
 import shutil
 import sys
@@ -31,6 +32,12 @@ def replace_once(source, original, replacement):
         raise ValueError(f'Deadlock source changed at {original[:90]!r}')
     return source.replace(original, replacement, 1)
 
+def link_or_copy(source, target):
+    try:
+        os.link(source, target)
+    except OSError:
+        shutil.copyfile(source, target)
+
 def build(output):
     original_html = (ROOT / 'index.html').read_text(encoding='utf-8')
     begin = original_html.index('<div aria-label="Вторая фаза: драфт героев Deadlock" id="dlPhase">')
@@ -59,7 +66,7 @@ def build(output):
     controller = replace_once(controller, 'if(animating||history.some(x=>x.id===h.id))return;',
                               "if(!onlineAllowed('move')||history.some(x=>x.id===h.id))return;")
     controller = replace_once(controller, "const className='dl-hero'+",
-                              "const className='dl-hero'+(!onlineAllowed('move')?' online-locked':'')+")
+                              "const className='dl-hero'+(roomTeams&&!onlineAllowed('move')?' online-locked':'')+")
     controller = replace_once(controller, 'const disabled=animating||!!usedBy;',
                               "const disabled=!onlineAllowed('move')||!!usedBy;")
     controller = replace_once(controller, "$('dlConfirm').disabled=animating||selected===null",
@@ -76,6 +83,12 @@ def build(output):
     old_coin_finish = """coin.className='dl-coin '+coinResult;flipping=false;$('dlCoinResult').textContent=heads?'ОРЁЛ! АРТЕМОН — МЕСТО 1':'РЕШКА! МАКАРЫЧ — МЕСТО 1';$('dlFlip').style.display='none';$('dlEnter').style.display='';sound(65,.8)"""
     controller = replace_once(controller, old_coin_finish, 'flipping=false;showCoinResult();sound(65,.8);resolve()')
     controller = replace_once(controller, " };\n $('dlEnter').onclick=", " });\n }\n $('dlEnter').onclick=")
+    controller = replace_once(controller, " $('dlEnter').onclick=()=>{if(flipping", """ $('dlFlip').onclick=()=>{
+ if(flipping||coinResult!==null)return;
+ const random=new Uint32Array(1);if(window.crypto?.getRandomValues)crypto.getRandomValues(random);else random[0]=Math.floor(Math.random()*4294967296);
+ return playCoin((random[0]&1)===0?'heads':'tails');
+ };
+ $('dlEnter').onclick=()=>{if(flipping""")
     close = controller.rindex('})();')
     controller = controller[:close] + (ONLINE / 'view.js').read_text(encoding='utf-8') + controller[close:]
 
@@ -92,13 +105,63 @@ def build(output):
     for file in sorted(files):
         target = output / file
         target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(ROOT / file, target)
-    (output / 'index.html').write_text(template, encoding='utf-8')
+        link_or_copy(ROOT / file, target)
+    (output / 'deadlock.html').write_text(template, encoding='utf-8')
     (output / 'code/js/deadlock-draft.js').write_text(controller, encoding='utf-8')
     data = 'export const order = ' + order + ';\nexport const heroNames = ' + heroes + ';\n'
     data += 'export const players = ' + json.dumps(players, ensure_ascii=False) + ';\n'
     (output / 'online-deadlock/draft-data.mjs').write_text(data, encoding='utf-8')
+    add_campaign(output, original_html)
     (output / '.nojekyll').touch()
+
+def add_campaign(output, html):
+    import hashlib
+    movie = ROOT / 'media/video/battle-finale.mp4'
+    if hashlib.sha256(movie.read_bytes()).hexdigest() != 'cb0a1ae1d17038c13444bf216a4c684fadc7807687533df5f7cf7c07a8a9930f':
+        raise ValueError('The original final film must be hydrated by Git LFS')
+
+    bar = re.search(r'<aside id="roomBar"[^>]*>.*?</aside>', (ONLINE / 'index.html').read_text(), re.S)[0]
+    html = replace_once(html, '<head>', """<head><meta name="referrer" content="no-referrer">
+    <script>if (new URLSearchParams(location.hash.slice(1)).has('teams') ||
+      new URLSearchParams(location.hash.slice(1)).has('room')) {
+      location.replace('deadlock.html' + location.hash);
+    }</script>""")
+    html = replace_once(html, '</body>', bar + """
+    <aside id="campaignMenu">
+      <button type="button" id="campaignCreate">Играть по сети</button>
+      <p id="campaignNotice" role="status"></p>
+    </aside>
+    <link rel="stylesheet" href="online-deadlock/room.css">
+    <link rel="stylesheet" href="online-deadlock/campaign.css">
+    <script src="online-deadlock/peerjs.min.js"></script>
+    <script type="module" src="online-deadlock/campaign.mjs"></script>
+    </body>""")
+    (output / 'index.html').write_text(html, encoding='utf-8')
+
+    first = (ROOT / 'code/js/first-draft.js').read_text(encoding='utf-8')
+    first = replace_once(first, 'const randomInt=max=>{', 'const randomInt=max=>{if(actionRandom)return actionRandom()%max;')
+    first = first.replace('onclick=()=>tapCard(', "onclick=()=>campaignDispatch('reveal',")
+    first = first.replace('onclick=()=>choose(', "onclick=()=>campaignDispatch('choose',")
+    first = replace_once(first, 'function tapCard(id){', 'async function tapCard(id){')
+    first = replace_once(first, 'showCompare([c],true);return;', 'return showCompare([c],true);')
+    first = replace_once(first, 'showCompare([...selectedPair],false,380);', 'return showCompare([...selectedPair],false,380);')
+    first = replace_once(first, 'function showFinish(){', 'function showFinish(replayMovie=true){')
+    first = replace_once(first, " movie.className='active';\n playMovie();",
+                        " if(replayMovie){movie.className='active';playMovie()}else{closeMovie();finish.classList.add('visible');skipVsIntro()}")
+    first = replace_once(first, "$('book').onclick=summon;$('restart').onclick=reset;",
+                        "$('book').onclick=()=>campaignDispatch('summon');$('restart').onclick=()=>campaignDispatch('restart');")
+    close = first.rindex('})();')
+    first = first[:close] + (ONLINE / 'campaign-view.js').read_text(encoding='utf-8') + first[close:]
+    (output / 'code/js/first-draft.js').write_text(first, encoding='utf-8')
+    for area in ('code', 'media'):
+        for source in (ROOT / area).rglob('*'):
+            if source.is_file():
+                target = output / source.relative_to(ROOT)
+                if not target.exists():
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    link_or_copy(source, target)
+    for name in ('campaign.css', 'campaign.mjs'):
+        link_or_copy(ONLINE / name, output / 'online-deadlock' / name)
 
 if __name__ == '__main__':
     build(Path(sys.argv[1]))

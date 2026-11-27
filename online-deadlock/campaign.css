@@ -1,0 +1,23 @@
+#campaignMenu {
+  position: fixed;
+  z-index: 100020;
+  top: .5rem;
+  right: .5rem;
+  max-width: 22rem;
+  text-align: right;
+}
+#campaignCreate {
+  padding: .55rem .8rem;
+  color: #f3e4cf;
+  background: #24151e;
+  border: 1px solid #a77a43;
+  font: 600 14px Georgia, serif;
+}
+#campaignNotice {
+  margin: .3rem 0 0;
+  color: #f3e4cf;
+  background: #1c121de8;
+  font: 13px/1.4 system-ui, sans-serif;
+}
+#campaignNotice:empty, #campaignMenu[hidden], #roomBar[hidden], #roomInvite[hidden] { display: none; }
+body:has(#dlPhase.active) #campaignMenu { display: none; }

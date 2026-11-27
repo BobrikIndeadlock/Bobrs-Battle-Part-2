@@ -1,10 +1,14 @@
-# Bobrs Battle Part 2 · Gothic Final
+# Bobrs Battle Part 2 · Стабильные сборки
 
-[Скачать финальную сборку (ZIP, 57,0 МиБ)](Bobrs-Battle-Part-2-Gothic-Final.zip)
+[Скачать v2.1 для iPhone (ZIP, 99,49 МБ)](Bobrs-Battle-Part-2-v2.1-Final.zip)
 
 Распакуйте архив целиком и откройте `index.html`. На iPhone откройте его через HTML Web Preview с доступом к соседним папкам `code/` и `media/`.
 
-Сборка `v2.0-gothic-final` создана из коммита `d64a9f65091cecd1758d7b04848c06095ce5c6a2` в `main`. [Заключительный аудит](QA-v2.0-gothic-final.md) · [Хеши файлов в ZIP](Final-build-files.SHA256) · [SHA-256 архива](SHA256SUMS)
+Сборка `v2.1-new-cards` создана из коммита `72c3f0e9f3e05c5aaaf2c03217546cdce7fa582b` в `main`. [Заключительный аудит](QA-v2.1-new-cards.md) · [Хеши файлов в ZIP](Final-build-v2.1-files.SHA256) · [SHA-256 архива](SHA256SUMS)
+
+## Предыдущая стабильная версия
+
+Сборка `v2.0-gothic-final` создана из коммита `d64a9f65091cecd1758d7b04848c06095ce5c6a2`. [Скачать ZIP v2.0](Bobrs-Battle-Part-2-Gothic-Final.zip) · [Аудит v2.0](QA-v2.0-gothic-final.md) · [Хеши файлов в ZIP v2.0](Final-build-files.SHA256)
 
 ## Проверка производительности анимаций
 
@@ -14,7 +18,7 @@
 - [Углублённый аудит и сравнение до и после](animation-performance/QA-animation-performance.md)
 - [Данные замеров](animation-performance/performance.json)
 
-## Набор из 12 утверждённых карточек
+## Утверждение набора из 12 карточек
 
 Сборка из ветки `Bobrs-new-cards`. Распакуйте ZIP в приложении «Файлы» и откройте `index.html` через HTML Web Preview. Все игровые ресурсы уже находятся в архиве.
 

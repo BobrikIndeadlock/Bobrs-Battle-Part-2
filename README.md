@@ -10,6 +10,10 @@
 
 Ветка `card-clarity-2k` увеличивает карточки выбора на ПК и показывает капитанов в тронном зале из оригинальных PNG. [ZIP для ПК и iPhone](card-clarity-2k/Bobrs-Battle-Part-2-Card-Clarity-2K.zip) · [Аудит и четыре снимка 2560 × 1440](card-clarity-2k/QA-card-clarity-2k.md)
 
+## Игра с онлайн-режимом Deadlock
+
+Первый драфт и финальный ролик запускаются из полного ZIP. После ролика выберите локальный режим или создайте онлайн-комнату с готовыми составами. [Полный ZIP игры](online-deadlock/Bobrs-Battle-Part-2-Deadlock-Online.zip) · [Размещённый модуль](https://bobrikindeadlock.github.io/Bobrs-Battle-Part-2/) · [Проверка офлайн- и онлайн-режимов](online-deadlock/QA-deadlock-online.md)
+
 ## Предыдущая стабильная версия
 
 Сборка `v2.0-gothic-final` создана из коммита `d64a9f65091cecd1758d7b04848c06095ce5c6a2`. [Скачать ZIP v2.0](Bobrs-Battle-Part-2-Gothic-Final.zip) · [Аудит v2.0](QA-v2.0-gothic-final.md) · [Хеши файлов в ZIP v2.0](Final-build-files.SHA256)

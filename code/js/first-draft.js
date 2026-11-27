@@ -35,11 +35,14 @@ function nextPaint(signal){
 }
 const chronosSealedBack='media/images/chronos-card-back.png';
 const duoPairNames=['Грит','Аптека'];
-// Approved encounter: the third and fifth successful draft turns offer fixed pairs.
-const scriptedPairs={2:['Грит','Сережа'],4:['Аптека','Данечек']};
-let scriptedCompleted=new Set();
+let scriptedPairs={};
+const scriptedCompleted=new Set();
 let chronosSecretPlayed=false;
-function randomizeScriptedDuoPicks(){scriptedCompleted.clear()}
+function randomizeScriptedDuoPicks(){
+ const first=randomInt(duoPairNames.length);
+ scriptedPairs={2:[duoPairNames[first],'Сережа'],4:[duoPairNames[1-first],'Данечек']};
+ scriptedCompleted.clear();
+}
 function scriptedDuoTarget(){return !scriptedCompleted.has(turn)?scriptedPairs[turn]:null}
 function reservedNames(){
  return Object.entries(scriptedPairs).filter(([t])=>Number(t)>turn&&!scriptedCompleted.has(Number(t))).flatMap(([,names])=>names);

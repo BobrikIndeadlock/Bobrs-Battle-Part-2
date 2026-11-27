@@ -133,7 +133,7 @@
 #grid.bobrs-grid-shuffling *{pointer-events:none!important}
 /* FIX: portrait is always on back side, card-back art remains intact on front. */
 .compare.arcane-cinematic .reveal-card .flip-side.back{background:#13070b!important;overflow:hidden}
-.compare.arcane-cinematic .reveal-card .flip-side.back > img{position:absolute!important;inset:0!important;display:block!important;opacity:1!important;visibility:visible!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;max-width:none!important;max-height:none!important;filter:none!important;transform:none!important}
+.compare.arcane-cinematic .reveal-card .flip-side.back > img{position:absolute!important;inset:0!important;display:block!important;opacity:1!important;visibility:visible!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important;max-width:none!important;max-height:none!important;filter:none!important;transform:none!important}
 .compare.arcane-cinematic .reveal-card.flipped .flip-core{transform:rotateY(180deg)!important}
 .compare.arcane-cinematic.arcane-ready .reveal-card.flipped .flip-core{transform:rotateY(180deg)!important}
 .compare.arcane-cinematic .reveal-card.flipped .flip-side.front{backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important}

@@ -6,3 +6,20 @@
   animation: none;
   opacity: .38;
 }
+.scene-card-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.scene-card-plane, .scene-card-plane img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+.scene-card-plane img {
+  display: block;
+  object-fit: fill;
+  clip-path: polygon(1.5% 0, 98.5% 0, 100% 1.5%, 100% 98.5%, 98.5% 100%, 1.5% 100%, 0 98.5%, 0 1.5%);
+}

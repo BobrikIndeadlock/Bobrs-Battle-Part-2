@@ -12,7 +12,18 @@
 #grid .tile:disabled{pointer-events:none}
 
 /* === Stage 3: cinematic pair reveal === */
-.compare.arcane-cinematic{overflow:hidden}
+.compare.arcane-cinematic {
+  overflow: hidden;
+  background: none;
+  backdrop-filter: none;
+}
+
+.compare.arcane-cinematic::before {
+  background:
+    radial-gradient(ellipse at center, transparent 15%, #040207bb 95%),
+    radial-gradient(ellipse at center, #26112ddc 0%, #050309f4 75%);
+  backdrop-filter: blur(6px);
+}
 .compare-stage-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .compare-stage-fx .compare-halo,.compare-stage-fx .compare-halo-two,.compare-stage-fx .compare-runes,.compare-stage-fx .compare-flash-layer{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
 .compare-stage-fx .compare-halo{width:min(80vw,920px);height:min(80vw,920px);border-radius:50%;background:radial-gradient(circle,rgba(199,99,255,.28) 0%,rgba(117,36,177,.18) 28%,rgba(0,0,0,0) 67%);filter:blur(16px);opacity:.7;animation:pairHaloPulse 3.6s ease-in-out infinite alternate}

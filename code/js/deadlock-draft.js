@@ -118,7 +118,23 @@
   const previousResults=$('dlFinalGrid');
   previousResults.classList.remove('battle-play');
   previousResults.replaceChildren();
-  for(let side=0;side<2;side++){const roster=$('dlRoster'+side);roster.replaceChildren();document.querySelectorAll('#teamTiny'+side+' .roster-slot:not(.empty) img').forEach(src=>{const fig=document.createElement('figure'),im=new Image(),cap=document.createElement('figcaption');im.src=src.src;im.alt=src.alt;cap.textContent=src.alt;fig.append(im,cap);roster.append(fig)});const from=document.getElementById('portrait'+side);const to=$('dlCap'+side);if(to&&from&&from.src){to.src=from.src;to.alt=side===0?'Макарыч':'Артемон';}}step=0;history=[];selected=null;coinResult=null;flipping=false;$('dlCoin').className='dl-coin';$('dlCoinResult').textContent='Монета определит порядок выбора';$('dlFlip').style.display='';$('dlFlip').disabled=false;$('dlEnter').style.display='none';$('dlSearch').value='';screen('dlCoinScreen');active.classList.add('active');fitCoin();document.body.style.overflow='hidden';$('epicFinal')?.classList.remove('active');}
+  for(let side=0;side<2;side++){
+   const roster=$('dlRoster'+side);
+   roster.replaceChildren();
+   document.querySelectorAll('#teamTiny'+side+' .roster-slot:not(.empty) img').forEach(src=>{
+    const fig=document.createElement('figure'),im=new Image(),cap=document.createElement('figcaption');
+    im.src=src.src;
+    im.alt=src.alt;
+    cap.textContent=src.nextElementSibling?.textContent??src.alt;
+    if(cap.textContent!==im.alt)fig.title=im.alt;
+    fig.append(im,cap);
+    roster.append(fig);
+   });
+   const from=$('portrait'+side),to=$('dlCap'+side);
+   if(to&&from?.src){to.src=from.src;to.alt=side===0?'Макарыч':'Артемон';}
+  }
+  step=0;history=[];selected=null;coinResult=null;flipping=false;$('dlCoin').className='dl-coin';$('dlCoinResult').textContent='Монета определит порядок выбора';$('dlFlip').style.display='';$('dlFlip').disabled=false;$('dlEnter').style.display='none';$('dlSearch').value='';screen('dlCoinScreen');active.classList.add('active');fitCoin();document.body.style.overflow='hidden';$('epicFinal')?.classList.remove('active');
+ }
  window.openDeadlockDraft=begin;
 
  $('dlFlip').onclick=()=>{

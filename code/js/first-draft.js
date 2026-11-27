@@ -1,7 +1,18 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
 const captains=['Макарыч','Артемон'];
-const baseCharacters=[{"id":"preset-1","name":"Мишаня","image":"media/cards/mishanya.png"},{"id":"preset-2","name":"Стасик","image":"media/cards/stasik.png"},{"id":"preset-3","name":"Грит","image":"media/cards/grit.png"},{"id":"preset-4","name":"Аптека","image":"media/cards/apteka.png"},{"id":"preset-5","name":"Павел король грязнулек","image":"media/cards/pavel.png"},{"id":"preset-6","name":"Сережа","image":"media/cards/serezha.png"},{"id":"preset-7","name":"Данечек","image":"media/cards/danechek.png"},{"id":"preset-8","name":"Дрипсик","image":"media/cards/dripsik.png"},{"id":"preset-9","name":"Ануар","image":"media/cards/anuar.png"},{"id":"preset-10","name":"Митя","image":"media/cards/mitya.png"}];
+const baseCharacters=[
+ {id:'preset-1',name:'Шаолиньский мудрец из Кызыла — Даваа-Серин',shortName:'Даваа-Серин',image:'media/cards/davaa-serin.png',aspect:1036/1518},
+ {id:'preset-2',name:'Стасик',image:'media/cards/stasik.png'},
+ {id:'preset-3',name:'Грит',image:'media/cards/grit.png'},
+ {id:'preset-4',name:'Аптека',image:'media/cards/apteka.png'},
+ {id:'preset-5',name:'Павел король грязнулек',image:'media/cards/pavel.png',aspect:1038/1515},
+ {id:'preset-6',name:'Сережа',image:'media/cards/serezha.png'},
+ {id:'preset-7',name:'Данечек',image:'media/cards/danechek.png'},
+ {id:'preset-8',name:'Дрипсик',image:'media/cards/dripsik.png'},
+ {id:'preset-9',name:'Кавказский Лев',image:'media/cards/caucasian-lion.png',aspect:1024/1536},
+ {id:'preset-10',name:'Митя',image:'media/cards/mitya.png'}
+];
 let available=[],turn=0,state='idle',pair=[],selectedPair=[],teams=[[],[]],captainTurn=0,duoLock=[null,null];
 const randomInt=max=>{const r=new Uint32Array(1);if(crypto?.getRandomValues){crypto.getRandomValues(r);return r[0]%max}return Math.floor(Math.random()*max)};
 function shuffle(list){const res=[...list];for(let i=res.length-1;i>0;i--){const j=randomInt(i+1);[res[i],res[j]]=[res[j],res[i]]}return res}
@@ -195,7 +206,7 @@ function renderRoster(roster, members){
    image.src=hero.image;
    image.alt=hero.name;
    const name=document.createElement('span');
-   name.textContent=hero.name;
+   name.textContent=hero.shortName??hero.name;
    slot.append(image,name);
   }
  }
@@ -299,8 +310,16 @@ function tapCard(id){
  }else status('Выбрана первая карта · выберите вторую');
 }
 function ensureCompareStageFx(){const panel=$('compare');let fx=panel.querySelector('.compare-stage-fx');if(!fx){fx=document.createElement('div');fx.className='compare-stage-fx';fx.innerHTML='<div class="compare-halo"></div><div class="compare-halo-two"></div><div class="compare-runes"></div><div class="compare-flash-layer"></div>';panel.prepend(fx)}return fx}
-function mountComparePortrait(button,image){
+function mountComparePortrait(button,image,card){
+ button.setAttribute('aria-label',card.name);
+ button.querySelector('.arcane-name').textContent=card.shortName??card.name;
  const face=button.querySelector('.flip-side.back');
+ if(card.aspect){
+  button.classList.add('native-card-aspect');
+  button.style.setProperty('--flip-card-aspect',card.aspect);
+  face.append(image);
+  return;
+ }
  function setEdges(){
   if(!image.naturalHeight)return;
   face.style.setProperty('--portrait-aspect',image.naturalWidth/image.naturalHeight);
@@ -334,9 +353,8 @@ async function showCompare(cards,last,hold=0){
    b.type='button';
    b.className='reveal-card arcane-live arcane-settled flipped arcane-choice-ready';
    b.dataset.cardId=String(c.id);
-   b.setAttribute('aria-label',c.name);
-   b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.name}</div>`;
-   mountComparePortrait(b,portraits[index]);
+   b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"></div></div><div class="arcane-rim"></div><div class="arcane-name"></div>`;
+   mountComparePortrait(b,portraits[index],c);
    b.onclick=()=>choose(c.id);
    container.append(b);
   }
@@ -361,9 +379,8 @@ async function revealCompare(cards,last,signal,portraits){
   b.dataset.cardId=String(c.id);
   b.type='button';
   b.disabled=true;
-  b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.name}</div>`;
-  mountComparePortrait(b,portraits[i]);
-  b.setAttribute('aria-label',c.name);
+  b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"></div></div><div class="arcane-rim"></div><div class="arcane-name"></div>`;
+  mountComparePortrait(b,portraits[i],c);
   b.onclick=()=>choose(c.id);
   container.append(b);
  });

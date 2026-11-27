@@ -149,6 +149,23 @@
 .compare.arcane-cinematic .reveal-card .flip-side.back::before { left: 0; background-position: left center; }
 .compare.arcane-cinematic .reveal-card .flip-side.back::after { right: 0; background-position: right center; }
 .compare.arcane-cinematic .reveal-card .flip-side.back > img{position:absolute!important;inset:0!important;z-index:1;display:block!important;opacity:1!important;visibility:visible!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important;max-width:none!important;max-height:none!important;filter:none!important;transform:none!important}
+/* Fit the shared back to the approved face ratio without stretching either side. */
+.compare.arcane-cinematic .native-card-aspect .flip-side.front .card-back-face > .card-back-image{object-fit:cover!important}
+.compare.arcane-cinematic .native-card-aspect .flip-side.back::before,
+.compare.arcane-cinematic .native-card-aspect .flip-side.back::after{content:none}
+.compare-cards:has(> .native-card-aspect){align-items:flex-end;margin-bottom:58px}
+.compare-cards:has(> .native-card-aspect) > .reveal-card{max-width:calc((100dvh - 138px) * var(--flip-card-aspect))}
+.compare-cards:has(> .native-card-aspect) .arcane-name{
+  top:calc(100% + 8px);
+  bottom:auto;
+  width:max-content;
+  max-width:100%;
+  padding-inline:clamp(6px,1vw,18px);
+  white-space:normal;
+  overflow-wrap:anywhere;
+  text-align:center;
+  line-height:1.1;
+}
 .compare.arcane-cinematic .reveal-card.flipped .flip-core{transform:rotateY(180deg)!important}
 .compare.arcane-cinematic.arcane-ready .reveal-card.flipped .flip-core{transform:rotateY(180deg)!important}
 .compare.arcane-cinematic .reveal-card.flipped .flip-side.front{backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important}

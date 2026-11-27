@@ -14,6 +14,13 @@
 - [Углублённый аудит и сравнение до и после](animation-performance/QA-animation-performance.md)
 - [Данные замеров](animation-performance/performance.json)
 
+## Набор из 12 утверждённых карточек
+
+Сборка из ветки `Bobrs-new-cards`. Распакуйте ZIP в приложении «Файлы» и откройте `index.html` через HTML Web Preview. Все игровые ресурсы уже находятся в архиве.
+
+- [Скачать ZIP для iPhone](bobrs-new-cards/Bobrs-Battle-Part-2-New-Cards-iPhone.zip)
+- [Результаты проверки](bobrs-new-cards/QA-bobrs-new-cards.md)
+
 ## Предварительная сборка и материалы этапов
 
 - `Bobrs-Battle-Part-2-Gothic-Preview.zip` — игра с исходным видеороликом. Распакуйте архив целиком и откройте `index.html`.

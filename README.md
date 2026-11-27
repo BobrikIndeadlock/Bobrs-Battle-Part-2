@@ -6,6 +6,14 @@
 
 Сборка `v2.0-gothic-final` создана из коммита `d64a9f65091cecd1758d7b04848c06095ce5c6a2` в `main`. [Заключительный аудит](QA-v2.0-gothic-final.md) · [Хеши файлов в ZIP](Final-build-files.SHA256) · [SHA-256 архива](SHA256SUMS)
 
+## Проверка производительности анимаций
+
+Сборка из ветки `gothic-animation-performance` включает оптимизации загрузки и отрисовки. Для локального запуска распакуйте ZIP целиком и откройте `index.html`.
+
+- [Скачать обновлённый ZIP](animation-performance/Bobrs-Battle-Part-2-Gothic-Final.zip)
+- [Углублённый аудит и сравнение до и после](animation-performance/QA-animation-performance.md)
+- [Данные замеров](animation-performance/performance.json)
+
 ## Предварительная сборка и материалы этапов
 
 - `Bobrs-Battle-Part-2-Gothic-Preview.zip` — игра с исходным видеороликом. Распакуйте архив целиком и откройте `index.html`.

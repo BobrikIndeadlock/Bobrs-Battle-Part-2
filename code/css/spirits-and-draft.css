@@ -12,7 +12,18 @@
 #grid .tile:disabled{pointer-events:none}
 
 /* === Stage 3: cinematic pair reveal === */
-.compare.arcane-cinematic{overflow:hidden}
+.compare.arcane-cinematic {
+  overflow: hidden;
+  background: none;
+  backdrop-filter: none;
+}
+
+.compare.arcane-cinematic::before {
+  background:
+    radial-gradient(ellipse at center, transparent 15%, #040207bb 95%),
+    radial-gradient(ellipse at center, #26112ddc 0%, #050309f4 75%);
+  backdrop-filter: blur(6px);
+}
 .compare-stage-fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .compare-stage-fx .compare-halo,.compare-stage-fx .compare-halo-two,.compare-stage-fx .compare-runes,.compare-stage-fx .compare-flash-layer{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
 .compare-stage-fx .compare-halo{width:min(80vw,920px);height:min(80vw,920px);border-radius:50%;background:radial-gradient(circle,rgba(199,99,255,.28) 0%,rgba(117,36,177,.18) 28%,rgba(0,0,0,0) 67%);filter:blur(16px);opacity:.7;animation:pairHaloPulse 3.6s ease-in-out infinite alternate}
@@ -121,8 +132,23 @@
 #grid.bobrs-grid-shuffling{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transition:none!important}
 #grid.bobrs-grid-shuffling *{pointer-events:none!important}
 /* FIX: portrait is always on back side, card-back art remains intact on front. */
-.compare.arcane-cinematic .reveal-card .flip-side.back{background:#13070b!important;overflow:hidden}
-.compare.arcane-cinematic .reveal-card .flip-side.back > img{position:absolute!important;inset:0!important;display:block!important;opacity:1!important;visibility:visible!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center center!important;max-width:none!important;max-height:none!important;filter:none!important;transform:none!important}
+.compare.arcane-cinematic .reveal-card .flip-side.back{background:#13070b!important;overflow:hidden;border:0!important}
+/* The middle retains the whole PNG. Only its outermost 2% is reflected into each side. */
+.compare.arcane-cinematic .reveal-card .flip-side.back::before,
+.compare.arcane-cinematic .reveal-card .flip-side.back::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  width: max(0px, calc((1 - var(--portrait-aspect, var(--flip-card-aspect)) / var(--flip-card-aspect)) * 50% + 1px));
+  background-image: var(--portrait-art, none);
+  background-size: 5000% 100%;
+  background-repeat: no-repeat;
+  transform: scaleX(-1);
+  pointer-events: none;
+}
+.compare.arcane-cinematic .reveal-card .flip-side.back::before { left: 0; background-position: left center; }
+.compare.arcane-cinematic .reveal-card .flip-side.back::after { right: 0; background-position: right center; }
+.compare.arcane-cinematic .reveal-card .flip-side.back > img{position:absolute!important;inset:0!important;z-index:1;display:block!important;opacity:1!important;visibility:visible!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important;max-width:none!important;max-height:none!important;filter:none!important;transform:none!important}
 .compare.arcane-cinematic .reveal-card.flipped .flip-core{transform:rotateY(180deg)!important}
 .compare.arcane-cinematic.arcane-ready .reveal-card.flipped .flip-core{transform:rotateY(180deg)!important}
 .compare.arcane-cinematic .reveal-card.flipped .flip-side.front{backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important}

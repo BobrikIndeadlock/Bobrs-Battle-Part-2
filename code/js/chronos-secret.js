@@ -60,6 +60,12 @@
     return image;
   }
 
+  function prepareSealedBack(path) {
+    const image = makeBack(path, 'seal-card-art sealed');
+    image.decode().catch(() => {});
+    return image;
+  }
+
   function rewindCard(slot) {
     if (!slot || reduced.matches) return;
     const rect = slot.getBoundingClientRect();
@@ -118,7 +124,7 @@
     card.className = 'seal-card';
     const cracks = document.createElement('span');
     cracks.className = 'seal-cracks';
-    card.append(makeBack(redBack, 'seal-card-art'), makeBack(sealedBack, 'seal-card-art sealed'), cracks);
+    card.append(makeBack(redBack, 'seal-card-art'), sealedBack, cracks);
     stage.append(card);
     document.body.append(stage);
     try {
@@ -167,6 +173,6 @@
     }
   }
 
-  window.chronosCinema = { wait, prepare, speak, rewindCard, seal };
+  window.chronosCinema = { wait, prepare, speak, rewindCard, prepareSealedBack, seal };
   window.playChronosSecret91 = runSecond;
 })();

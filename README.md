@@ -1,10 +1,10 @@
-# Bobrs Battle Part 2 · Gothic Final
+# Bobrs Battle Part 2
 
-Финальная версия `v2.0-gothic-final`.
+Стабильная версия `v2.1-new-cards` включает 12 утверждённых карточек и обновлённое расписание первого драфта. [История изменений](CHANGELOG.md)
 
 ## Локальный запуск
 
-1. Войдите в GitHub под аккаунтом с доступом к репозиторию и скачайте [финальный ZIP](https://github.com/BobrikIndeadlock/Bobrs-Battle-Part-2/raw/gothic-visual-upgrade-downloads/Bobrs-Battle-Part-2-Gothic-Final.zip).
+1. Войдите в GitHub под аккаунтом с доступом к приватному репозиторию. [Скачать Bobrs-Battle-Part-2-v2.1-Final.zip](https://github.com/BobrikIndeadlock/Bobrs-Battle-Part-2/raw/gothic-visual-upgrade-downloads/Bobrs-Battle-Part-2-v2.1-Final.zip)
 2. Распакуйте архив целиком. Оставьте каталоги `code/` и `media/` рядом с `index.html`.
 3. На компьютере откройте `index.html` в браузере. На iPhone распакуйте ZIP в приложении «Файлы», затем откройте `index.html` из полученной папки через HTML Web Preview. Если приложение запросит доступ к локальным файлам, выберите всю распакованную папку.
 
@@ -17,7 +17,7 @@
 
 ```sh
 git lfs install
-git clone --branch v2.0-gothic-final https://github.com/BobrikIndeadlock/Bobrs-Battle-Part-2.git
+git clone --branch v2.1-new-cards https://github.com/BobrikIndeadlock/Bobrs-Battle-Part-2.git
 cd Bobrs-Battle-Part-2
 git lfs pull
 ```
@@ -28,3 +28,7 @@ git lfs pull
 - `media/images/` и `media/video/` содержат изображения и ролик из исходной версии.
 - `media/deadlock/portraits.js` содержит исходные миниатюры из [Deadlock Wiki](https://deadlock.wiki/Heroes)
   в формате data URL для локальных анимаций героев и экспорта составов в PNG.
+
+## Предыдущая стабильная версия
+
+Тег `v2.0-gothic-final` и резервная ветка `backup/v2.0-gothic-final` указывают на коммит `d64a9f65091cecd1758d7b04848c06095ce5c6a2`. [Скачать архив v2.0](https://github.com/BobrikIndeadlock/Bobrs-Battle-Part-2/raw/gothic-visual-upgrade-downloads/Bobrs-Battle-Part-2-Gothic-Final.zip)

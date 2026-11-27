@@ -1,6 +1,7 @@
 """Publish the full browser game and keep invitations from the original ZIP working."""
 
 import json
+import hashlib
 import os
 import re
 import shutil
@@ -112,10 +113,10 @@ def build(output):
     data += 'export const players = ' + json.dumps(players, ensure_ascii=False) + ';\n'
     (output / 'online-deadlock/draft-data.mjs').write_text(data, encoding='utf-8')
     add_campaign(output, original_html)
+    version_online_scripts(output)
     (output / '.nojekyll').touch()
 
 def add_campaign(output, html):
-    import hashlib
     movie = ROOT / 'media/video/battle-finale.mp4'
     if hashlib.sha256(movie.read_bytes()).hexdigest() != 'cb0a1ae1d17038c13444bf216a4c684fadc7807687533df5f7cf7c07a8a9930f':
         raise ValueError('The original final film must be hydrated by Git LFS')
@@ -162,6 +163,29 @@ def add_campaign(output, html):
                     link_or_copy(source, target)
     for name in ('campaign.css', 'campaign.mjs'):
         link_or_copy(ONLINE / name, output / 'online-deadlock' / name)
+
+def version_online_scripts(output):
+    # Pages caches individual files. Keep the controllers and the wire protocol in one build.
+    modules = ('campaign.mjs', 'room.mjs', 'rules.mjs', 'draft-data.mjs')
+    controllers = ('code/js/first-draft.js', 'code/js/deadlock-draft.js')
+    scripts = tuple(f'online-deadlock/{name}' for name in modules) + controllers
+    digest = hashlib.sha256()
+    for file in scripts:
+        digest.update((output / file).read_bytes())
+    revision = digest.hexdigest()[:16]
+    for name in modules:
+        module = output / 'online-deadlock' / name
+        source = module.read_text(encoding='utf-8')
+        for dependency in modules:
+            source = source.replace(f"from './{dependency}'", f"from './{dependency}?v={revision}'")
+        module.unlink()  # The original source can be hard-linked into the build directory.
+        module.write_text(source, encoding='utf-8')
+    for file in ('index.html', 'deadlock.html'):
+        page = output / file
+        html = page.read_text(encoding='utf-8')
+        for script in scripts:
+            html = html.replace(f'src="{script}"', f'src="{script}?v={revision}"')
+        page.write_text(html, encoding='utf-8')
 
 if __name__ == '__main__':
     build(Path(sys.argv[1]))

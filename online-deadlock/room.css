@@ -1,0 +1,41 @@
+[hidden] { display: none !important; }
+html { color-scheme: dark; background: #100b12; }
+body { margin: 0; color: #f2dec3; font-family: Georgia, serif; }
+#roomLobby {
+  box-sizing: border-box;
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 1rem;
+  padding: 2rem 1.25rem;
+  text-align: center;
+  background: linear-gradient(#17101bdc, #100b12f5), url('../media/images/deadlock-finale-background.jpg') center/cover;
+}
+#roomLobby > img { width: min(360px, 100%); }
+#roomLobby h1 { color: #eac489; margin: 0; }
+#roomLobby p { max-width: 52ch; margin: 0; line-height: 1.5; }
+#roomBar {
+  position: fixed;
+  inset: 0.5rem auto auto 0.5rem;
+  z-index: 100020;
+  max-width: min(25rem, calc(100% - 7.5rem));
+  padding: .5rem .65rem;
+  border: 1px solid #a77851;
+  border-radius: 3px;
+  background: #1c121de8;
+  color: #f2dec3;
+  font: 13px/1.4 system-ui, sans-serif;
+}
+#roomBar p { margin: 0; }
+#roomBar details { margin-top: .3rem; }
+#roomBar summary { cursor: pointer; color: #efc891; }
+#roomBar label, #roomBar input { display: block; box-sizing: border-box; width: 100%; margin-block: .3rem; }
+#roomBar input, #roomBar button { font: inherit; color: inherit; border: 1px solid #a77851; border-radius: 2px; background: #160f18; padding: .35rem; }
+#roomBar button { cursor: pointer; }
+#roomBar :focus-visible { outline: 2px solid #ffe0a5; outline-offset: 2px; }
+#dlPhase button.dl-hero.online-locked:not(.taken) { opacity: 1; }
+#dlPhase button.dl-hero.online-locked:hover { transform: none; }
+@media (max-width: 850px) {
+  #dlPhase .dl-head { padding-top: 4.5rem; }
+}

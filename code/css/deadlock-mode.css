@@ -1,0 +1,26 @@
+#deadlockMode {
+  width: min(90vw, 480px);
+  padding: 28px;
+  border: 1px solid #a77a43;
+  border-radius: 4px;
+  background: linear-gradient(145deg, #26121c, #100a12);
+  color: #f3e4cf;
+  text-align: center;
+  box-shadow: 0 18px 75px #000b;
+}
+#deadlockMode::backdrop { background: #070309c9; }
+#deadlockMode h2 { margin: 0; color: #eac489; }
+#deadlockMode .deadlock-mode-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+#deadlockMode button, #deadlockMode a {
+  display: inline-block;
+  padding: 10px 14px;
+  border: 1px solid #a77a43;
+  border-radius: 3px;
+  background: #29191d;
+  color: #ffe4aa;
+  font: 600 14px/1.4 Georgia, serif;
+  text-decoration: none;
+}
+#deadlockMode button:hover, #deadlockMode a:hover { background: #48262a; }
+#deadlockMode :focus-visible { outline: 2px solid #ffe4aa; outline-offset: 3px; }
+#deadlockMode #deadlockModeBack { margin-top: 14px; background: transparent; }

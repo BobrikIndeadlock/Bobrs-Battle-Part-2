@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="Онлайн-драфт Deadlock для капитанов Bobrs Battle Part 2">
+  <title>Bobrs Battle Part 2 · Deadlock</title>
+  <!-- DEADLOCK_STYLES -->
+  <link rel="stylesheet" href="online-deadlock/room.css">
+</head>
+<body>
+  <main id="roomLobby">
+    <img src="media/images/altar-header.jpg" alt="Bobrs Battle Part 2">
+    <h1>Драфт героев Deadlock</h1>
+    <p id="roomHelp">Откройте онлайн-режим после первого драфта в Bobrs Battle Part 2 или перейдите по приглашению капитана.</p>
+    <p id="lobbyStatus" role="status"></p>
+  </main>
+  <aside id="roomBar" hidden aria-label="Онлайн-комната">
+    <p id="roomStatus" role="status" aria-live="polite"></p>
+    <details id="roomInvite" hidden>
+      <summary>Приглашение</summary>
+      <label for="inviteUrl">Ссылка для Артемона</label>
+      <input type="url" id="inviteUrl" readonly autocomplete="off">
+      <button type="button" id="copyInvite">Копировать</button>
+      <p id="copyStatus" role="status"></p>
+    </details>
+  </aside>
+  <!-- DEADLOCK_VIEW -->
+  <script src="media/deadlock/portraits.js"></script>
+  <script src="online-deadlock/peerjs.min.js"></script>
+  <script src="code/js/deadlock-draft.js"></script>
+  <script src="code/js/deadlock-atmosphere.js"></script>
+  <script type="module" src="online-deadlock/room.mjs"></script>
+</body>
+</html>

@@ -296,6 +296,17 @@ function tapCard(id){
  }else status('Выбрана первая карта · выберите вторую');
 }
 function ensureCompareStageFx(){const panel=$('compare');let fx=panel.querySelector('.compare-stage-fx');if(!fx){fx=document.createElement('div');fx.className='compare-stage-fx';fx.innerHTML='<div class="compare-halo"></div><div class="compare-halo-two"></div><div class="compare-runes"></div><div class="compare-flash-layer"></div>';panel.prepend(fx)}return fx}
+function mountComparePortrait(button,image){
+ const face=button.querySelector('.flip-side.back');
+ function setEdges(){
+  if(!image.naturalHeight)return;
+  face.style.setProperty('--portrait-aspect',image.naturalWidth/image.naturalHeight);
+  face.style.setProperty('--portrait-art',`url("${image.src}")`);
+ }
+ if(image.complete)setEdges();
+ else image.addEventListener('load',setEdges,{once:true});
+ face.append(image);
+}
 async function showCompare(cards,last,hold=0){
  const signal=draftController.signal;
  const portraits=cards.map(card=>{
@@ -306,7 +317,30 @@ async function showCompare(cards,last,hold=0){
   return image;
  });
  if(hold&&!await delay(hold,signal))return;
- try{return await revealCompare(cards,last,signal,portraits)}catch(err){if(signal.aborted)return;console.warn('Card reveal recovered:',err);if(state!=='preview'&&state!=='last')return;const panel=$('compare'),container=$('compareCards');pair=cards;container.replaceChildren();for(const c of cards){const b=document.createElement('button');b.type='button';b.className='reveal-card arcane-live arcane-settled flipped arcane-choice-ready';b.dataset.cardId=String(c.id);b.setAttribute('aria-label',c.name);b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"><img alt=""></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.name}</div>`;const im=b.querySelector('.flip-side.back img');im.src=c.image;im.alt=c.name;b.onclick=()=>choose(c.id);container.append(b)}panel.classList.remove('arcane-flare','arcane-resolving');panel.classList.add('visible','arcane-cinematic','arcane-ready','arcane-selectable');$('choiceHint').textContent='Выберите персонажа для команды '+currentName();}
+ try{
+  return await revealCompare(cards,last,signal,portraits);
+ }catch(err){
+  if(signal.aborted)return;
+  console.warn('Card reveal recovered:',err);
+  if(state!=='preview'&&state!=='last')return;
+  const panel=$('compare'),container=$('compareCards');
+  pair=cards;
+  container.replaceChildren();
+  for(const [index,c] of cards.entries()){
+   const b=document.createElement('button');
+   b.type='button';
+   b.className='reveal-card arcane-live arcane-settled flipped arcane-choice-ready';
+   b.dataset.cardId=String(c.id);
+   b.setAttribute('aria-label',c.name);
+   b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.name}</div>`;
+   mountComparePortrait(b,portraits[index]);
+   b.onclick=()=>choose(c.id);
+   container.append(b);
+  }
+  panel.classList.remove('arcane-flare','arcane-resolving');
+  panel.classList.add('visible','arcane-cinematic','arcane-ready','arcane-selectable');
+  $('choiceHint').textContent='Выберите персонажа для команды '+currentName();
+ }
 }
 async function revealCompare(cards,last,signal,portraits){
  pair=cards;
@@ -324,8 +358,8 @@ async function revealCompare(cards,last,signal,portraits){
   b.dataset.cardId=String(c.id);
   b.type='button';
   b.disabled=true;
-  b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"><img alt=""></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.name}</div>`;
-  b.querySelector('.flip-side.back img').replaceWith(portraits[i]);
+  b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.name}</div>`;
+  mountComparePortrait(b,portraits[i]);
   b.setAttribute('aria-label',c.name);
   b.onclick=()=>choose(c.id);
   container.append(b);

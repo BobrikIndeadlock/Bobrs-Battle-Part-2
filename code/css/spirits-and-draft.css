@@ -132,8 +132,23 @@
 #grid.bobrs-grid-shuffling{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transition:none!important}
 #grid.bobrs-grid-shuffling *{pointer-events:none!important}
 /* FIX: portrait is always on back side, card-back art remains intact on front. */
-.compare.arcane-cinematic .reveal-card .flip-side.back{background:#13070b!important;overflow:hidden}
-.compare.arcane-cinematic .reveal-card .flip-side.back > img{position:absolute!important;inset:0!important;display:block!important;opacity:1!important;visibility:visible!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important;max-width:none!important;max-height:none!important;filter:none!important;transform:none!important}
+.compare.arcane-cinematic .reveal-card .flip-side.back{background:#13070b!important;overflow:hidden;border:0!important}
+/* The middle retains the whole PNG. Only its outermost 2% is reflected into each side. */
+.compare.arcane-cinematic .reveal-card .flip-side.back::before,
+.compare.arcane-cinematic .reveal-card .flip-side.back::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  width: max(0px, calc((1 - var(--portrait-aspect, var(--flip-card-aspect)) / var(--flip-card-aspect)) * 50% + 1px));
+  background-image: var(--portrait-art, none);
+  background-size: 5000% 100%;
+  background-repeat: no-repeat;
+  transform: scaleX(-1);
+  pointer-events: none;
+}
+.compare.arcane-cinematic .reveal-card .flip-side.back::before { left: 0; background-position: left center; }
+.compare.arcane-cinematic .reveal-card .flip-side.back::after { right: 0; background-position: right center; }
+.compare.arcane-cinematic .reveal-card .flip-side.back > img{position:absolute!important;inset:0!important;z-index:1;display:block!important;opacity:1!important;visibility:visible!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important;max-width:none!important;max-height:none!important;filter:none!important;transform:none!important}
 .compare.arcane-cinematic .reveal-card.flipped .flip-core{transform:rotateY(180deg)!important}
 .compare.arcane-cinematic.arcane-ready .reveal-card.flipped .flip-core{transform:rotateY(180deg)!important}
 .compare.arcane-cinematic .reveal-card.flipped .flip-side.front{backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important}

@@ -6,6 +6,10 @@
 
 Сборка `v2.1-new-cards` создана из коммита `72c3f0e9f3e05c5aaaf2c03217546cdce7fa582b` в `main`. [Заключительный аудит](QA-v2.1-new-cards.md) · [Хеши файлов в ZIP](Final-build-v2.1-files.SHA256) · [SHA-256 архива](SHA256SUMS)
 
+## Рабочая сборка для 2K
+
+Ветка `card-clarity-2k` увеличивает карточки выбора на ПК и показывает капитанов в тронном зале из оригинальных PNG. [ZIP для ПК и iPhone](card-clarity-2k/Bobrs-Battle-Part-2-Card-Clarity-2K.zip) · [Аудит и четыре снимка 2560 × 1440](card-clarity-2k/QA-card-clarity-2k.md)
+
 ## Предыдущая стабильная версия
 
 Сборка `v2.0-gothic-final` создана из коммита `d64a9f65091cecd1758d7b04848c06095ce5c6a2`. [Скачать ZIP v2.0](Bobrs-Battle-Part-2-Gothic-Final.zip) · [Аудит v2.0](QA-v2.0-gothic-final.md) · [Хеши файлов в ZIP v2.0](Final-build-files.SHA256)

@@ -8,6 +8,15 @@ export function validTeams(teams) {
     new Set(teams.flat()).size === 10;
 }
 
+export function matchCampaignRosters(teams, draftTeams) {
+  // Old clients omit the redundant wire roster. The first draft snapshot still carries it.
+  return Array.isArray(teams) && (teams.length === 0 || (
+    teams.length === draftTeams.length && teams.every((team, side) =>
+      Array.isArray(team) && team.length === draftTeams[side].length &&
+      team.every((id, slot) => id === draftTeams[side][slot]))
+  ));
+}
+
 export const newDraft = (rev = 0) => ({ rev, coin: null, started: false, moves: [] });
 
 export function validDraft(value) {

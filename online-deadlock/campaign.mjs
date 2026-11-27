@@ -1,5 +1,5 @@
 import { openRoom, roomToken } from './room.mjs';
-import { applyAction, newDraft, permits as permitsDeadlock, validDraft, validTeams } from './rules.mjs';
+import { applyAction, matchCampaignRosters, newDraft, permits as permitsDeadlock, validDraft, validTeams } from './rules.mjs';
 import { players } from './draft-data.mjs';
 
 const $ = id => document.getElementById(id);
@@ -124,9 +124,8 @@ function campaignGame() {
         if (!next.second) return;
         await whenClassClears($('movieFinal'), 'active');
         $('finish').classList.remove('visible');
-        const roster = next.first.teams.map(team => team.map(id => players.find(player => player.id === id)));
+        second.open(options.rosters, send, allowed);
         deadlockOpen = true;
-        second.open(roster, send, allowed);
       }
       await second.paint(previous?.second, next.second, options);
     },
@@ -136,7 +135,8 @@ function campaignGame() {
     waitForPeer: true,
     initial: () => ({ rev: 0, first: first.snapshot(), event: null, second: null }),
     valid,
-    validTeams: teams => Array.isArray(teams) && teams.length === 0,
+    rosterIds: state => state.first.teams,
+    validTeams: (teams, state) => matchCampaignRosters(teams, state.first.teams),
     permits,
     apply,
     settle: state => state.event ? {
@@ -146,7 +146,7 @@ function campaignGame() {
 }
 
 function join(side, room) {
-  openRoom({ side, room, teams: [], game: campaignGame(), invitationKey: 'campaign' });
+  openRoom({ side, room, game: campaignGame(), invitationKey: 'campaign' });
 }
 
 const invite = new URLSearchParams(location.hash.slice(1)).get('campaign');

@@ -5,7 +5,7 @@ import test from 'node:test';
 
 const site = pathToFileURL(resolve(process.env.DEADLOCK_SITE || '_site') + '/');
 const { order, players } = await import(new URL('online-deadlock/draft-data.mjs', site));
-const { applyAction, moveAt, newDraft, validDraft, validTeams } =
+const { applyAction, matchCampaignRosters, moveAt, newDraft, validDraft, validTeams } =
   await import(new URL('online-deadlock/rules.mjs', site));
 
 test('only two complete teams of original IDs are transferable', () => {
@@ -13,6 +13,17 @@ test('only two complete teams of original IDs are transferable', () => {
   assert.equal(validTeams([ids.slice(0, 5), ids.slice(5)]), true);
   assert.equal(validTeams([ids.slice(0, 5), ids.slice(0, 5)]), false);
   assert.equal(validTeams([['https://elsewhere.example/card'], ids.slice(5)]), false);
+});
+
+test('campaign rosters preserve seats and order, including reconnects and older snapshots', () => {
+  const ids = players.map(player => player.id);
+  const teams = [ids.slice(0, 5), ids.slice(5)];
+  assert.equal(matchCampaignRosters(teams, teams), true);
+  assert.equal(matchCampaignRosters([[], []], teams), false);
+  assert.equal(matchCampaignRosters(teams.slice().reverse(), teams), false);
+  assert.equal(matchCampaignRosters([teams[0].slice().reverse(), teams[1]], teams), false);
+  assert.equal(matchCampaignRosters([], teams), true);
+  assert.equal(matchCampaignRosters([[], []], [[], []]), true);
 });
 
 for (const coin of ['heads', 'tails']) {

@@ -18,6 +18,10 @@
   roomTeams.forEach((team, side) => {
    const roster = $('dlRoster' + side);
    roster.replaceChildren();
+   const heading = roster.previousElementSibling;
+   const label = heading.dataset.rosterLabel ?? heading.textContent;
+   heading.dataset.rosterLabel = label;
+   heading.textContent = label + ' · ' + team.length + ' / 5';
    for (const player of team) {
     const item = document.createElement('figure');
     const image = new Image();
@@ -55,6 +59,9 @@
 
  window.DeadlockRoomView = {
   open(teams, send, allowed) {
+   if (teams.length !== 2 || teams.some(team => team.length !== 5 || !team.every(Boolean))) {
+    throw new Error('В Deadlock должны перейти два полных состава первого драфта.');
+   }
    roomTeams = teams;
    sendAction = send;
    maySend = allowed;

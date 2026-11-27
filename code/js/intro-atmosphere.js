@@ -27,7 +27,7 @@
   for (const [name, file] of Object.entries(sources)) {
     const image = new Image();
     image.src = 'media/' + file;
-    images.set(name, image);
+    image.decode().then(() => images.set(name, image), () => {});
   }
 
   let frame = 0;
@@ -47,14 +47,14 @@
 
   function layer(name, x, y, alpha, w, h) {
     const image = images.get(name);
-    if (!image?.complete || !image.naturalWidth || alpha <= 0) return;
+    if (!image || alpha <= 0) return;
     context.globalAlpha = clamp(alpha);
     context.drawImage(image, x, y, w ?? image.width, h ?? image.height);
   }
 
   function brazierFlames(time, left, strength) {
     const atlas = images.get('fire');
-    if (!atlas.complete || !atlas.naturalWidth) return;
+    if (!atlas || strength <= 0) return;
     const n = Math.floor(time * (left ? 13.2 : 11.8) + (left ? 0 : 5)) % 12;
     const x = left ? 49 : 687;
     context.globalAlpha = strength;

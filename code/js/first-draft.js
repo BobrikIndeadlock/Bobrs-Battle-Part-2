@@ -110,7 +110,7 @@ async function playChronosIntervention(captIndex,invalidHero,signal){
  status('Нарушено древнее правило…');
  $('book').disabled=true;
  $('grid').querySelectorAll('.tile').forEach(card=>card.disabled=true);
- let echo;
+ let echo, sealedBack;
  try{
   if(cinema){
    try{
@@ -135,6 +135,7 @@ async function playChronosIntervention(captIndex,invalidHero,signal){
     await cinema.wait(4800,signal);
     echo?.remove();
     event.classList.add('rewind-fading');
+    sealedBack=cinema.prepareSealedBack(chronosSealedBack);
     await cinema.wait(1100,signal);
    }catch(error){
     if(signal.aborted)throw error;
@@ -146,7 +147,7 @@ async function playChronosIntervention(captIndex,invalidHero,signal){
   available=shuffle([...available,invalidHero]);
   duoLock[captIndex]=invalidHero.name;
   try{
-   await cinema?.seal(chronosSealedBack,$('grid'),()=>event.classList.add('chronos-release'),signal);
+   await cinema?.seal(sealedBack??cinema.prepareSealedBack(chronosSealedBack),$('grid'),()=>event.classList.add('chronos-release'),signal);
   }catch(error){
    if(signal.aborted)throw error;
    console.warn('Chronos seal presentation unavailable:',error);
@@ -297,10 +298,17 @@ function tapCard(id){
 function ensureCompareStageFx(){const panel=$('compare');let fx=panel.querySelector('.compare-stage-fx');if(!fx){fx=document.createElement('div');fx.className='compare-stage-fx';fx.innerHTML='<div class="compare-halo"></div><div class="compare-halo-two"></div><div class="compare-runes"></div><div class="compare-flash-layer"></div>';panel.prepend(fx)}return fx}
 async function showCompare(cards,last,hold=0){
  const signal=draftController.signal;
+ const portraits=cards.map(card=>{
+  const image=new Image();
+  image.src=card.image;
+  image.alt=card.name;
+  image.decode().catch(()=>{});
+  return image;
+ });
  if(hold&&!await delay(hold,signal))return;
- try{return await revealCompare(cards,last,signal)}catch(err){if(signal.aborted)return;console.warn('Card reveal recovered:',err);if(state!=='preview'&&state!=='last')return;const panel=$('compare'),container=$('compareCards');pair=cards;container.replaceChildren();for(const c of cards){const b=document.createElement('button');b.type='button';b.className='reveal-card arcane-live arcane-settled flipped arcane-choice-ready';b.dataset.cardId=String(c.id);b.setAttribute('aria-label',c.name);b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"><img alt=""></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.name}</div>`;const im=b.querySelector('.flip-side.back img');im.src=c.image;im.alt=c.name;b.onclick=()=>choose(c.id);container.append(b)}panel.classList.remove('arcane-flare','arcane-resolving');panel.classList.add('visible','arcane-cinematic','arcane-ready','arcane-selectable');$('choiceHint').textContent='Выберите персонажа для команды '+currentName();}
+ try{return await revealCompare(cards,last,signal,portraits)}catch(err){if(signal.aborted)return;console.warn('Card reveal recovered:',err);if(state!=='preview'&&state!=='last')return;const panel=$('compare'),container=$('compareCards');pair=cards;container.replaceChildren();for(const c of cards){const b=document.createElement('button');b.type='button';b.className='reveal-card arcane-live arcane-settled flipped arcane-choice-ready';b.dataset.cardId=String(c.id);b.setAttribute('aria-label',c.name);b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"><img alt=""></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.name}</div>`;const im=b.querySelector('.flip-side.back img');im.src=c.image;im.alt=c.name;b.onclick=()=>choose(c.id);container.append(b)}panel.classList.remove('arcane-flare','arcane-resolving');panel.classList.add('visible','arcane-cinematic','arcane-ready','arcane-selectable');$('choiceHint').textContent='Выберите персонажа для команды '+currentName();}
 }
-async function revealCompare(cards,last,signal){
+async function revealCompare(cards,last,signal,portraits){
  pair=cards;
  const panel=$('compare'),container=$('compareCards');
  ensureCompareStageFx();
@@ -317,8 +325,7 @@ async function revealCompare(cards,last,signal){
   b.type='button';
   b.disabled=true;
   b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"><img alt=""></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.name}</div>`;
-  b.querySelector('.flip-side.back img').src=c.image;
-  b.querySelector('.flip-side.back img').alt=c.name;
+  b.querySelector('.flip-side.back img').replaceWith(portraits[i]);
   b.setAttribute('aria-label',c.name);
   b.onclick=()=>choose(c.id);
   container.append(b);

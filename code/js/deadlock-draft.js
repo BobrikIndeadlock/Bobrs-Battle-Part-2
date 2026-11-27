@@ -18,11 +18,24 @@
 
  function sideOf(place){return place===0?place1:1-place1}function turn(){return order[step]};function picked(side){return history.filter(h=>h.type==='pick'&&h.side===side)}function banned(side){return history.filter(h=>h.type==='ban'&&h.side===side)}
  const heroButtons=new Map();
- function setPortrait(im,h){const url=portrait(h);if(im.dataset.requestedSrc!==url){im.dataset.requestedSrc=url;im.src=url}im.alt=h.name}
+ function setPortrait(im,h){
+  const url=portrait(h);
+  if(im.getAttribute('src')!==url)im.src=url;
+  if(im.alt!==h.name)im.alt=h.name;
+ }
  function syncSlots(root,entries,kind){while(root.children.length>entries.length)root.lastElementChild.remove();entries.forEach((entry,i)=>{let el=root.children[i];if(!el){el=document.createElement('div');root.append(el)}const hero=entry?heroes[entry.id]:null,key=hero?String(hero.id):'empty';const cls=kind==='pick'?'dl-slot':'dl-ban-mini';if(el.dataset.heroKey!==key){el.dataset.heroKey=key;el.className=cls+(hero?'':' empty');el.replaceChildren();el.title=hero&&kind==='ban'?hero.name:'';if(hero){const im=new Image();el.append(im)}if(kind==='pick'){const txt=document.createElement('span');txt.textContent=hero?hero.name:`${i+1}. Ожидание`;el.append(txt)}}if(hero)setPortrait(el.querySelector('img'),hero)})}
  function renderAltar(){const timeline=$('dlOrder');if(timeline.children.length!==order.length){timeline.replaceChildren();order.forEach(([type,place],i)=>{const el=document.createElement('div');el.innerHTML=`${i+1}<b>${type==='ban'?'⊘':'⚔'}</b>${type==='ban'?'БАН':'ПИК'} ${place+1}`;timeline.append(el)})}order.forEach(([type,place],i)=>{const el=timeline.children[i];el.className='dl-order-item '+type+(i===step?' now':i<step?' done':'');el.dataset.paletteSide=String(sideOf(place));if(i===step)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current')});const list=history.filter(h=>h.type==='ban');syncSlots($('dlCentralBans'),Array.from({length:6},(_,i)=>list[i]||null),'ban')}
  function update(){renderAltar();if(step>=order.length){showEnd();return}const [type,place]=turn(),side=sideOf(place),name=side?'АРТЕМОН':'МАКАРЫЧ';$('dlDraftScreen').dataset.paletteSide=String(side);$('dlStep').textContent=`${type==='ban'?'БАН':'ПИК'} ${step+1} / 18`;$('dlTurnText').textContent=`ХОД ${side?'АРТЕМОНА':'МАКАРЫЧА'}`;$('dlTurnHint').textContent=`МЕСТО ${place+1} · ${type==='ban'?'Запретите одного героя':'Выберите героя в команду'}`;$('dlProgress').style.width=step/18*100+'%';$('dlPlace0').textContent='МЕСТО '+(place1===0?'1':'2')+' · ПИКИ '+picked(0).length+'/6 · БАНЫ '+banned(0).length+'/3';$('dlPlace1').textContent='МЕСТО '+(place1===1?'1':'2')+' · ПИКИ '+picked(1).length+'/6 · БАНЫ '+banned(1).length+'/3';for(let i=0;i<2;i++){$('dlTeam'+i).classList.toggle('current',side===i);const picks=picked(i),bans=banned(i);syncSlots($('dlPicks'+i),Array.from({length:6},(_,j)=>picks[j]||null),'pick');syncSlots($('dlBans'+i),bans,'ban')}$('dlChosenText').textContent=selected===null?'Выберите героя':heroes[selected].name;$('dlConfirm').disabled=animating||selected===null;$('dlConfirm').textContent=type==='ban'?'ЗАПРЕТИТЬ ГЕРОЯ':'ВЫБРАТЬ ГЕРОЯ';$('dlUndo').disabled=animating||!history.length;$('dlHistory').textContent=history.slice(-5).map(h=>`${h.side?'Артемон':'Макарыч'}: ${h.type==='ban'?'бан':'пик'} ${heroes[h.id].name}`).join('  ·  ');renderHeroes()}
- function renderHeroes(){const search=$('dlSearch').value.trim().toLowerCase(),used=new Map(history.map(h=>[h.id,h])),root=$('dlHeroes');for(const h of heroes){let b=heroButtons.get(h.id);if(!b){b=document.createElement('button');b.type='button';const im=new Image();im.loading='lazy';b.append(im);const label=document.createElement('span');label.textContent=h.name;b.append(label);b.onclick=()=>{if(animating||history.some(x=>x.id===h.id))return;selected=h.id;update()};heroButtons.set(h.id,b);root.append(b)}setPortrait(b.querySelector('img'),h);const usedBy=used.get(h.id);b.className='dl-hero'+(usedBy?' taken':'')+(selected===h.id?' selected':'');b.disabled=animating||!!usedBy;b.dataset.status=usedBy?(usedBy.type==='ban'?'БАН':'ПИК'):'';b.hidden=!h.name.toLowerCase().includes(search)}}
+ function renderHeroes(){const search=$('dlSearch').value.trim().toLowerCase(),used=new Map(history.map(h=>[h.id,h])),root=$('dlHeroes');for(const h of heroes){let b=heroButtons.get(h.id);if(!b){b=document.createElement('button');b.type='button';const im=new Image();im.loading='lazy';b.append(im);const label=document.createElement('span');label.textContent=h.name;b.append(label);b.onclick=()=>{if(animating||history.some(x=>x.id===h.id))return;selected=h.id;update()};heroButtons.set(h.id,b);root.append(b)}setPortrait(b.querySelector('img'),h);const usedBy=used.get(h.id);
+  const className='dl-hero'+(usedBy?' taken':'')+(selected===h.id?' selected':'');
+  const disabled=animating||!!usedBy;
+  const status=usedBy?(usedBy.type==='ban'?'БАН':'ПИК'):'';
+  const hidden=!h.name.toLowerCase().includes(search);
+  if(b.className!==className)b.className=className;
+  if(b.disabled!==disabled)b.disabled=disabled;
+  if(b.dataset.status!==status)b.dataset.status=status;
+  if(b.hidden!==hidden)b.hidden=hidden;
+}}
  let audioCtx=null, audioMaster=null, audioEnabled=false;
  const soundToggle=$('battleSoundToggle');
  function prepareAudio(){const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return false;if(!audioCtx||audioCtx.state==='closed'){audioCtx=new Audio();audioMaster=audioCtx.createGain();audioMaster.gain.value=audioEnabled?1:0;audioMaster.connect(audioCtx.destination)}if(audioCtx.state==='suspended')audioCtx.resume().catch(()=>{});return true}
@@ -86,10 +99,26 @@
  const coinModel=$('dlCoin');
  const edgeCount=96;
  const edgeFaces=Array.from({length:edgeCount},(_,i)=>{const edge=document.createElement('div');edge.className='dl-coin-edge';edge.setAttribute('aria-hidden','true');coinModel.append(edge);return edge});
- function fitCoin(){const size=coinModel.offsetWidth;if(!size)return;const radius=size/2*Math.cos(Math.PI/edgeCount),half=Math.max(5,size*.028);coinModel.style.setProperty('--coin-half',half+'px');coinModel.style.setProperty('--edge-depth',(2*half+.35)+'px');coinModel.style.setProperty('--edge-width',(size*Math.sin(Math.PI/edgeCount)+.45)+'px');edgeFaces.forEach((edge,i)=>{edge.style.transform=`translate(-50%,-50%) rotateZ(${i*360/edgeCount}deg) translateY(${-radius}px) rotateX(90deg)`})}
+ let fittedCoinSize=0;
+ function fitCoin(){
+  const size=coinModel.offsetWidth;
+  if(!size||size===fittedCoinSize)return;
+  fittedCoinSize=size;
+  const radius=size/2*Math.cos(Math.PI/edgeCount),half=Math.max(5,size*.028);
+  coinModel.style.setProperty('--coin-half',half+'px');
+  coinModel.style.setProperty('--edge-depth',(2*half+.35)+'px');
+  coinModel.style.setProperty('--edge-width',(size*Math.sin(Math.PI/edgeCount)+.45)+'px');
+  edgeFaces.forEach((edge,i)=>{edge.style.transform=`translate(-50%,-50%) rotateZ(${i*360/edgeCount}deg) translateY(${-radius}px) rotateX(90deg)`});
+ }
  if(typeof ResizeObserver==='function')new ResizeObserver(fitCoin).observe(coinModel);window.addEventListener('resize',fitCoin,{passive:true});
  function cancelCoin(){if(coinCleanup)coinCleanup();coinCleanup=null;flipping=false}
- function begin(){if(animating)return;cancelCoin();for(let side=0;side<2;side++){const roster=$('dlRoster'+side);roster.replaceChildren();document.querySelectorAll('#teamTiny'+side+' .roster-slot:not(.empty) img').forEach(src=>{const fig=document.createElement('figure'),im=new Image(),cap=document.createElement('figcaption');im.src=src.src;im.alt=src.alt;cap.textContent=src.alt;fig.append(im,cap);roster.append(fig)});const from=document.getElementById('portrait'+side);const to=$('dlCap'+side);if(to&&from&&from.src){to.src=from.src;to.alt=side===0?'Макарыч':'Артемон';}}step=0;history=[];selected=null;coinResult=null;flipping=false;$('dlCoin').className='dl-coin';$('dlCoinResult').textContent='Монета определит порядок выбора';$('dlFlip').style.display='';$('dlFlip').disabled=false;$('dlEnter').style.display='none';$('dlSearch').value='';screen('dlCoinScreen');active.classList.add('active');fitCoin();document.body.style.overflow='hidden';$('epicFinal')?.classList.remove('active');}
+ function begin(){
+  if(animating)return;
+  cancelCoin();
+  const previousResults=$('dlFinalGrid');
+  previousResults.classList.remove('battle-play');
+  previousResults.replaceChildren();
+  for(let side=0;side<2;side++){const roster=$('dlRoster'+side);roster.replaceChildren();document.querySelectorAll('#teamTiny'+side+' .roster-slot:not(.empty) img').forEach(src=>{const fig=document.createElement('figure'),im=new Image(),cap=document.createElement('figcaption');im.src=src.src;im.alt=src.alt;cap.textContent=src.alt;fig.append(im,cap);roster.append(fig)});const from=document.getElementById('portrait'+side);const to=$('dlCap'+side);if(to&&from&&from.src){to.src=from.src;to.alt=side===0?'Макарыч':'Артемон';}}step=0;history=[];selected=null;coinResult=null;flipping=false;$('dlCoin').className='dl-coin';$('dlCoinResult').textContent='Монета определит порядок выбора';$('dlFlip').style.display='';$('dlFlip').disabled=false;$('dlEnter').style.display='none';$('dlSearch').value='';screen('dlCoinScreen');active.classList.add('active');fitCoin();document.body.style.overflow='hidden';$('epicFinal')?.classList.remove('active');}
  window.openDeadlockDraft=begin;
 
  $('dlFlip').onclick=()=>{

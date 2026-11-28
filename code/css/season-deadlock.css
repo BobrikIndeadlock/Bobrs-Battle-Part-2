@@ -91,3 +91,63 @@
 }
 
 #dlCathedral .season-light[hidden] { display: none; }
+
+/* Specular reflection rides on each face so the toss keeps its 3D depth. */
+#dlPhase .dl-face::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(122deg, transparent 23%, #fce1a64d 48%, #fce1a609 56%, transparent 70%);
+  opacity: .19;
+  pointer-events: none;
+}
+#dlPhase .dl-face.back::after {
+  background: linear-gradient(122deg, transparent 23%, #ddd49f49 48%, #ddd49f08 56%, transparent 70%);
+}
+#dlPhase .dl-coin.spinning .dl-face::after { animation: coinReflection 4.6s ease-out both; }
+@keyframes coinReflection {
+  0% { transform: translateX(-60%); opacity: .12; }
+  28% { opacity: .85; }
+  66% { transform: translateX(25%); opacity: .38; }
+  100% { transform: none; opacity: .19; }
+}
+
+#dlPhase #dlDraftScreen .dl-turn {
+  border-inline-start: 2px solid var(--accent);
+  border-inline-end: 2px solid var(--accent);
+}
+#dlPhase #dlDraftScreen.hero-in-focus .dl-confirm {
+  border-color: var(--accent);
+}
+#dlPhase #dlDraftScreen.last-draft-turn .dl-turn {
+  background: linear-gradient(115deg, var(--tint), #151713 50%, var(--tint));
+}
+#dlPhase .draft-impact::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 22% 52%, rgba(var(--glow),.29),transparent 55%),
+              radial-gradient(ellipse at 78% 74%, rgba(var(--glow),.14),transparent 50%);
+  animation: draftReflectedLight 1.85s ease-out both;
+}
+#dlPhase .draft-impact.is-ban::after {
+  background: radial-gradient(ellipse at 50% 42%, #9e4f3835, transparent 54%);
+}
+#dlPhase #dlEndScreen .dl-final {
+  background: radial-gradient(ellipse at 12% 47%, rgba(var(--team-0-rgb),.10), transparent 48%),
+              radial-gradient(ellipse at 88% 47%, rgba(var(--team-1-rgb),.12), transparent 49%);
+}
+@keyframes draftReflectedLight {
+  0% { opacity: 0; }
+  16% { opacity: .87; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #dlPhase .dl-coin.spinning .dl-face::after, #dlPhase .draft-impact::after { animation: none; }
+  #dlPhase .draft-impact::after { opacity: 0; }
+}
+body.bobrs-page-hidden #dlPhase :is(.dl-coin.spinning .dl-face,.draft-impact)::after {
+  animation-play-state: paused;
+}

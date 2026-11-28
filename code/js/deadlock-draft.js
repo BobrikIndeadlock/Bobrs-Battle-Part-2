@@ -113,7 +113,7 @@
  }
  let coinCleanup=null;
  const coinModel=$('dlCoin');
- const edgeCount=96;
+ const edgeCount=48;
  const edgeFaces=Array.from({length:edgeCount},(_,i)=>{const edge=document.createElement('div');edge.className='dl-coin-edge';edge.setAttribute('aria-hidden','true');coinModel.append(edge);return edge});
  let fittedCoinSize=0;
  function fitCoin(){

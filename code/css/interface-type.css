@@ -3,8 +3,8 @@
   --ui-text: "Source Sans 3", system-ui, sans-serif;
   --ui-paper: #e9e5d8;
   --ui-secondary: #c0c2b8;
-  --ui-ossuary: #c4d0b8;
-  --ui-storm: #f0d590;
+  --ui-ossuary: var(--team-0-light);
+  --ui-storm: var(--team-1-light);
   --ui-time: #e3cfa6;
   --ui-ban: #e6b3a8;
   --ui-panel: #151815;
@@ -25,11 +25,11 @@ body:has(#roomLobby),
 
 :where(#cap0, #dlTeam0, .battle-team.side0, .vs-captain.left, .vs-team:first-child, [data-palette-side="0"]) {
   --ui-side-paper: var(--ui-ossuary);
-  --ui-side-edge: #788771;
+  --ui-side-edge: var(--team-0-middle);
 }
 :where(#cap1, #dlTeam1, .battle-team.side1, .vs-captain.right, .vs-team:nth-child(2), [data-palette-side="1"]) {
   --ui-side-paper: var(--ui-storm);
-  --ui-side-edge: #9b804e;
+  --ui-side-edge: var(--team-1-middle);
 }
 
 /* Small labels stay legible over the original scene lighting. */

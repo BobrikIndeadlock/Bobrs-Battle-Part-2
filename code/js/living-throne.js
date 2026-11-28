@@ -29,7 +29,12 @@
   let ready = false;
 
   function paint(time) {
-    season.paint(time, scene.dataset.paletteSide, { reduced: reduced.matches });
+    const draft = window.BobrsNewDraft;
+    const progress = draft.teams().reduce((count,team)=>count+team.length,0)/10;
+    const charge = draft.phase()==='summoning' ? .54 : progress;
+    season.paint(time, scene.dataset.paletteSide, {
+      reduced: reduced.matches, charge, convergence: Math.max(0,(progress-.70)*.75),
+    });
     context.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
     context.clearRect(0, 0, width, height);
     grimoire?.paint(context, ember.naturalWidth ? ember : null, time, reduced.matches, compact.matches);
@@ -82,7 +87,7 @@
     if (canvas.width !== bufferWidth || canvas.height !== bufferHeight) {
       canvas.width = bufferWidth;
       canvas.height = bufferHeight;
-      season.size(lightweight ? 352 : 512,lightweight ? 198 : 288);
+      season.size(lightweight ? 240 : 352,lightweight ? 135 : 198);
     }
     sync();
   }

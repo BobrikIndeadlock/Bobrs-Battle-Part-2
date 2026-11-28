@@ -105,3 +105,41 @@
 #compare .compare-title, #compare .choice-hint { position: relative; }
 #compare .compare-title { inset-block-start: -1rem; }
 #compare .choice-hint { inset-block-start: min(2.1rem, 4dvh); }
+
+/* One light field follows the painted perspective on the poster and in VS. */
+.season-cinema-film {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 1;
+}
+#finish .season-cinema-film { position: fixed; }
+#moviePoster > :is(.season-title,img) { position: relative; z-index: 2; }
+#finish .vs-lightning { display: none; }
+
+#chronosEvent .chronos-wash::after,
+#c91oOverlay #c91oDim::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 36%, #bab38b16, transparent 44%),
+    linear-gradient(100deg, #11140f4a, transparent 38% 64%, #191a1a38);
+}
+#chronosEvent.show-figure .chronos-wash::after,
+#c91oOverlay.show #c91oDim::after {
+  animation: timeAir 3.8s ease-out both;
+}
+@keyframes timeAir {
+  0% { opacity: 0; }
+  47% { opacity: 1; }
+  100% { opacity: .63; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #chronosEvent .chronos-wash::after, #c91oOverlay #c91oDim::after { animation: none; }
+}
+body.bobrs-page-hidden :is(#chronosEvent .chronos-wash, #c91oOverlay #c91oDim)::after {
+  animation-play-state: paused;
+}

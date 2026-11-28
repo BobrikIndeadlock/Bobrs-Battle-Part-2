@@ -19,7 +19,7 @@
         "teamName": "Павла",
         "styleName": "Повелитель нежити",
         "portrait": "media/cards/pavel.png",
-        "theme": {"dark":"#141914","middle":"#616b52","light":"#d1dac5","rgb":"164,181,147"},
+        "theme": {"dark":"#1e2009","middle":"#767442","light":"#d9d1a8","rgb":"167,160,90"},
         "coin": {"side":"tails","label":"Корона","image":"media/season/coin-ossuary.webp"},
         "effects": {"sound":"media/season/emerald.wav"}
       },
@@ -30,7 +30,7 @@
         "teamName": "Мишани",
         "styleName": "Повелитель молний",
         "portrait": "media/cards/mishanya.png",
-        "theme": {"dark":"#201b09","middle":"#9d7d16","light":"#fff1a1","rgb":"248,206,66"},
+        "theme": {"dark":"#291706","middle":"#a8762a","light":"#f7dea0","rgb":"235,175,77"},
         "coin": {"side":"heads","label":"Молния","image":"media/season/coin-lightning.webp"},
         "effects": {"sound":"media/season/thunder.wav"}
       }

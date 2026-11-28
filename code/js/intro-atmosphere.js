@@ -15,19 +15,29 @@
   let frame = 0;
   let last = 0;
   let cameraPosition = () => 0;
+  let focus = 0;
+  let hovering = false;
+  gate.addEventListener('pointerenter', () => { hovering = true; });
+  gate.addEventListener('pointerleave', () => { hovering = false; });
+  gate.addEventListener('focus', () => { hovering = true; });
+  gate.addEventListener('blur', () => { hovering = false; });
   function fit() {
-    season.size(compact.matches ? 352 : 512,compact.matches ? 198 : 288);
+    season.size(compact.matches ? 224 : 320,compact.matches ? 126 : 180);
   }
 
   function render(now) {
     frame = 0;
     if (motion.matches || document.hidden || !stage.isConnected) return;
     frame = requestAnimationFrame(render);
-    const interval = compact.matches ? 48 : 39;
+    const interval = compact.matches ? 58 : 48;
     if (now - last < interval) return;
     last = now;
 
-    season.paint(now / 1000, '', { proximity: cameraPosition() });
+    focus += ((hovering ? 1 : 0)-focus)*.14;
+    const proximity = cameraPosition();
+    season.paint(now / 1000, '', {
+      proximity, charge: focus, convergence: focus*.26 + proximity*.14,
+    });
   }
 
   function stop() {

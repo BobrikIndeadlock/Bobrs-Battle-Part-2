@@ -2,7 +2,10 @@
 window.createSeasonAtmosphere = (canvas, scene) => {
   const media = window.BobrsLightMaps[scene];
   const map = new Image();
+  const detail = new Image();
   map.src = media;
+  detail.src = window.BobrsDetailMaps[scene];
+  const [ash, storm] = window.BobrsSeason.captains.map(({theme}) => theme.rgb.split(',').map(n => Number(n)/255));
   let renderer;
   let aspect = 16 / 9;
   let lastTime;
@@ -21,9 +24,10 @@ window.createSeasonAtmosphere = (canvas, scene) => {
   `;
   const fragment = `
     precision mediump float;
-    uniform sampler2D response;
-    uniform float t, aspect, fade;
+    uniform sampler2D response, details;
+    uniform float t, aspect, fade, charge, strike, approach;
     uniform vec2 energy;
+    uniform vec3 ash, storm;
     varying vec2 uv;
 
     float hash(vec2 p) {
@@ -43,19 +47,36 @@ window.createSeasonAtmosphere = (canvas, scene) => {
       q += (curl-.5)*1.28;
       return noise(q)*.61 + noise(q*2.17+vec2(step*.25,-step*.11))*.26 + noise(q*4.07)*.13;
     }
+    float grains(vec2 p, float tick) {
+      vec2 cell = floor(p);
+      float seed = hash(cell + vec2(44.,2.));
+      vec2 center = vec2(hash(cell*.71),hash(cell+16.))*.62+.19;
+      float speck = 1.-smoothstep(.008,.073,length(fract(p)-center));
+      return speck * smoothstep(.72,.98,seed) *
+        pow(.5+.5*sin(tick*(1.3+seed)+seed*8.),2.);
+    }
+
     void main() {
       vec3 surface = texture2D(response,uv).rgb;
+      vec3 field = texture2D(details,uv).rgb;
       vec2 p = uv * vec2(aspect,1.);
-      vec3 ash = vec3(.69,.74,.63);
-      vec3 gold = vec3(1.,.79,.28);
-      float deep = mist(p * vec2(4.1,8.) + vec2(0.,11.),t);
-      float near = mist(p * vec2(2.8,5.7) + vec2(16.,0.),t*1.41);
-      float fog = surface.b * smoothstep(.30,.83,deep*.61+near*.39)*(.14+.21*energy.x);
-      float left = surface.r * energy.x * (.30+deep*.40);
-      float right = surface.g * energy.y * .66;
-      float opacity = (left + right + fog)*fade;
-      vec3 light = ash*(left+fog) + gold*right;
-      gl_FragColor = vec4(light*fade,opacity);
+      float farAir = noise(p*vec2(4.7,12.) + vec2(-t*.11,t*.12));
+      float nearAir = mist(p*vec2(3.7,6.9) + vec2(16.+approach*.9,0.),t*.75);
+      float bank = smoothstep(.31,.79,farAir*.42+nearAir*.58);
+      float wisp = smoothstep(.49,.85,nearAir) * field.b;
+      float left = surface.r*energy.x*(.28+nearAir*.46);
+      float right = surface.g*energy.y*.69;
+      float litBolt = field.g*strike*smoothstep(uv.y-.30,uv.y+.10,strike+.14);
+      float torch = field.r * (.38 + .15*sin(t*6.9+uv.x*24.) + .14*sin(t*11.8+uv.y*13.));
+      float fog = (.09*surface.b+.29*field.b)*bank;
+      float spores = grains(p*vec2(40.,25.)+vec2(t*.39,t*.64),t) *
+        (surface.r*.10+field.b*(.08+charge*.18));
+      float drift = wisp * (.06+energy.x*.25) + spores;
+      vec3 mistColor = vec3(.57,.59,.61);
+      vec3 light = ash*(left+drift) + storm*(right+litBolt*.32)
+        + mistColor*fog + vec3(1.,.57,.26)*torch;
+      float opacity = clamp(left+right+litBolt*.32+torch+fog+drift,0.,.84);
+      gl_FragColor = vec4(light*fade,opacity*fade);
     }
   `;
 
@@ -81,11 +102,19 @@ window.createSeasonAtmosphere = (canvas, scene) => {
     const p = gl.getAttribLocation(program,'p');
     gl.enableVertexAttribArray(p);
     gl.vertexAttribPointer(p,2,gl.FLOAT,false,0,0);
-    gl.bindTexture(gl.TEXTURE_2D,gl.createTexture());
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,map);
-    for (const name of [gl.TEXTURE_WRAP_S,gl.TEXTURE_WRAP_T])gl.texParameteri(gl.TEXTURE_2D,name,gl.CLAMP_TO_EDGE);
-    for (const name of [gl.TEXTURE_MIN_FILTER,gl.TEXTURE_MAG_FILTER])gl.texParameteri(gl.TEXTURE_2D,name,gl.LINEAR);
-    const locations = Object.fromEntries(['t','aspect','fade','energy'].map(name=>[name,gl.getUniformLocation(program,name)]));
+    for (const [unit, [name, image]] of [['response',map],['details',detail]].entries()) {
+      gl.activeTexture(gl.TEXTURE0 + unit);
+      gl.bindTexture(gl.TEXTURE_2D,gl.createTexture());
+      gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,image);
+      for (const axis of [gl.TEXTURE_WRAP_S,gl.TEXTURE_WRAP_T]) gl.texParameteri(gl.TEXTURE_2D,axis,gl.CLAMP_TO_EDGE);
+      for (const filter of [gl.TEXTURE_MIN_FILTER,gl.TEXTURE_MAG_FILTER]) gl.texParameteri(gl.TEXTURE_2D,filter,gl.LINEAR);
+      gl.uniform1i(gl.getUniformLocation(program,name),unit);
+    }
+    const locations = Object.fromEntries(
+      ['t','aspect','fade','energy','charge','strike','approach'].map(name=>[name,gl.getUniformLocation(program,name)])
+    );
+    gl.uniform3fv(gl.getUniformLocation(program,'ash'),ash);
+    gl.uniform3fv(gl.getUniformLocation(program,'storm'),storm);
     return { gl, locations };
   }
 
@@ -96,17 +125,20 @@ window.createSeasonAtmosphere = (canvas, scene) => {
     renderer?.gl.viewport(0,0,width,height);
   }
 
-  function receive(side) {
+  let pulseKind = 'pick';
+
+  function receive(side, kind = 'pick') {
     pulseSide = side;
+    pulseKind = kind;
     landingPending = true;
   }
 
-  function paint(time, side, { reduced = false, proximity = 0 } = {}) {
+  function paint(time, side, { reduced = false, proximity = 0, charge = 0, convergence = 0 } = {}) {
     if (reduced || proximity >= .98) {
       canvas.hidden = true;
       return;
     }
-    if (!map.naturalWidth) return;
+    if (!map.naturalWidth || !detail.naturalWidth || canvas.width < 2) return;
     if (renderer === undefined) {
       try { renderer = initialize(); }
       catch (error) {
@@ -129,16 +161,26 @@ window.createSeasonAtmosphere = (canvas, scene) => {
     }
 
     const age = time-pulseTime;
-    const arrival = age < 1.85 ? Math.sin(Math.PI*age/1.85)**2 : 0;
-    const sinceStrike = (time+6.2)%11.3;
-    const flash = sinceStrike < .64 ? Math.sin(Math.PI*sinceStrike/.64)**2 * Math.exp(-sinceStrike*3.8) : 0;
-    const left = .14 + level[0]*.32 + (pulseSide===0 ? arrival*.34 : 0);
-    const right = .11 + level[1]*.26 + flash*(.77+level[1]*.12) + (pulseSide===1 ? arrival*.36 : 0);
+    const pulse = age < 2.3 ? (1-Math.exp(-age*11))*Math.exp(-age*1.85) : 0;
+    const harmonic = (1+Math.sin(time*1.3))*.5;
+    const cycle = (time+4.6)%13.7;
+    const flash = Math.exp(-cycle*10)*smoothstep(0,.10,cycle)
+      + .50*Math.exp(-Math.max(0,cycle-.38)*13)*smoothstep(.34,.44,cycle);
+    const activation = .86 + .3*charge;
+    const ban = pulseKind === 'ban';
+    const left = .20 + harmonic*.09 + level[0]*.36*activation +
+      (pulseSide===0 ? pulse*(ban ? .30 : .69) : 0) + convergence*.35;
+    const right = .13 + level[1]*.27*activation + flash*1.2 +
+      (pulseSide===1 ? pulse*(ban ? .36 : .73) : 0) + convergence*.32;
+    const lightning = Math.min(1,flash*2.1 + (pulseSide===1 ? pulse*.58 : 0) + convergence*.18);
 
     const { gl,locations } = renderer;
     gl.uniform1f(locations.t,time%512);
     gl.uniform1f(locations.aspect,aspect);
     gl.uniform1f(locations.fade,(1-proximity)**1.5);
+    gl.uniform1f(locations.approach,proximity);
+    gl.uniform1f(locations.charge,charge);
+    gl.uniform1f(locations.strike,lightning);
     gl.uniform2f(locations.energy,left,right);
     gl.drawArrays(gl.TRIANGLES,0,3);
   }
@@ -151,12 +193,20 @@ window.createSeasonAtmosphere = (canvas, scene) => {
     canvas.hidden = true;
   });
   canvas.addEventListener('webglcontextrestored', () => { renderer = undefined; });
-  const ready = map.decode().catch(()=>{});
+  function smoothstep(start, end, value) {
+    const t = Math.max(0,Math.min(1,(value-start)/(end-start)));
+    return t*t*(3-2*t);
+  }
+
+  const ready = Promise.all([map.decode(),detail.decode()]).catch(()=>{});
   return { ready, size, paint, receive };
 };
 
 window.playSeasonSound = (() => {
   const clips = new Map();
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) for (const clip of clips.values()) clip.pause();
+  });
   return (side, volume = .26) => {
     if (document.hidden) return;
     let clip = clips.get(side);

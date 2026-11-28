@@ -43,7 +43,21 @@
   }
 }
 
-/* Original orb surfaces and responsive dimensions from 469d8d0. */
+/* The original orb geometry and flight use two palettes this season. */
+.summoning-flight {
+  --orb-pale:#e9ffeb;
+  --orb-light:var(--team-0-light);
+  --orb-mid:#4cec90;
+  --orb-edge:#149958;
+  --orb-deep:#072e21;
+}
+.summoning-flight:nth-of-type(2n) {
+  --orb-pale:#fffbe0;
+  --orb-light:var(--team-1-light);
+  --orb-mid:#f6d14f;
+  --orb-edge:#b47e13;
+  --orb-deep:#473908;
+}
 .orb {
   width: clamp(14px,1.75vw,27px);
   height: clamp(14px,1.75vw,27px);
@@ -62,7 +76,7 @@
   inset: -68% -46% -36%;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(ellipse at 50% 64%,#ffdb66a0 0%,#ff7a12c9 24%,#ee270aaa 48%,transparent 72%);
+  background: radial-gradient(ellipse at 50% 64%,color-mix(in srgb,var(--orb-light) 65%,transparent) 0%,color-mix(in srgb,var(--orb-mid) 81%,transparent) 24%,color-mix(in srgb,var(--orb-edge) 68%,transparent) 48%,transparent 72%);
   clip-path: polygon(50% 100%,15% 75%,27% 46%,7% 12%,49% 34%,67% 0,75% 46%,95% 27%,84% 78%);
   filter: blur(3px);
   transform-origin: 50% 73%;
@@ -73,9 +87,9 @@
   content: '';
   position: absolute;
   inset: -21%;
-  border: 1px solid #ffcc5a88;
+  border: 1px solid color-mix(in srgb,var(--orb-light) 53%,transparent);
   border-radius: 50%;
-  box-shadow: inset 0 0 8px #ff7f2380,0 0 11px #ff550b99;
+  box-shadow: inset 0 0 8px color-mix(in srgb,var(--orb-mid) 50%,transparent),0 0 11px color-mix(in srgb,var(--orb-edge) 60%,transparent);
   opacity: .75;
   animation: hellPulse .42s ease-in-out infinite alternate;
 }
@@ -104,8 +118,8 @@
   width: var(--s,4px);
   height: var(--s,4px);
   border-radius: 50%;
-  background: #ffe98b;
-  box-shadow: 0 0 5px 2px #ff8d20,0 0 12px #ef3612;
+  background: var(--orb-light);
+  box-shadow: 0 0 5px 2px var(--orb-mid),0 0 12px var(--orb-edge);
   animation: hellEmber var(--t,0.8s) ease-out infinite;
   animation-delay: var(--delay,0s);
   opacity: 0;
@@ -115,8 +129,8 @@
 .bobrs-summon-orb {
   width: clamp(17px,1.9vw,30px);
   height: clamp(17px,1.9vw,30px);
-  filter: drop-shadow(0 0 7px #ffc15e) drop-shadow(0 0 16px #f04d20);
-  background: radial-gradient(circle at 38% 34%,#ffffff 0%,#fff8d2 12%,#ffe58a 25%,#ffae36 43%,#f65116 65%,#a40c16 81%,transparent 94%);
+  filter: drop-shadow(0 0 7px var(--orb-light)) drop-shadow(0 0 16px var(--orb-edge));
+  background: radial-gradient(circle at 38% 34%,#ffffff 0%,var(--orb-pale) 12%,var(--orb-light) 25%,var(--orb-mid) 43%,var(--orb-edge) 65%,var(--orb-deep) 81%,transparent 94%);
 }
 
 .bobrs-summon-orb::before {
@@ -130,7 +144,7 @@
   height: clamp(70px,9vw,142px);
   width: clamp(16px,2vw,28px);
   opacity: .85;
-  background: linear-gradient(to bottom,#fff2aa 0%,#ffa339bd 17%,#ef461bb0 43%,#a20d3444 67%,transparent 100%);
+  background: linear-gradient(to bottom,var(--orb-light) 0%,color-mix(in srgb,var(--orb-mid) 75%,transparent) 17%,color-mix(in srgb,var(--orb-edge) 70%,transparent) 43%,color-mix(in srgb,var(--orb-deep) 27%,transparent) 67%,transparent 100%);
   filter: blur(5px);
   animation-duration: .52s;
 }
@@ -145,7 +159,7 @@
   transform-origin: top center;
   pointer-events: none;
   border-radius: 90% 90% 70% 70%;
-  background: linear-gradient(180deg,#fffae29c,#ff8b286b 28%,#be214633 60%,transparent);
+  background: linear-gradient(180deg,color-mix(in srgb,var(--orb-pale) 61%,transparent),color-mix(in srgb,var(--orb-mid) 42%,transparent) 28%,color-mix(in srgb,var(--orb-deep) 20%,transparent) 60%,transparent);
   filter: blur(8px);
   animation: ritualWake .64s ease-in-out infinite alternate;
   animation-delay: var(--flickerDelay);
@@ -155,13 +169,13 @@
   position: absolute;
   inset: -60%;
   border-radius: 50%;
-  background: radial-gradient(circle,#fff6be40 0%,#ffae2345 32%,#e1232924 58%,transparent 72%);
+  background: radial-gradient(circle,color-mix(in srgb,var(--orb-light) 25%,transparent) 0%,color-mix(in srgb,var(--orb-mid) 27%,transparent) 32%,color-mix(in srgb,var(--orb-edge) 15%,transparent) 58%,transparent 72%);
   animation: ritualHalo 1.45s ease-in-out infinite alternate;
   pointer-events: none;
 }
 
 .stage-fx.summon-charged .bobrs-summon-orb {
-  filter: drop-shadow(0 0 12px #ffe7ae) drop-shadow(0 0 25px #ff5a29);
+  filter: drop-shadow(0 0 12px var(--orb-pale)) drop-shadow(0 0 25px var(--orb-edge));
   transition: filter .4s;
 }
 
@@ -225,7 +239,7 @@
 @media(max-width:800px) {
   .bobrs-summon-orb {
     filter: none;
-    box-shadow: 0 0 8px 3px #ffad38,0 0 18px 8px #ed481488;
+    box-shadow: 0 0 8px 3px var(--orb-mid),0 0 18px 8px color-mix(in srgb,var(--orb-edge) 53%,transparent);
   }
 }
 

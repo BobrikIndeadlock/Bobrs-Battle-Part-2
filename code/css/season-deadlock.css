@@ -1,0 +1,72 @@
+#dlPhase {
+  background: linear-gradient(#06100fe0,#080c0cf2),var(--season-cathedral) center / cover fixed;
+}
+#dlPhase .dl-cathedral-world {
+  background: var(--season-cathedral) center / 100% 100% no-repeat;
+}
+#dlPhase #dlEndScreen {
+  background: linear-gradient(#050b087a,#05090ad2),var(--season-cathedral) center / cover fixed !important;
+}
+#dlPhase .dl-captain-stage::before {
+  background: radial-gradient(ellipse at 50% 80%,rgba(var(--glow),.27),transparent 73%);
+}
+#dlPhase #dlDraftScreen .dl-team {
+  outline: 1px solid rgba(var(--glow),.3);
+  background: linear-gradient(175deg,var(--tint),#0b1011ee 65%);
+}
+#dlPhase #dlDraftScreen .dl-team.current {
+  border-color: var(--light);
+  box-shadow: 0 0 13px rgba(var(--glow),.23);
+}
+#dlPhase #dlDraftScreen .dl-team h2,
+#dlPhase #dlDraftScreen .dl-team h3 { color: var(--light); }
+#dlPhase #dlDraftScreen .dl-player-roster figure { border-color: var(--accent); }
+#dlPhase #dlDraftScreen .dl-team .dl-captain {
+  object-fit: contain;
+  object-position: center;
+  filter: drop-shadow(0 4px 6px #0009);
+}
+#dlPhase #dlDraftScreen .dl-order-item:not(.ban) {
+  background: linear-gradient(#1e2527,var(--tint));
+  border-color: rgba(var(--glow),.35);
+}
+#dlPhase #dlDraftScreen .dl-order-item.now {
+  color: var(--light);
+  border-color: var(--light);
+  box-shadow: 0 0 12px rgba(var(--glow),.33);
+}
+#dlPhase #dlDraftScreen .dl-hero.selected {
+  border-color: var(--light);
+  box-shadow: 0 0 13px rgba(var(--glow),.38);
+}
+#dlPhase .draft-impact.is-pick::before { background: radial-gradient(ellipse,rgba(var(--glow),.34),transparent 72%); }
+#dlPhase .draft-impact.is-pick .draft-impact-card {
+  border-color: var(--light);
+  box-shadow: 0 0 32px rgba(var(--glow),.38),0 20px 60px #000;
+}
+#dlPhase .draft-impact.is-pick .draft-impact-kind { color: var(--light); }
+#dlPhase .dl-face img,#dlPhase .dl-face.back img { inset: 0; width: 100%; height: 100%; }
+#dlPhase .dl-coin-edge {
+  background: linear-gradient(180deg,#8d9583,#232721 20%,#6a6e63 48%,#272a24 74%,#828779);
+}
+#dlPhase .dl-coin-edge:nth-child(2n) {
+  background: linear-gradient(180deg,#a2a99a,#323630 20%,#83887a 49%,#242722 78%,#777c70);
+}
+
+#dlTeam0 {
+  --draft-detail: url("../../media/season/rail-royal.webp");
+  --team-fog: var(--team-0-mist);
+}
+#dlTeam1 {
+  --draft-detail: url("../../media/season/rail-storm.webp");
+  --team-fog: var(--team-1-mist);
+}
+#dlPhase .dl-captain-stage::after {
+  mix-blend-mode: screen;
+}
+#dlPhase .draft-impact.is-pick .draft-impact-card {
+  background: linear-gradient(145deg,var(--tint),#090d0f);
+}
+#dlPhase .draft-impact.is-ban .draft-impact-card {
+  background: linear-gradient(145deg,#281619,#100e11);
+}

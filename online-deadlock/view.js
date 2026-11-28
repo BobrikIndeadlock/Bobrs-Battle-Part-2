@@ -9,7 +9,7 @@
 
  function showCoinResult() {
   coinModel.className = 'dl-coin ' + coinResult;
-  $('dlCoinResult').textContent = coinResult === 'heads' ? 'ОРЁЛ! АРТЕМОН — МЕСТО 1' : 'РЕШКА! МАКАРЫЧ — МЕСТО 1';
+  $('dlCoinResult').textContent = coinCaption(coinResult);
   $('dlFlip').style.display = 'none';
   $('dlEnter').style.display = '';
  }

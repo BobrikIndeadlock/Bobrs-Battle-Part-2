@@ -20,14 +20,17 @@
     <p id="roomStatus" role="status" aria-live="polite"></p>
     <details id="roomInvite" hidden>
       <summary>Приглашение</summary>
-      <label for="inviteUrl">Ссылка для Артемона</label>
+      <label for="inviteUrl">Ссылка для второго капитана</label>
       <input type="url" id="inviteUrl" readonly autocomplete="off">
       <button type="button" id="copyInvite">Копировать</button>
       <p id="copyStatus" role="status"></p>
     </details>
   </aside>
   <!-- DEADLOCK_VIEW -->
+  <script src="code/js/season.js"></script>
+  <script src="code/js/season-atmosphere.js"></script>
   <script src="media/deadlock/portraits.js"></script>
+  <script src="media/season/export-preview.js"></script>
   <script src="online-deadlock/peerjs.min.js"></script>
   <script src="code/js/deadlock-draft.js"></script>
   <script src="code/js/deadlock-atmosphere.js"></script>

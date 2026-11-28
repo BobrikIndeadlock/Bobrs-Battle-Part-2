@@ -12,20 +12,17 @@ ROOT = Path(__file__).resolve().parent.parent
 ONLINE = ROOT / 'online-deadlock'
 STYLES = (
     'deadlock-altar.css', 'deadlock-finale.css', 'deadlock.css',
-    'deadlock-sound.css', 'altar-details.css', 'palette.css', 'coin.css',
+    'deadlock-sound.css', 'altar-details.css', 'palette.css', 'coin.css', 'season-deadlock.css',
 )
 ASSETS = (
     'media/deadlock/portraits.js',
     'media/images/altar-header.jpg',
-    'media/images/coin-artemon.jpg',
-    'media/images/coin-makarych.jpg',
-    'media/images/deadlock-draft-background.jpg',
-    'media/images/deadlock-finale-background.jpg',
     'media/cards/makarych.png',
     'media/cards/artemon.png',
     'media/throne/fog-haze.webp',
     'media/throne/fog-floor.webp',
-    'code/js/deadlock-atmosphere.js',
+    'code/js/deadlock-atmosphere.js', 'code/js/season.js', 'code/js/season-atmosphere.js',
+    'media/cards/pavel.png', 'media/cards/mishanya.png',
 )
 
 def replace_once(source, original, replacement):
@@ -44,9 +41,6 @@ def build(output):
     begin = original_html.index('<div aria-label="Вторая фаза: драфт героев Deadlock" id="dlPhase">')
     end = original_html.index('<script src="media/deadlock/portraits.js">', begin)
     markup = original_html[begin:end]
-    for index, captain in enumerate(('makarych', 'artemon')):
-        markup = replace_once(markup, f'id="dlCap{index}"/>',
-                              f'id="dlCap{index}" src="media/cards/{captain}.png" alt="{("Макарыч", "Артемон")[index]}">')
     template = (ONLINE / 'index.html').read_text(encoding='utf-8')
     styles = {f'code/css/{style}' for style in STYLES}
     links = '\n  '.join(f'<link rel="stylesheet" href="code/css/{style}">' for style in STYLES)
@@ -59,7 +53,7 @@ def build(output):
     local_draft = (ROOT / 'code/js/first-draft.js').read_text(encoding='utf-8')
     players = json.loads(re.search(r'const baseCharacters=(\[[^\n]+\]);', local_draft)[1])
     if len(players) != 10 or any(
-        not re.fullmatch(r'preset-\d+', p['id']) or not re.fullmatch(r'media/cards/[a-z]+\.png', p['image'])
+        not re.fullmatch(r'preset-\d+', p['id']) or not re.fullmatch(r'media/cards/[a-z-]+\.png', p['image'])
         for p in players
     ):
         raise ValueError('The offline roster must contain ten approved cards')
@@ -81,7 +75,7 @@ def build(output):
  const heads=result==='heads';place1=heads?1:0;
  return new Promise(resolve=>{
 ''' + controller[coin_logic:]
-    old_coin_finish = """coin.className='dl-coin '+coinResult;flipping=false;$('dlCoinResult').textContent=heads?'ОРЁЛ! АРТЕМОН — МЕСТО 1':'РЕШКА! МАКАРЫЧ — МЕСТО 1';$('dlFlip').style.display='none';$('dlEnter').style.display='';sound(65,.8)"""
+    old_coin_finish = """coin.className='dl-coin '+coinResult;flipping=false;$('dlCoinResult').textContent=coinCaption(coinResult);$('dlFlip').style.display='none';$('dlEnter').style.display='';sound(65,.8)"""
     controller = replace_once(controller, old_coin_finish, 'flipping=false;showCoinResult();sound(65,.8);resolve()')
     controller = replace_once(controller, " };\n $('dlEnter').onclick=", " });\n }\n $('dlEnter').onclick=")
     controller = replace_once(controller, " $('dlEnter').onclick=()=>{if(flipping", """ $('dlFlip').onclick=()=>{
@@ -117,9 +111,14 @@ def build(output):
     (output / '.nojekyll').touch()
 
 def add_campaign(output, html):
-    movie = ROOT / 'media/video/battle-finale.mp4'
-    if hashlib.sha256(movie.read_bytes()).hexdigest() != 'cb0a1ae1d17038c13444bf216a4c684fadc7807687533df5f7cf7c07a8a9930f':
-        raise ValueError('The original final film must be hydrated by Git LFS')
+    config_file = ROOT / 'code/js/season.js'
+    config = json.loads(re.search(r'const season = ({.*?});', config_file.read_text(), re.S)[1])
+    if config['movie']:
+        movie = ROOT / config['movie']
+        with movie.open('rb') as stream:
+            header = stream.read(42)
+        if movie.stat().st_size < 1024 or header.startswith(b'version https://git-lfs'):
+            raise ValueError('The season film must be hydrated by Git LFS')
 
     bar = re.search(r'<aside id="roomBar"[^>]*>.*?</aside>', (ONLINE / 'index.html').read_text(), re.S)[0]
     html = replace_once(html, '<head>', """<head><meta name="referrer" content="no-referrer">
@@ -167,7 +166,7 @@ def add_campaign(output, html):
 def version_online_scripts(output):
     # Pages caches individual files. Keep the controllers and the wire protocol in one build.
     modules = ('campaign.mjs', 'room.mjs', 'rules.mjs', 'draft-data.mjs')
-    controllers = ('code/js/first-draft.js', 'code/js/deadlock-draft.js')
+    controllers = ('code/js/first-draft.js', 'code/js/deadlock-draft.js', 'code/js/season.js', 'code/js/season-atmosphere.js', 'code/js/captain-portraits.js')
     scripts = tuple(f'online-deadlock/{name}' for name in modules) + controllers
     digest = hashlib.sha256()
     for file in scripts:

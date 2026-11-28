@@ -30,11 +30,19 @@
   document.body.append(dialog);
 
   const online = dialog.querySelector('#deadlockOnline');
+  const canHost = !!window.BobrsCampaignView;
+  if (!canHost) {
+    const instruction = document.createElement('p');
+    instruction.textContent = 'Для приглашения запустите веб-сборку этого сезона.';
+    online.replaceWith(instruction);
+  }
   button.addEventListener('click', () => {
-    const teams = window.BobrsNewDraft.teams().map(team => team.map(player => player.id));
-    const page = new URL('https://bobrikindeadlock.github.io/Bobrs-Battle-Part-2/');
-    page.hash = new URLSearchParams({ teams: JSON.stringify(teams) }).toString();
-    online.href = page.href;
+    if (canHost) {
+      const teams = window.BobrsNewDraft.teams().map(team => team.map(player => player.id));
+      const page = new URL('deadlock.html', location.href);
+      page.hash = new URLSearchParams({ teams: JSON.stringify(teams), season: window.BobrsSeason.id }).toString();
+      online.href = page.href;
+    }
     dialog.showModal();
   });
   dialog.querySelector('#deadlockLocal').addEventListener('click', () => {

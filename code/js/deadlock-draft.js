@@ -1,6 +1,20 @@
 
 (()=>{
  const $=id=>document.getElementById(id);
+ const { captains, art }=window.BobrsSeason;
+ for(const [side,captain] of captains.entries()){
+  $('dlCap'+side).src=captain.portrait;
+  $('dlCap'+side).alt=captain.name;
+  $('dlName'+side).textContent=captain.name;
+  const image=$(captain.coin.side==='heads'?'dlCoinHeads':'dlCoinTails');
+  image.src=captain.coin.image;
+  image.alt=captain.coin.label+' — '+captain.name;
+ }
+ $('dlCoinHelp').textContent=captains.map(({coin,shortName})=>coin.label+' — '+shortName+' на месте 1').join(' · ');
+ const coinCaption=result=>{
+  const captain=captains.find(({coin})=>coin.side===result);
+  return (captain.coin.label+' · '+captain.shortName+' — место 1').toUpperCase();
+ };
  const order=[['ban',0],['ban',1],['ban',1],['ban',0],['pick',0],['pick',1],['pick',1],['pick',0],['pick',0],['ban',1],['ban',0],['pick',1],['pick',1],['pick',0],['pick',0],['pick',1],['pick',0],['pick',1]];
  const names=['Abrams', 'Apollo', 'Baba', 'Bebop', 'Billy', 'Calico', 'Celeste', 'Deadman Danny', 'The Doorman', 'Drifter', 'Dynamo', 'Graves', 'Grey Talon', 'Haze', 'Holliday', 'Infernus', 'Ivy', 'Kelvin', 'Lady Geist', 'Lash', 'McGinnis', 'Mina', 'Mirage', 'Mo & Krill', 'Nurse Harrow', 'Paige', 'Paradox', 'Pocket', 'Rat King', 'Rem', 'Seven', 'Shiv', 'Silver', 'Sinclair', 'Solomon', 'Venator', 'Victor', 'Vindicta', 'Violet', 'Viscous', 'Vyper', 'Warden', 'Wraith', 'Yamato'];
  // Portraits can be replaced locally by clicking a hero and uploading a file; SVG fallbacks work offline.
@@ -25,7 +39,7 @@
  }
  function syncSlots(root,entries,kind){while(root.children.length>entries.length)root.lastElementChild.remove();entries.forEach((entry,i)=>{let el=root.children[i];if(!el){el=document.createElement('div');root.append(el)}const hero=entry?heroes[entry.id]:null,key=hero?String(hero.id):'empty';const cls=kind==='pick'?'dl-slot':'dl-ban-mini';if(el.dataset.heroKey!==key){el.dataset.heroKey=key;el.className=cls+(hero?'':' empty');el.replaceChildren();el.title=hero&&kind==='ban'?hero.name:'';if(hero){const im=new Image();el.append(im)}if(kind==='pick'){const txt=document.createElement('span');txt.textContent=hero?hero.name:`${i+1}. Ожидание`;el.append(txt)}}if(hero)setPortrait(el.querySelector('img'),hero)})}
  function renderAltar(){const timeline=$('dlOrder');if(timeline.children.length!==order.length){timeline.replaceChildren();order.forEach(([type,place],i)=>{const el=document.createElement('div');el.innerHTML=`${i+1}<b>${type==='ban'?'⊘':'⚔'}</b>${type==='ban'?'БАН':'ПИК'} ${place+1}`;timeline.append(el)})}order.forEach(([type,place],i)=>{const el=timeline.children[i];el.className='dl-order-item '+type+(i===step?' now':i<step?' done':'');el.dataset.paletteSide=String(sideOf(place));if(i===step)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current')});const list=history.filter(h=>h.type==='ban');syncSlots($('dlCentralBans'),Array.from({length:6},(_,i)=>list[i]||null),'ban')}
- function update(){renderAltar();if(step>=order.length){showEnd();return}const [type,place]=turn(),side=sideOf(place),name=side?'АРТЕМОН':'МАКАРЫЧ';$('dlDraftScreen').dataset.paletteSide=String(side);$('dlStep').textContent=`${type==='ban'?'БАН':'ПИК'} ${step+1} / 18`;$('dlTurnText').textContent=`ХОД ${side?'АРТЕМОНА':'МАКАРЫЧА'}`;$('dlTurnHint').textContent=`МЕСТО ${place+1} · ${type==='ban'?'Запретите одного героя':'Выберите героя в команду'}`;$('dlProgress').style.width=step/18*100+'%';$('dlPlace0').textContent='МЕСТО '+(place1===0?'1':'2')+' · ПИКИ '+picked(0).length+'/6 · БАНЫ '+banned(0).length+'/3';$('dlPlace1').textContent='МЕСТО '+(place1===1?'1':'2')+' · ПИКИ '+picked(1).length+'/6 · БАНЫ '+banned(1).length+'/3';for(let i=0;i<2;i++){$('dlTeam'+i).classList.toggle('current',side===i);const picks=picked(i),bans=banned(i);syncSlots($('dlPicks'+i),Array.from({length:6},(_,j)=>picks[j]||null),'pick');syncSlots($('dlBans'+i),bans,'ban')}$('dlChosenText').textContent=selected===null?'Выберите героя':heroes[selected].name;$('dlConfirm').disabled=animating||selected===null;$('dlConfirm').textContent=type==='ban'?'ЗАПРЕТИТЬ ГЕРОЯ':'ВЫБРАТЬ ГЕРОЯ';$('dlUndo').disabled=animating||!history.length;$('dlHistory').textContent=history.slice(-5).map(h=>`${h.side?'Артемон':'Макарыч'}: ${h.type==='ban'?'бан':'пик'} ${heroes[h.id].name}`).join('  ·  ');renderHeroes()}
+ function update(){renderAltar();if(step>=order.length){showEnd();return}const [type,place]=turn(),side=sideOf(place);$('dlDraftScreen').dataset.paletteSide=String(side);$('dlStep').textContent=`${type==='ban'?'БАН':'ПИК'} ${step+1} / 18`;$('dlTurnText').textContent=`ХОД ${captains[side].teamName.toUpperCase()}`;$('dlTurnHint').textContent=`МЕСТО ${place+1} · ${type==='ban'?'Запретите одного героя':'Выберите героя в команду'}`;$('dlProgress').style.width=step/18*100+'%';$('dlPlace0').textContent='МЕСТО '+(place1===0?'1':'2')+' · ПИКИ '+picked(0).length+'/6 · БАНЫ '+banned(0).length+'/3';$('dlPlace1').textContent='МЕСТО '+(place1===1?'1':'2')+' · ПИКИ '+picked(1).length+'/6 · БАНЫ '+banned(1).length+'/3';for(let i=0;i<2;i++){$('dlTeam'+i).classList.toggle('current',side===i);const picks=picked(i),bans=banned(i);syncSlots($('dlPicks'+i),Array.from({length:6},(_,j)=>picks[j]||null),'pick');syncSlots($('dlBans'+i),bans,'ban')}$('dlChosenText').textContent=selected===null?'Выберите героя':heroes[selected].name;$('dlConfirm').disabled=animating||selected===null;$('dlConfirm').textContent=type==='ban'?'ЗАПРЕТИТЬ ГЕРОЯ':'ВЫБРАТЬ ГЕРОЯ';$('dlUndo').disabled=animating||!history.length;$('dlHistory').textContent=history.slice(-5).map(h=>`${h.captains[side].name}: ${h.type==='ban'?'бан':'пик'} ${heroes[h.id].name}`).join('  ·  ');renderHeroes()}
  function renderHeroes(){const search=$('dlSearch').value.trim().toLowerCase(),used=new Map(history.map(h=>[h.id,h])),root=$('dlHeroes');for(const h of heroes){let b=heroButtons.get(h.id);if(!b){b=document.createElement('button');b.type='button';const im=new Image();im.loading='lazy';b.append(im);const label=document.createElement('span');label.textContent=h.name;b.append(label);b.onclick=()=>{if(animating||history.some(x=>x.id===h.id))return;selected=h.id;update()};heroButtons.set(h.id,b);root.append(b)}setPortrait(b.querySelector('img'),h);const usedBy=used.get(h.id);
   const className='dl-hero'+(usedBy?' taken':'')+(selected===h.id?' selected':'');
   const disabled=animating||!!usedBy;
@@ -81,6 +95,8 @@
   stage.replaceChildren(wave,card);
   stage.classList.add('draft-impact',type==='ban'?'is-ban':'is-pick');
   stage.setAttribute('aria-hidden','true');
+  stage.dataset.paletteSide=String(side);
+  if(audioEnabled)window.playSeasonSound(side,.19);
   try{
    if(reducedImpact.matches){
     await pause(220);
@@ -118,7 +134,7 @@
   const previousResults=$('dlFinalGrid');
   previousResults.classList.remove('battle-play');
   previousResults.replaceChildren();
-  for(let side=0;side<2;side++){const roster=$('dlRoster'+side);roster.replaceChildren();document.querySelectorAll('#teamTiny'+side+' .roster-slot:not(.empty) img').forEach(src=>{const fig=document.createElement('figure'),im=new Image(),cap=document.createElement('figcaption');im.src=src.src;im.alt=src.alt;cap.textContent=src.alt;fig.append(im,cap);roster.append(fig)});const from=document.getElementById('portrait'+side);const to=$('dlCap'+side);if(to&&from&&from.src){to.src=from.src;to.alt=side===0?'Макарыч':'Артемон';}}step=0;history=[];selected=null;coinResult=null;flipping=false;$('dlCoin').className='dl-coin';$('dlCoinResult').textContent='Монета определит порядок выбора';$('dlFlip').style.display='';$('dlFlip').disabled=false;$('dlEnter').style.display='none';$('dlSearch').value='';screen('dlCoinScreen');active.classList.add('active');fitCoin();document.body.style.overflow='hidden';$('epicFinal')?.classList.remove('active');}
+  for(let side=0;side<2;side++){const roster=$('dlRoster'+side);roster.replaceChildren();document.querySelectorAll('#teamTiny'+side+' .roster-slot:not(.empty) img').forEach(src=>{const fig=document.createElement('figure'),im=new Image(),cap=document.createElement('figcaption');im.src=src.src;im.alt=src.alt;cap.textContent=src.alt;fig.append(im,cap);roster.append(fig)});const from=document.getElementById('portrait'+side);const to=$('dlCap'+side);if(to&&from&&from.src){to.src=from.src;to.alt=captains[side].name;}}step=0;history=[];selected=null;coinResult=null;flipping=false;$('dlCoin').className='dl-coin';$('dlCoinResult').textContent='Монета определит порядок выбора';$('dlFlip').style.display='';$('dlFlip').disabled=false;$('dlEnter').style.display='none';$('dlSearch').value='';screen('dlCoinScreen');active.classList.add('active');fitCoin();document.body.style.overflow='hidden';$('epicFinal')?.classList.remove('active');}
  window.openDeadlockDraft=begin;
 
  $('dlFlip').onclick=()=>{
@@ -129,7 +145,7 @@
  $('dlFlip').disabled=true;$('dlCoinResult').textContent='СУДЬБА РЕШАЕТ…';sound(130,.5);
  let timer,finished=false;
  const cleanup=()=>{clearTimeout(timer);coin.removeEventListener('animationend',onEnd);coin.removeEventListener('animationcancel',onEnd)};
- const finish=()=>{if(finished)return;finished=true;cleanup();coinCleanup=null;coin.className='dl-coin '+coinResult;flipping=false;$('dlCoinResult').textContent=heads?'ОРЁЛ! АРТЕМОН — МЕСТО 1':'РЕШКА! МАКАРЫЧ — МЕСТО 1';$('dlFlip').style.display='none';$('dlEnter').style.display='';sound(65,.8)};
+ const finish=()=>{if(finished)return;finished=true;cleanup();coinCleanup=null;coin.className='dl-coin '+coinResult;flipping=false;$('dlCoinResult').textContent=coinCaption(coinResult);$('dlFlip').style.display='none';$('dlEnter').style.display='';sound(65,.8)};
  const onEnd=e=>{if(e.target===coin&&e.animationName===animationName)finish()};
  coinCleanup=cleanup;coin.addEventListener('animationend',onEnd);coin.addEventListener('animationcancel',onEnd);coin.classList.add('spinning',coinResult);
  const style=getComputedStyle(coin),ms=v=>parseFloat(v)*(v.trim().endsWith('ms')?1:1000);const total=ms(style.animationDuration)+ms(style.animationDelay);timer=setTimeout(finish,Number.isFinite(total)?Math.max(0,total)+400:5000);
@@ -137,7 +153,7 @@
  $('dlEnter').onclick=()=>{if(flipping||coinResult===null)return;screen('dlDraftScreen');update()};$('dlSearch').oninput=renderHeroes;
  $('dlConfirm').onclick=async()=>{if(animating||selected===null||step>=18||history.some(h=>h.id===selected))return;animating=true;const [type,place]=turn(),side=sideOf(place),id=selected;$('dlConfirm').disabled=true;$('dlUndo').disabled=true;$('dlSearch').disabled=true;$('dlPortraitUpload').disabled=true;renderHeroes();try{try{await effect(type,heroes[id],side)}catch(err){console.warn('Эффект пропущен:',err)}history.push({type,side,id,place});step++;selected=null;}finally{animating=false;$('dlSearch').disabled=false;$('dlPortraitUpload').disabled=false;update()}};$('dlUndo').onclick=()=>{if(animating||!history.length)return;history.pop();step--;selected=null;update()};
  $('dlPortraitUpload').onchange=async e=>{if(animating){e.target.value='';return}const file=e.target.files[0];if(selected===null){alert('Сначала выберите героя, затем загрузите его портрет.');e.target.value='';return}if(!file||!file.type.startsWith('image/'))return;const hero=heroes[selected];const old=hero.img;hero.img=URL.createObjectURL(file);e.target.value='';update();if(old)URL.revokeObjectURL(old)};
- function showEnd(){ $('dlProgress').style.width='100%';screen('dlEndScreen');const root=$('dlFinalGrid');root.replaceChildren();root.classList.remove('battle-play');for(let side=0;side<2;side++){const card=document.createElement('article');card.className='battle-team side'+side;const captain=new Image();captain.src=$('dlCap'+side).src;captain.className='battle-captain';captain.alt=side?'Артемон':'Макарыч';card.append(captain);const h=document.createElement('h3');h.textContent=side?'АРТЕМОН':'МАКАРЫЧ';card.append(h);const label=document.createElement('h4');label.textContent='КОМАНДА '+(side?'АРТЕМОНА':'МАКАРЫЧА');card.append(label);const roster=document.createElement('div');roster.className='battle-roster';for(const fig of $('dlRoster'+side).children)roster.append(fig.cloneNode(true));card.append(roster);const hl=document.createElement('h4');hl.textContent='ГЕРОИ DEADLOCK';card.append(hl);const grid=document.createElement('div');grid.className='battle-heroes';for(const x of picked(side)){const fig=document.createElement('figure'),img=new Image(),cap=document.createElement('figcaption');img.src=portrait(heroes[x.id]);cap.textContent=heroes[x.id].name;fig.append(img,cap);grid.append(fig)}card.append(grid);root.append(card)}const vs=document.createElement('div');vs.className='battle-vs';vs.textContent='VS';root.append(vs);void root.offsetWidth;root.classList.add('battle-play');sound(50,1)}
+ function showEnd(){ $('dlProgress').style.width='100%';screen('dlEndScreen');const root=$('dlFinalGrid');root.replaceChildren();root.classList.remove('battle-play');for(let side=0;side<2;side++){const card=document.createElement('article');card.className='battle-team side'+side;const captain=new Image();captain.src=$('dlCap'+side).src;captain.className='battle-captain';captain.alt=captains[side].name;card.append(captain);const h=document.createElement('h3');h.textContent=captains[side].name.toUpperCase();card.append(h);const label=document.createElement('h4');label.textContent='КОМАНДА '+(captains[side].teamName.toUpperCase());card.append(label);const roster=document.createElement('div');roster.className='battle-roster';for(const fig of $('dlRoster'+side).children)roster.append(fig.cloneNode(true));card.append(roster);const hl=document.createElement('h4');hl.textContent='ГЕРОИ DEADLOCK';card.append(hl);const grid=document.createElement('div');grid.className='battle-heroes';for(const x of picked(side)){const fig=document.createElement('figure'),img=new Image(),cap=document.createElement('figcaption');img.src=portrait(heroes[x.id]);cap.textContent=heroes[x.id].name;fig.append(img,cap);grid.append(fig)}card.append(grid);root.append(card)}const vs=document.createElement('div');vs.className='battle-vs';vs.textContent='VS';root.append(vs);void root.offsetWidth;root.classList.add('battle-play');sound(50,1)}
  $('dlNew').onclick=begin;$('dlBack').onclick=()=>{active.classList.remove('active');document.body.style.overflow='';document.getElementById('finish')?.classList.add('visible')};
  $('dlExport').onclick=async()=>{
   const button=$('dlExport');if(button.disabled)return;
@@ -155,24 +171,53 @@
     const main=await tryImage(portrait(h));
     return main||await tryImage(fallbackPortrait(h),1400);
    }));
+   const previews=window.BobrsExportPreviews;
+   const keyFor=image=>image.src.split('/media/cards/').at(-1);
+   const rosterImages=[0,1].map(side=>[...$('dlRoster'+side).querySelectorAll('figure img')]);
+   const [background,...lineups]=await Promise.all([
+    tryImage(previews[art.cathedral]),
+    ...captains.map(async(captain,side)=>({
+     captain:await tryImage(previews[captain.portrait]),
+     players:await Promise.all(rosterImages[side].map(image=>tryImage(previews['media/cards/'+keyFor(image)])))
+    })),
+   ]);
    const c=document.createElement('canvas');c.width=1600;c.height=900;
-   const g=c.getContext('2d');g.fillStyle='#100c11';g.fillRect(0,0,c.width,c.height);
-   const haze=g.createRadialGradient(800,340,60,800,340,900);haze.addColorStop(0,'#522525');haze.addColorStop(1,'#100c11');g.fillStyle=haze;g.fillRect(0,0,1600,900);
-   g.textAlign='center';g.fillStyle='#eac489';g.font='bold 62px Georgia';g.fillText('BOBRS BATTLE · DEADLOCK',800,90);
-   g.font='29px Georgia';g.fillText('CAPTAIN’S MODE · СОСТАВЫ КОМАНД',800,140);
-   for(let side=0;side<2;side++){
-    const x=side?860:80;g.textAlign='left';g.fillStyle='#eac489';g.font='bold 46px Georgia';g.fillText(side?'АРТЕМОН':'МАКАРЫЧ',x,215);
-    for(let j=0;j<6;j++){
-     const pickedHero=picked(side)[j];if(!pickedHero)continue;
-     const h=heroes[pickedHero.id],px=x+(j%3)*245,py=240+Math.floor(j/3)*240;
-     g.fillStyle=colors[h.id%colors.length];g.fillRect(px,py,220,190);
-     const im=loaded[side*6+j];
-     if(im){try{g.drawImage(im,px,py,220,140)}catch(err){console.warn('Невозможно отрисовать портрет; используется подложка',err)}}
-     g.fillStyle='#120e12';g.fillRect(px,py+140,220,50);
-     g.fillStyle='#f8e2b9';g.font='bold 24px Georgia';g.textAlign='center';g.fillText(h.name,px+110,py+171,210);
+   const g=c.getContext('2d');
+   g.fillStyle='#070a0a';g.fillRect(0,0,1600,900);
+   if(background)g.drawImage(background,0,0,1600,900);
+   g.fillStyle='#060809ba';g.fillRect(0,0,1600,900);
+   g.textAlign='center';g.fillStyle='#ecf1e8';g.font='bold 58px Georgia';g.fillText('BOBRS BATTLE · DEADLOCK',800,84);
+   g.font='25px Georgia';g.fillText(window.BobrsSeason.name.toUpperCase(),800,125);
+   function fit(image,x,y,w,h) {
+    if(!image)return;
+    const scale=Math.min(w/image.width,h/image.height),iw=image.width*scale,ih=image.height*scale;
+    g.drawImage(image,x+(w-iw)/2,y+(h-ih)/2,iw,ih);
+   }
+   for(const [side,captain] of captains.entries()){
+    const x=side?840:70,y=164;
+    g.fillStyle='#070b0de0';g.fillRect(x-17,y-12,710,678);
+    g.strokeStyle=captain.theme.middle;g.strokeRect(x-17,y-12,710,678);
+    fit(lineups[side].captain,x,y,58,84);
+    g.textAlign='left';g.fillStyle=captain.theme.light;g.font='bold 32px Georgia';
+    g.fillText(captain.name.toUpperCase(),x+74,203,590);
+    g.font='20px Georgia';g.fillText(captain.styleName,x+74,237,590);
+    for(const [j,player] of rosterImages[side].entries()){
+     const px=x+j*136;
+     fit(lineups[side].players[j],px,260,129,108);
+     g.fillStyle=captain.theme.light;g.font='bold 17px Georgia';g.textAlign='center';
+     g.fillText(player.alt,px+64,391,130);
     }
-    g.textAlign='left';g.font='20px Arial';g.fillStyle='#c6a999';
-    g.fillText('БАНЫ: '+banned(side).map(x=>heroes[x.id].name).join(', '),x,760,675);
+    g.textAlign='left';g.font='20px Georgia';g.fillText('ГЕРОИ DEADLOCK',x,430);
+    for(const [j,pickedHero] of picked(side).entries()){
+     const h=heroes[pickedHero.id],px=x+(j%3)*228,py=445+Math.floor(j/3)*169;
+     g.fillStyle=captain.theme.dark;g.fillRect(px,py,214,150);
+     const im=loaded[side*6+j];
+     if(im)fit(im,px,py+2,214,114);
+     g.fillStyle=captain.theme.light;g.font='bold 23px Georgia';g.textAlign='center';
+     g.fillText(h.name,px+107,py+139,210);
+    }
+    g.textAlign='left';g.font='19px Georgia';g.fillStyle='#e7d0c0';
+    g.fillText('БАНЫ: '+banned(side).map(x=>heroes[x.id].name).join(', '),x,811,675);
    }
    const png=await new Promise((resolve,reject)=>{try{c.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG недоступен')),'image/png')}catch(err){reject(err)}});
    const url=URL.createObjectURL(png),a=document.createElement('a');a.href=url;a.download='bobrs-deadlock-draft.png';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),20000);

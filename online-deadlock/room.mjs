@@ -3,6 +3,8 @@ import { applyAction, moveAt, newDraft, permits, validDraft, validTeams } from '
 
 const $ = id => document.getElementById(id);
 const version = 1;
+const season = window.BobrsSeason;
+const captainNames = season.captains.map(captain => captain.shortName);
 const maxJoinAttempts = 3;
 const maxSignalRetries = 2;
 const signalTimeout = 12000;
@@ -23,6 +25,7 @@ function launch() {
   if (!location.hash) return null;
   if (location.hash.length > 1024) throw new Error('Ссылка комнаты повреждена.');
   const query = new URLSearchParams(location.hash.slice(1));
+  if (query.get('season') !== season.id) throw new Error('Ссылка относится к другому сезону.');
   const teams = query.get('teams');
   const room = query.get('room');
   if (teams !== null && room === null) {
@@ -51,7 +54,7 @@ function seatKey(room) {
 
 export function openRoom({ side, room, teams: initialTeams, game = legacyGame, invitationKey = 'room' }) {
   const { view } = game;
-  const peerId = (invitationKey === 'campaign' ? 'bobrs-campaign-' : 'bobrs-deadlock-') + room;
+  const peerId = (invitationKey === 'campaign' ? 'bobrs-campaign-' : 'bobrs-deadlock-') + season.id + '-' + room;
   if (typeof window.Peer !== 'function' || typeof RTCPeerConnection !== 'function') {
     throw new Error('Этот браузер не предоставил PeerJS или WebRTC. Откройте ссылку в браузере с WebRTC.');
   }
@@ -83,7 +86,7 @@ export function openRoom({ side, room, teams: initialTeams, game = legacyGame, i
   let rendering = false;
   let peerRev = -1;
 
-  const role = host ? 'Макарыч' : 'Артемон';
+  const role = captainNames[side];
   const report = message => {
     const status = role + ' · ' + message;
     if ($('roomStatus').textContent !== status) $('roomStatus').textContent = status;
@@ -214,7 +217,7 @@ export function openRoom({ side, room, teams: initialTeams, game = legacyGame, i
       report('Связь с комнатой прервана. PeerJS недоступен. Обновите страницу для новой попытки.');
       return;
     }
-    if (host) report('Артемон отключился. Ожидаем переподключения.');
+    if (host) report(captainNames[1] + ' отключился. Ожидаем переподключения.');
     else retry(reason);
   }
 
@@ -243,7 +246,7 @@ export function openRoom({ side, room, teams: initialTeams, game = legacyGame, i
         clearTimeout(expiry);
         lastPacket = Date.now();
         ready = true;
-        report('Артемон подключён');
+        report(captainNames[1] + ' подключён');
         snapshot(connection);
         refresh();
         return;
@@ -283,7 +286,7 @@ export function openRoom({ side, room, teams: initialTeams, game = legacyGame, i
         clearTimeout(expiry);
         lost(connection);
         connection.close();
-        report('Место Артемона занято. Для восстановления откройте ссылку в прежнем браузере.');
+        report('Место второго капитана занято. Для восстановления откройте ссылку в прежнем браузере.');
         return;
       }
       lastPacket = Date.now();
@@ -298,7 +301,7 @@ export function openRoom({ side, room, teams: initialTeams, game = legacyGame, i
       ready = true;
       joinAttempts = 0;
       showGame(message.draft);
-      report('Макарыч подключён');
+      report(captainNames[0] + ' подключён');
       receive(message.draft);
       if (game.waitForPeer && shown?.rev === message.draft.rev) {
         send(link, 'shown', { rev: shown.rev });
@@ -354,7 +357,7 @@ export function openRoom({ side, room, teams: initialTeams, game = legacyGame, i
     if (signalStopped) return;
     signalRetries = 0;
     if (host) {
-      if (!connected()) report(guestKey ? 'Ожидаем переподключения Артемона' : 'Отправьте приглашение Артемону');
+      if (!connected()) report(guestKey ? 'Ожидаем переподключения второго капитана' : 'Отправьте приглашение второму капитану');
     } else dial();
   });
   peer.on('connection', connection => {
@@ -408,7 +411,7 @@ export function openRoom({ side, room, teams: initialTeams, game = legacyGame, i
     receive(authority);
     report('Подключаемся к PeerJS…');
     const invitation = new URL(location.href);
-    invitation.hash = new URLSearchParams({ [invitationKey]: room }).toString();
+    invitation.hash = new URLSearchParams({ [invitationKey]: room, season: season.id }).toString();
     const input = $('inviteUrl');
     input.value = invitation.href;
     $('roomInvite').hidden = false;

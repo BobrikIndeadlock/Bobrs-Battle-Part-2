@@ -19,14 +19,8 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const compact = matchMedia('(max-width: 850px), (max-height: 500px)');
   const images = new Map();
-  const captains = createCaptainAtmosphere(context);
+  const season = window.createSeasonAtmosphere(context);
   const grimoire = window.grimoireVisual;
-  const candleLights = [
-    { image: 'candle-left-front', x: 0, y: 645, phase: 1.3 },
-    { image: 'candle-left-inner', x: 324, y: 620, phase: 3.6 },
-    { image: 'candle-right-inner', x: 1010, y: 620, phase: 6.4 },
-    { image: 'candle-right-front', x: 1360, y: 630, phase: 9.7 },
-  ];
   const fogPlanes = [
     {
       image: 'fog-haze', x: 482, y: 416, width: 581, height: 159, drift: 20, speed: .22, opacity: .25,
@@ -65,12 +59,6 @@
     context.drawImage(image, x, y, imageWidth ?? image.width, imageHeight ?? image.height);
   }
 
-  function candleIntensity(time, phase) {
-    // Two slow, independent rhythms keep light and reflections tied to one flame group.
-    return .60 + Math.sin(time * 4.2 + phase) * .085 +
-      Math.sin(time * 7.1 + phase * 1.71) * .044 + Math.sin(time * 1.7 - phase) * .062;
-  }
-
   function paint(time) {
     const lightweight = compact.matches || reduced.matches;
     const inDraft = scene.dataset.paletteSide !== '';
@@ -78,19 +66,6 @@
 
     context.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
     context.clearRect(0, 0, width, height);
-    draw('masonry-shadow', 421 + Math.sin(time * .9) * 3, 497,
-      .34 + Math.sin(time * 1.14) * .065);
-    draw('window-cool', 389, 151, .48 + Math.sin(time * .40) * .08);
-    draw('window-moon', 906, 103, .46 + Math.sin(time * .31 + 1) * .08);
-
-    let chainLight = 0;
-    for (const [index, light] of candleLights.entries()) {
-      const strength = candleIntensity(time, light.phase);
-      draw(light.image, light.x, light.y, strength);
-      if (index === 1 || index === 2) chainLight += strength;
-    }
-    draw('chain-reflection', 498, 646, chainLight * .34);
-
     for (const [index, plane] of fogPlanes.entries()) {
       if (lightweight && index === 0) continue;
       context.save();
@@ -114,7 +89,7 @@
         draw('ember', x, y, opacity * atmosphereOpacity, size, size * 1.55);
       }
     }
-    captains.paint(time, scene.dataset.paletteSide, reduced.matches, compact.matches);
+    season.paint('throne', time, scene.dataset.paletteSide, { reduced: reduced.matches, compact: compact.matches });
     grimoire?.paint(context, images.get('ember'), time, reduced.matches, compact.matches);
     context.globalAlpha = 1;
   }
@@ -169,8 +144,7 @@
     sync();
   }
 
-  const assets = [...candleLights.map(light => light.image), 'window-cool', 'window-moon',
-    'masonry-shadow', 'chain-reflection', 'fog-haze', 'fog-floor', 'ember'];
+  const assets = ['fog-haze', 'fog-floor', 'ember'];
   const basePath = 'media/throne/';
   const roomReady = Promise.all(assets.map(async name => {
     const image = new Image();
@@ -182,7 +156,7 @@
       console.warn('Throne atmosphere asset unavailable:', name, error);
     }
   }));
-  Promise.all([roomReady, captains.ready, grimoire?.ready]).then(() => {
+  Promise.all([roomReady, season.ready, grimoire?.ready]).then(() => {
     ready = true;
     sync();
   });

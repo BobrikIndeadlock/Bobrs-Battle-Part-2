@@ -15,50 +15,14 @@
   const height = 464;
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const compact = matchMedia('(max-width: 850px), (max-height: 500px)');
-  const sources = {
-    left: 'intro/brazier-left.webp', right: 'intro/brazier-right.webp',
-    arch: 'intro/arch-light.webp', title: 'intro/title-light.webp',
-    leftMetal: 'intro/metal-left.webp', rightMetal: 'intro/metal-right.webp',
-    floor: 'intro/threshold-reflection.webp', shadow: 'intro/threshold-shadow.webp',
-    fire: 'intro/brazier-fire.webp', mist: 'images/intro-mist.webp',
-    ember: 'throne/ember.webp',
-  };
-  const images = new Map();
-  for (const [name, file] of Object.entries(sources)) {
-    const image = new Image();
-    image.src = 'media/' + file;
-    image.decode().then(() => images.set(name, image), () => {});
-  }
+  const season = window.createSeasonAtmosphere(context);
 
   let frame = 0;
   let last = 0;
-  let opened = null;
   let cameraPosition = () => 0;
-  const clamp = value => Math.min(1, Math.max(0, value));
-  const smooth = value => {
-    const t = clamp(value);
-    return t * t * (3 - 2 * t);
-  };
-
   function fit() {
     canvas.width = compact.matches ? 544 : width;
     canvas.height = compact.matches ? 306 : height;
-  }
-
-  function layer(name, x, y, alpha, w, h) {
-    const image = images.get(name);
-    if (!image || alpha <= 0) return;
-    context.globalAlpha = clamp(alpha);
-    context.drawImage(image, x, y, w ?? image.width, h ?? image.height);
-  }
-
-  function brazierFlames(time, left, strength) {
-    const atlas = images.get('fire');
-    if (!atlas || strength <= 0) return;
-    const n = Math.floor(time * (left ? 13.2 : 11.8) + (left ? 0 : 5)) % 12;
-    const x = left ? 49 : 687;
-    context.globalAlpha = strength;
-    context.drawImage(atlas, n % 4 * 90, Math.floor(n / 4) * 76, 90, 76, x, 184, 90, 83);
   }
 
   function render(now) {
@@ -69,56 +33,9 @@
     if (now - last < interval) return;
     last = now;
 
-    const time = now / 1000;
-    const passage = opened === null ? 0 : (now - opened) / 1000;
-    const reveal = smooth((passage - .3) / 3.0);
-    const distance = cameraPosition();
-    const departure = 1 - smooth((passage - 3.4) / 1.9);
-    const fogDeparture = 1 - smooth((distance - .60) / .39);
-    const live = (seed) => .54 + Math.sin(time * 4.3 + seed) * .09 +
-      Math.sin(time * 9.1 + seed * 2) * .06 + Math.cos(time * 2.2 + seed) * .11;
-    const left = live(.8) * departure;
-    const right = live(2.5) * departure;
-
     context.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
     context.clearRect(0, 0, width, height);
-
-    // The distant mist stays inside the arch while the nearer bank slips past the viewer.
-    const distant = 1 / (1 + distance * .42);
-    layer('mist', -104 + 35 * Math.sin(time * .22) + distance * 37, 268 - distance * 8,
-      (.18 + reveal * .13) * fogDeparture, 513 * distant, 122 * distant);
-    layer('mist', 413 - 29 * Math.sin(time * .19 + 1.6) + distance * 69, 268 - distance * 6,
-      (.16 + reveal * .12) * fogDeparture, 501 * distant, 123 * distant);
-    layer('arch', 192, 101, (.36 + reveal * .52) * departure);
-    layer('left', 0, 173, left);
-    layer('right', 613, 173, right);
-    layer('title', 220, 21, (.51 + .13 * Math.sin(time * .95)) * departure);
-
-    if (passage < .23) {
-      const closed = 1 - smooth(passage / .23);
-      layer('leftMetal', 258, 112, (.42 + left * .12) * closed);
-      layer('rightMetal', 410, 112, (.42 + right * .12) * closed);
-    }
-
-    layer('shadow', 236 - reveal * 12, 327, (.19 + reveal * .32) * departure);
-    layer('floor', 184, 393, (.28 + (left + right) * .15 + reveal * .31) * departure);
-    brazierFlames(time, true, left * .67);
-    brazierFlames(time, false, right * .63);
-
-    const count = compact.matches ? 14 : 24;
-    for (let index = 0; index < count; index++) {
-      const side = index % 2 ? 1 : -1;
-      const age = (time / (2.3 + index % 5 * .41) + index * .61803398875) % 1;
-      const x = (side < 0 ? 89 : 734) + Math.sin(index * 7) * 14 + side * age * 24;
-      const y = 260 - age * (32 + index % 4 * 11);
-      layer('ember', x, y, Math.sin(Math.PI * age) * .48 * departure, 1.2 + index % 3 * .28, 3);
-    }
-
-    const near = distance * distance;
-    layer('mist', 169 + 41 * Math.sin(time * .26) + reveal * 44 - near * 155,
-      357 - reveal * 19 + near * 82,
-      (.20 + reveal * .18) * fogDeparture * (1 - near), 465 + near * 320, 135 + near * 90);
-    context.globalAlpha = 1;
+    season.paint('gate', now / 1000, '', { compact: compact.matches, proximity: cameraPosition() });
   }
 
   function stop() {
@@ -132,7 +49,6 @@
   }
 
   stage.addEventListener('intro:open', event => {
-    opened = performance.now();
     cameraPosition = event.detail.cameraPosition;
   }, { once: true });
   stage.addEventListener('intro:complete', () => {

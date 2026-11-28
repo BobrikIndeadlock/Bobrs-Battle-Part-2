@@ -149,11 +149,13 @@ function join(side, room) {
   openRoom({ side, room, game: campaignGame(), invitationKey: 'campaign' });
 }
 
-const invite = new URLSearchParams(location.hash.slice(1)).get('campaign');
+const params = new URLSearchParams(location.hash.slice(1));
+const invite = params.get('campaign');
 if (invite !== null) {
   $('campaignCreate').hidden = true;
   $('roomBar').hidden = false;
   try {
+    if (params.get('season') !== window.BobrsSeason.id) throw new Error('Ссылка относится к другому сезону.');
     if (!roomPattern.test(invite)) throw new Error('Ссылка комнаты повреждена.');
     $('book').inert = true;
     join(1, invite);

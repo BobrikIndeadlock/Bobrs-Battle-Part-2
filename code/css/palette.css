@@ -1,6 +1,6 @@
 
 /* 8.1: palette only, original artwork untouched. */
-:root{--m-dark:#170b27;--m-mid:#6229a3;--m-light:#d1a1ff;--m-rgb:157,75,231;--a-dark:#26080f;--a-mid:#900c20;--a-light:#ff909a;--a-rgb:225,43,68;--c-dark:#291b0c;--c-mid:#ad863e;--c-light:#ffe4aa;--c-rgb:218,170,81;--neutral:#141018;--metal:#a77a43;--ink:#f3e4cf;--accent:var(--metal);--glow:183,132,76;--tint:#231713;--light:var(--ink)}
+:root{--m-dark:var(--team-0-dark);--m-mid:var(--team-0-middle);--m-light:var(--team-0-light);--m-rgb:var(--team-0-rgb);--a-dark:var(--team-1-dark);--a-mid:var(--team-1-middle);--a-light:var(--team-1-light);--a-rgb:var(--team-1-rgb);--c-dark:#291b0c;--c-mid:#ad863e;--c-light:#ffe4aa;--c-rgb:218,170,81;--neutral:#141018;--metal:#a77a43;--ink:#f3e4cf;--accent:var(--metal);--glow:183,132,76;--tint:#231713;--light:var(--ink)}
 #cap0,#dlTeam0,.battle-team.side0,#finish .vs-captain.left,#finish .vs-team:first-child,[data-palette-side="0"]{--accent:var(--m-mid);--glow:var(--m-rgb);--tint:var(--m-dark);--light:var(--m-light)}
 #cap1,#dlTeam1,.battle-team.side1,#finish .vs-captain.right,#finish .vs-team:nth-child(2),[data-palette-side="1"]{--accent:var(--a-mid);--glow:var(--a-rgb);--tint:var(--a-dark);--light:var(--a-light)}
 .scene[data-palette-side] .status{color:var(--light);text-shadow:0 0 12px rgba(var(--glow),.6),0 2px 4px #000}

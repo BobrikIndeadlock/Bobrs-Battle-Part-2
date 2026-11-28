@@ -9,7 +9,6 @@
   --roster-anchor: 50%;
   --roster-light: var(--light);
   --roster-reflection: rgba(var(--glow), .45);
-  --roster-rail: linear-gradient(155deg, var(--tint), #080b0c 38%, #101415 72%, var(--tint));
 }
 #scene .captain.left { left: 3%; }
 #scene .captain.right { right: 3%; }
@@ -21,9 +20,6 @@
 }
 #scene .captain .teams-view {
   top: 129%;
-  border: 1px solid rgba(var(--glow),.32);
-  box-shadow: inset 0 1px 0 #b0bdab42,inset 0 -7px 9px #000b,0 9px 12px #0009;
-  border-radius: 2px 2px 5px 5px;
 }
 #scene .roster-slot .team-badge { border-color: rgba(var(--glow),.36); }
 
@@ -82,15 +78,6 @@
 
 #intro-interior::after { background: #090d0e; }
 
-#scene .captain {
-  --roster-rail: linear-gradient(155deg,#030c096e,#080b0cbb),url("../../media/season/rail-ossuary.webp");
-}
-#scene .captain.right {
-  --roster-rail: linear-gradient(155deg,#090a0d60,#080b0cbb),url("../../media/season/rail-storm.webp");
-}
-#scene .captain .teams-view {
-  background: var(--roster-rail) center / 100% 100% no-repeat;
-}
 /* The caption must not enlarge the grid track or cover the transition controls. */
 #finish .vs-main {
   flex: 0 0 auto;

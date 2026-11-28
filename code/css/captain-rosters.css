@@ -1,13 +1,11 @@
 /* The roster is registered to the stone below each painted pedestal. */
 #scene .captain {
   --roster-anchor: 69%;
-  --roster-rail: url("../../media/draft/rail-demon.webp");
   --roster-light: #e1bcf5;
   --roster-reflection: #9e54d080;
 }
 #scene .captain.right {
   --roster-anchor: 31%;
-  --roster-rail: url("../../media/draft/rail-vampire.webp");
   --roster-light: #ffd1ca;
   --roster-reflection: #c74b5488;
 }
@@ -41,23 +39,15 @@
   transform: translateX(-50%);
   width: 101%;
   aspect-ratio: 760 / 244;
-  padding: 2% 5.2% 5.7%;
+  padding: calc(2% + 1px) calc(5.2% + 1px) calc(5.7% + 1px);
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 3%;
   align-items: stretch;
   z-index: 8;
-  background: var(--roster-rail) center / 100% 100% no-repeat;
   pointer-events: none;
 }
 #scene .captain .teams-view[hidden] { display: none; }
-#scene .captain .teams-view::before {
-  content: "";
-  position: absolute;
-  inset: 57% -6% -9%;
-  z-index: -1;
-  background: radial-gradient(ellipse at center, #0b050bd9, #11071357 59%, transparent 73%);
-}
 
 .roster-slot {
   position: relative;

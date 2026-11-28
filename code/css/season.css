@@ -8,7 +8,6 @@
   height: 52%;
   --roster-anchor: 50%;
   --roster-light: var(--light);
-  --roster-reflection: rgba(var(--glow), .45);
 }
 #scene .captain.left { left: 3%; }
 #scene .captain.right { right: 3%; }
@@ -120,7 +119,6 @@
 #moviePoster > :is(.season-title,img) { position: relative; z-index: 2; }
 #finish .vs-lightning { display: none; }
 
-#chronosEvent .chronos-wash::after,
 #c91oOverlay #c91oDim::after {
   content: "";
   position: absolute;
@@ -128,7 +126,6 @@
   background: radial-gradient(ellipse at 50% 36%, #bab38b16, transparent 44%),
     linear-gradient(100deg, #11140f4a, transparent 38% 64%, #191a1a38);
 }
-#chronosEvent.show-figure .chronos-wash::after,
 #c91oOverlay.show #c91oDim::after {
   animation: timeAir 3.8s ease-out both;
 }
@@ -138,8 +135,8 @@
   100% { opacity: .63; }
 }
 @media (prefers-reduced-motion: reduce) {
-  #chronosEvent .chronos-wash::after, #c91oOverlay #c91oDim::after { animation: none; }
+  #c91oOverlay #c91oDim::after { animation: none; }
 }
-body.bobrs-page-hidden :is(#chronosEvent .chronos-wash, #c91oOverlay #c91oDim)::after {
+body.bobrs-page-hidden #c91oOverlay #c91oDim::after {
   animation-play-state: paused;
 }

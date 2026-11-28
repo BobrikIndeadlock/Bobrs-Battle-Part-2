@@ -146,6 +146,8 @@ def add_campaign(output, html):
     first = first.replace('onclick=()=>tapCard(', "onclick=()=>campaignDispatch('reveal',")
     first = first.replace('onclick=()=>choose(', "onclick=()=>campaignDispatch('choose',")
     first = replace_once(first, 'function tapCard(id){', 'async function tapCard(id){')
+    first = replace_once(first, "submit:settleChronos, allowed:()=>state==='chronos',",
+                         "submit:campaignDispatch, allowed:()=>state==='chronos' && mayResolveChronos(),")
     first = replace_once(first, 'showCompare([c],true);return;', 'return showCompare([c],true);')
     first = replace_once(first, 'showCompare([...selectedPair],false,380);', 'return showCompare([...selectedPair],false,380);')
     first = replace_once(first, 'function showFinish(){', 'function showFinish(replayMovie=true){')
@@ -169,7 +171,7 @@ def add_campaign(output, html):
 def version_online_scripts(output):
     # Pages caches individual files. Keep the controllers and the wire protocol in one build.
     modules = ('campaign.mjs', 'room.mjs', 'rules.mjs', 'draft-data.mjs')
-    controllers = ('code/js/first-draft.js', 'code/js/deadlock-draft.js', 'code/js/season.js', 'code/js/season-atmosphere.js', 'code/js/captain-portraits.js')
+    controllers = ('code/js/first-draft.js', 'code/js/deadlock-draft.js', 'code/js/season.js', 'code/js/season-atmosphere.js', 'code/js/captain-portraits.js', 'code/js/chronos-secret.js')
     scripts = tuple(f'online-deadlock/{name}' for name in modules) + controllers
     digest = hashlib.sha256()
     for file in scripts:

@@ -1,0 +1,182 @@
+.arena { transition: filter 1.35s ease; }
+body.chronos-still .arena { filter: grayscale(1) brightness(.73); }
+#c91oOverlay [hidden] { display: none !important; }
+#c91oOverlay .chronos-word.spoken { animation: chronosInk .48s ease both; }
+@keyframes chronosInk {
+  from { opacity: 0; transform: translateY(.14em); }
+  to { opacity: 1; transform: none; }
+}
+
+#chronosExchange {
+  position: absolute;
+  z-index: 4;
+  inset: 39% 0 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 1rem clamp(.65rem, 4vw, 4rem) max(1rem, env(safe-area-inset-bottom));
+  color: #e3d6bd;
+  background: linear-gradient(transparent, #09090deb 14%, #09090d 72%);
+  font: 500 clamp(.83rem, 1.2vw, 1.06rem)/1.35 var(--ui-text);
+  text-align: center;
+  animation: chronosInk .48s ease both;
+}
+#chronosExchange h2 {
+  margin: 0;
+  color: #f0dfbd;
+  font: 700 clamp(1.55rem, 3.4vw, 3.28rem)/1.04 var(--ui-display);
+  outline: none;
+}
+#chronosExchangeHelp { margin: .35rem auto .9rem; }
+#chronosTeams {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(.6rem, 3.2vw, 3rem);
+  max-width: 1400px;
+  margin-inline: auto;
+}
+.chronos-roster h3 {
+  margin: 0 0 .55rem;
+  padding: .22rem 0 .48rem;
+  border-bottom: 1px solid var(--accent);
+  color: var(--light);
+  font: 700 clamp(1rem, 2vw, 1.45rem)/1.05 var(--ui-display);
+}
+.chronos-roster ul {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(.25rem, .7vw, .55rem);
+  list-style: none;
+}
+.chronos-roster li { min-width: 0; }
+#chronosExchange button, #chronosInspect button {
+  border: 1px solid #7f6a4c;
+  border-radius: 2px;
+  background: #151419;
+  color: #e3d6bd;
+  font: inherit;
+}
+#chronosExchange button:enabled, #chronosInspect button { cursor: pointer; }
+#chronosExchange button:disabled { cursor: default; opacity: .55; }
+#chronosExchange button:focus-visible, #chronosInspect button:focus-visible {
+  outline: 2px solid #e9cd95;
+  outline-offset: 2px;
+}
+#chronosExchange .chronos-choice {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: .17rem;
+  width: 100%;
+  padding: 3px;
+  border-color: #514537;
+}
+#chronosExchange .chronos-choice:disabled { opacity: .88; }
+#chronosExchange .chronos-choice[aria-pressed="true"] {
+  border-color: #e1bb7f;
+  outline: 1px solid #e1bb7f;
+  background: #30261c;
+  color: #fff0cd;
+}
+.chronos-choice img { display: block; width: 100%; aspect-ratio: 1037 / 1517; object-fit: contain; }
+.chronos-choice span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.chronos-choice.thread-lifted img { visibility: hidden; }
+#chronosExchange .chronos-inspect-button {
+  margin-top: .18rem;
+  padding: .22rem .1rem;
+  min-height: 30px;
+  width: 100%;
+  border-color: transparent;
+  background: transparent;
+  color: #c5b89e;
+  font-size: .86em;
+}
+#chronosExchange footer { padding-top: .7rem; }
+#chronosExchangePreview { min-height: 1.35em; margin: 0 0 .55rem; color: #f0d6a4; }
+#chronosExchangeActions { display: flex; justify-content: center; flex-wrap: wrap; gap: .5rem; }
+#chronosExchangeActions button, #chronosInspect button { padding: .42em .78em; min-height: 40px; }
+#chronosExchangeActions #chronosConfirm { background: #31271b; }
+
+#chronosInspect {
+  box-sizing: border-box;
+  width: min(94vw, 650px);
+  max-height: 92svh;
+  padding: .6rem;
+  color: #f0dfbd;
+  background: #101015;
+  border: 1px solid #8c7552;
+  font: 500 .95rem/1.3 var(--ui-text);
+}
+#chronosInspect::backdrop { background: #040409d9; }
+#chronosInspect header { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+#chronosInspect h3 { margin: 0 auto 0 0; font: 700 1.35rem/1 var(--ui-display); }
+.chronos-card-scroll { max-height: 78svh; margin-top: .5rem; overflow: auto; }
+.chronos-card-scroll img { display: block; width: min(100%, 51svh); margin-inline: auto; }
+#chronosInspect.magnified img { width: 700px; max-width: none; }
+
+.chronos-rift {
+  position: absolute;
+  z-index: 6;
+  inset: 0;
+  pointer-events: none;
+  perspective: 980px;
+}
+.chronos-rift::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 46%, #c7ae7834, #20152c55 23%, transparent 57%);
+  animation: chronosRipple 1.84s both ease-in-out;
+}
+.chronos-rift canvas { position: absolute; transform: translate(-50%, -50%); }
+.chronos-rift img {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: min(150px, 27vw);
+  border: 1px solid #b99c6e;
+  box-shadow: 0 8px 22px #000a, 0 0 22px #a38a5e55;
+}
+@keyframes chronosRipple {
+  0%, 100% { opacity: 0; transform: scale(.94); }
+  48% { opacity: 1; transform: scale(1.05); }
+}
+
+@media (max-width: 760px) {
+  #chronosExchange { inset-block-start: 33%; }
+  .chronos-roster ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-height: 540px) and (orientation: landscape) {
+  #chronosExchange { inset-block-start: 25%; }
+  .chronos-choice img { max-height: 104px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .arena { transition-duration: .2s; }
+}
+
+#c91oOverlay.chronos-bargain #c91oChronos {
+  --portrait-height: min(60svh, 550px, 110vw);
+}
+#c91oOverlay.chronos-bargain #c91oChronos .chronos-portrait { top: 33%; }
+#c91oOverlay.chronos-bargain #c91oChronos .chronos-orrery { top: 34%; }
+
+.chronos-rift::after {
+  content: "";
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  width: min(460px, 86vw, 82svh);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  translate: -50% -50%;
+  backdrop-filter: blur(2px) saturate(.48);
+  mask-image: radial-gradient(circle, transparent 38%, #000a 52%, transparent 68%);
+  animation: chronosRipple 1.84s both ease-in-out;
+}
+
+@media (max-width: 520px) {
+  .chronos-choice span {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    font-size: .74rem;
+  }
+}

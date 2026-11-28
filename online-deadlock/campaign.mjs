@@ -6,8 +6,9 @@ const $ = id => document.getElementById(id);
 const first = window.BobrsCampaignView;
 const second = window.DeadlockRoomView;
 const playerIds = new Set(players.map(player => player.id));
-const phases = ['idle', 'choose', 'preview', 'last', 'done'];
-const actions = ['summon', 'reveal', 'choose', 'restart'];
+const phases = ['idle', 'choose', 'preview', 'chronos', 'last', 'done'];
+const actions = ['summon', 'reveal', 'choose', 'restart', 'exchange', 'decline'];
+const chronos = window.chronosRules;
 const roomPattern = /^[a-f0-9]{32}$/;
 
 function ids(value, max) {
@@ -17,17 +18,20 @@ function ids(value, max) {
 
 function validFirst(state) {
   return state && phases.includes(state.phase) && Number.isInteger(state.turn) &&
-    state.turn >= 0 && state.turn <= 20 && state.captain === state.turn % 2 &&
+    state.turn >= 0 && state.turn <= 10 && state.captain === state.turn % 2 &&
     Array.isArray(state.teams) && state.teams.length === 2 && state.teams.every(team => ids(team, 5)) &&
     ids(state.deck, 10) && ids([...state.deck, ...state.teams.flat()], 10) &&
     (state.phase === 'idle' || state.deck.length + state.teams.flat().length === 10) &&
     ids(state.pair, 2) && ids(state.exposed, 2) && ids(state.legal, 10) &&
     [...state.pair, ...state.exposed, ...state.legal].every(id => state.deck.includes(id)) &&
-    Array.isArray(state.lock) && state.lock.length === 2 &&
-    state.lock.every(name => [null, 'Грит', 'Аптека'].includes(name)) &&
+    state.turn === state.teams.flat().length &&
+    (state.phase === 'chronos'
+      ? state.exchange !== null && state.exchange === chronos.recipient(state.teams,state.deck.length)
+      : state.exchange === null) &&
+    (state.phase !== 'done' || validTeams(state.teams)) &&
     (state.phase === 'idle' ? state.scripted === null : ['Грит', 'Аптека'].includes(state.scripted)) &&
     Array.isArray(state.completed) && state.completed.length <= 2 &&
-    state.completed.every(value => value === 2 || value === 4) && typeof state.lastScene === 'boolean';
+    state.completed.every(value => value === 2 || value === 4);
 }
 
 function valid(state) {
@@ -37,7 +41,10 @@ function valid(state) {
   }
   if (!state.event) return state.event === null;
   const { kind, id, seed } = state.event;
-  return actions.includes(kind) && (id === undefined || playerIds.has(id)) &&
+  const payload = kind === 'exchange' ? chronos.validSwap(state.first.teams,state.first.exchange,id) :
+    ['reveal','choose'].includes(kind) ? playerIds.has(id) : id === undefined;
+  return actions.includes(kind) && payload &&
+    (kind !== 'exchange' && kind !== 'decline' || state.first.phase === 'chronos') &&
     Number.isInteger(seed) && seed >= 0 && seed <= 0xffffffff;
 }
 
@@ -47,6 +54,10 @@ function permits(state, side, kind, id) {
   const draft = state.first;
   if (kind === 'summon') return side === 0 && draft.phase === 'idle';
   if (kind === 'enter' || kind === 'restart') return side === 0 && draft.phase === 'done';
+  if (kind === 'exchange' || kind === 'decline') {
+    return draft.phase === 'chronos' && side === draft.exchange &&
+      (kind === 'decline' ? id === undefined : id === undefined || chronos.validSwap(draft.teams,side,id));
+  }
   const legal = kind === 'reveal' && draft.phase === 'choose' ? draft.legal :
     kind === 'choose' && ['preview', 'last'].includes(draft.phase) ? draft.pair : [];
   return side === draft.captain && (id === undefined ? legal.length > 0 : legal.includes(id));
@@ -54,7 +65,8 @@ function permits(state, side, kind, id) {
 
 function apply(state, side, action, toss) {
   if (action?.rev !== state.rev || !permits(state, side, action.kind, action.hero)) return null;
-  if (['reveal', 'choose'].includes(action.kind) && !playerIds.has(action.hero)) return null;
+  if (['reveal', 'choose'].includes(action.kind) && !state.second && !playerIds.has(action.hero)) return null;
+  if (!state.second && action.kind === 'exchange' && !chronos.validSwap(state.first.teams,side,action.hero)) return null;
   const rev = state.rev + 1;
   if (state.second) {
     const next = applyAction({ ...state.second, rev: state.rev }, side, action, toss);
@@ -98,7 +110,7 @@ function campaignGame() {
       send = submit;
       allowed = maySend;
       $('campaignMenu').hidden = true;
-      first.connect(send);
+      first.connect(send,allowed);
       $('goDeadlock').addEventListener('click', event => {
         event.stopImmediatePropagation();
         send('enter');
@@ -115,6 +127,7 @@ function campaignGame() {
       $('compareCards').inert = !allowed('choose');
       $('goDeadlock').inert = !allowed('enter');
       $('restart').inert = !allowed('restart');
+      window.chronosCinema.refresh();
     },
     async paint(previous, next, options) {
       if (!deadlockOpen) {

@@ -8,7 +8,7 @@
   function sync() {
     const hidden = document.hidden;
     const covered = !!byId('intro-stage') || arena.inert || active('movieFinal') ||
-      active('dlPhase') || active('hall92') || active('chronosEvent', 'visible') ||
+      active('dlPhase') || active('hall92') ||
       active('c91oOverlay', 'show') || active('finish', 'visible');
     const pauseArena = covered || hidden;
     // Compare lives inside the arena. Its card animations must continue.
@@ -29,7 +29,7 @@
   }
 
   const observer = new MutationObserver(sync);
-  for (const id of ['intro-stage', 'movieFinal', 'dlPhase', 'hall92', 'chronosEvent',
+  for (const id of ['intro-stage', 'movieFinal', 'dlPhase', 'hall92',
     'c91oOverlay', 'finish', 'dlFx', 'compare']) {
     const element = byId(id);
     if (element) {

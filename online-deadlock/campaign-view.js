@@ -1,6 +1,7 @@
  // This bridge is appended to the Pages copy of the original first draft.
  let campaignInput = null;
  let actionRandom = null;
+ let mayResolveChronos = () => true;
 
  function campaignDispatch(kind, id) {
   if (campaignInput) return campaignInput(kind, id);
@@ -13,9 +14,9 @@
   return {
    phase: state, turn, captain: captainTurn, deck: ids(available),
    teams: teams.map(ids), pair: ids(pair), exposed: ids(selectedPair),
-   lock: [...duoLock], scripted: idle ? null : scriptedPairs[2][0],
-   completed: idle ? [] : [...scriptedCompleted], lastScene: chronosSecretPlayed,
-   legal: state === 'choose' ? ids(playableCards()).filter(id => !selectedPair.some(card => card.id === id)) : [],
+   exchange: exchangeSeat, scripted: idle ? null : scriptedPairs[2][0],
+   completed: idle ? [] : [...scriptedCompleted],
+   legal: state === 'choose' ? ids(available).filter(id => !selectedPair.some(card => card.id === id)) : [],
   };
  }
 
@@ -30,6 +31,7 @@
    else if (kind === 'reveal') await tapCard(id);
    else if (kind === 'choose') await choose(id);
    else if (kind === 'restart') reset();
+   else if (kind === 'exchange' || kind === 'decline') await settleChronos(kind,id);
   } finally {
    actionRandom = null;
   }
@@ -45,8 +47,7 @@
   pair = cards(saved.pair);
   turn = saved.turn;
   state = saved.phase;
-  duoLock = [...saved.lock];
-  chronosSecretPlayed = saved.lastScene;
+  exchangeSeat = saved.exchange;
   scriptedPairs = {2:[saved.scripted,'Сережа'],4:[getCounterpartName(saved.scripted),'Данечек']};
   scriptedCompleted.clear();
   saved.completed.forEach(value => scriptedCompleted.add(value));
@@ -63,12 +64,16 @@
   if (state === 'preview' || state === 'last') {
    if (state === 'preview') $('scene').classList.add('arcane-choosing');
    await showCompare([...pair], state === 'last');
-  } else if (state === 'done') showFinish(false);
-  else status('Ход '+currentName()+(playableCards().length===1?' · нажмите на доступную карту':' · нажмите на две закрытые карты'));
+  } else if (state === 'chronos') showChronosExchange();
+  else if (state === 'done') showFinish(false);
+  else status('Ход '+currentName()+(available.length===1?' · нажмите на доступную карту':' · нажмите на две закрытые карты'));
  }
 
  window.BobrsCampaignView = {
-  connect(send) { campaignInput = send; },
+  connect(send, allowed) {
+   campaignInput = send;
+   mayResolveChronos = () => allowed('decline');
+  },
   snapshot: campaignSnapshot,
   play: playCampaignAction,
   restore: restoreCampaign,

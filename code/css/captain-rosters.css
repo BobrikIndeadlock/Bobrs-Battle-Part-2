@@ -2,12 +2,10 @@
 #scene .captain {
   --roster-anchor: 69%;
   --roster-light: #e1bcf5;
-  --roster-reflection: #9e54d080;
 }
 #scene .captain.right {
   --roster-anchor: 31%;
   --roster-light: #ffd1ca;
-  --roster-reflection: #c74b5488;
 }
 #scene .captain .captain-count {
   position: absolute;
@@ -78,26 +76,16 @@
   padding-top: .23em;
 }
 .roster-arrive { animation: rosterSeat .6s cubic-bezier(.18,.55,.22,1) both; }
-.roster-withdrawn::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: 1px solid var(--roster-light);
-  box-shadow: inset 0 0 12px var(--roster-reflection);
-  animation: rosterAfterglow .75s ease-out both;
-}
 @keyframes rosterSeat {
   0% { opacity: 0; transform: translateY(-10px) rotateX(-23deg) scale(1.09); }
   73% { opacity: 1; transform: translateY(1px) rotateX(4deg); }
   100% { opacity: 1; transform: none; }
 }
-@keyframes rosterAfterglow { from { opacity: .85; } to { opacity: 0; } }
 @media (max-width: 600px) {
   #scene .captain .teams-view { width: 112%; }
   #scene .captain .captain-count { width: 35%; }
   .roster-slot span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .roster-arrive, .roster-withdrawn::after { animation: none; }
-  .roster-withdrawn::after { display: none; }
+  .roster-arrive { animation: none; }
 }

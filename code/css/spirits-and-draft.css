@@ -156,7 +156,3 @@
 
 /* === Chronos intervention + chained duo cards === */
 /* Chronos curse uses a separate full-cover card back instead of chains. */
-.tile.chronos-sealed{cursor:not-allowed!important;filter:none!important;opacity:1!important;box-shadow:0 0 0 2px rgba(125,188,255,.7),0 0 18px rgba(51,118,222,.55),0 0 35px rgba(190,57,39,.28)!important;}
-.tile.chronos-sealed .card-back-face,.tile.chronos-sealed .card-back-image{filter:none!important;opacity:1!important;}
-.tile.chronos-sealed:disabled{opacity:1!important;filter:none!important;}
-.tile.chronos-sealed::before,.tile.chronos-sealed::after{content:none!important;display:none!important;}

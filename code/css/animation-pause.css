@@ -9,7 +9,6 @@ body.bobrs-pause-finish #finish,body.bobrs-pause-finish #finish *,body.bobrs-pau
 #dlPhase.bobrs-fx-active .dl-wrap,#dlPhase.bobrs-fx-active .dl-wrap *,#dlPhase.bobrs-fx-active .dl-wrap *::before,#dlPhase.bobrs-fx-active .dl-wrap *::after,#dlPhase.bobrs-fx-active .dl-fog,
 #hall92:not(.active),#hall92:not(.active) *,#hall92:not(.active) *::before,#hall92:not(.active) *::after,
 #compare:not(.visible),#compare:not(.visible) *,#compare:not(.visible) *::before,#compare:not(.visible) *::after,
-#chronosEvent:not(.visible),#chronosEvent:not(.visible) *,#chronosEvent:not(.visible) *::before,#chronosEvent:not(.visible) *::after,
 #c91oOverlay:not(.show),#c91oOverlay:not(.show) *,#c91oOverlay:not(.show) *::before,#c91oOverlay:not(.show) *::after{animation-play-state:paused!important}
 
 body.bobrs-pause-atmosphere #livingAtmosphere *,

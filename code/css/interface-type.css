@@ -87,19 +87,6 @@ body:has(#roomLobby),
   color: var(--ui-time);
   background: linear-gradient(90deg, transparent, #100e0bf5 12% 88%, transparent);
 }
-.rewind-caption {
-  font-family: var(--ui-display);
-  font-weight: 700;
-  letter-spacing: .08em;
-  color: var(--ui-time);
-}
-.chronos-mark84 text {
-  font-family: var(--ui-display);
-  font-weight: 700;
-  fill: var(--ui-time);
-  stroke: none;
-}
-
 /* The live VS lettering echoes the engravings without adding a halo. */
 #finish.vs-finisher { font-family: var(--ui-text); }
 #finish .vs-topline {

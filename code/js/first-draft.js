@@ -2,7 +2,7 @@
 const $=id=>document.getElementById(id);
 const { captains, movie: filmSource } = window.BobrsSeason;
 const baseCharacters=[{"id":"preset-1","name":"Макарыч","image":"media/cards/makarych.png"},{"id":"preset-2","name":"Стасик","image":"media/cards/stasik.png"},{"id":"preset-3","name":"Грит","image":"media/cards/grit.png"},{"id":"preset-4","name":"Аптека","image":"media/cards/apteka.png"},{"id":"preset-5","name":"Артемон","image":"media/cards/artemon.png"},{"id":"preset-6","name":"Сережа","image":"media/cards/serezha.png"},{"id":"preset-7","name":"Данечек","image":"media/cards/danechek.png"},{"id":"preset-8","name":"Дрипсик","image":"media/cards/dripsik.png"},{"id":"preset-9","name":"Ануар","image":"media/cards/anuar.png"},{"id":"preset-10","name":"Митя","image":"media/cards/mitya.png"}];
-let available=[],turn=0,state='idle',pair=[],selectedPair=[],teams=[[],[]],captainTurn=0,duoLock=[null,null];
+let available=[],turn=0,state='idle',pair=[],selectedPair=[],teams=[[],[]],captainTurn=0;
 const randomInt=max=>{const r=new Uint32Array(1);if(crypto?.getRandomValues){crypto.getRandomValues(r);return r[0]%max}return Math.floor(Math.random()*max)};
 function shuffle(list){const res=[...list];for(let i=res.length-1;i>0;i--){const j=randomInt(i+1);[res[i],res[j]]=[res[j],res[i]]}return res}
 function status(t){$('status').textContent=(state==='idle'&&t.includes('Нажмите на гримуар'))?'':t}
@@ -33,11 +33,10 @@ function nextPaint(signal){
   signal.addEventListener('abort',cancel,{once:true});
  });
 }
-const chronosSealedBack='media/images/chronos-card-back.png';
 const duoPairNames=['Грит','Аптека'];
 let scriptedPairs={};
 const scriptedCompleted=new Set();
-let chronosSecretPlayed=false;
+let exchangeSeat=null;
 function randomizeScriptedDuoPicks(){
  const first=randomInt(duoPairNames.length);
  scriptedPairs={2:[duoPairNames[first],'Сережа'],4:[duoPairNames[1-first],'Данечек']};
@@ -57,19 +56,9 @@ function swapHiddenCardIntoChosenSlot(clickedId,targetName){
  }
  return available[selectedIdx].id;
 }
-function playableCards(){
- const legal=available.filter(c=>!isHeroChainedForCaptain(c,captainTurn));
- // Reserve the final team slot for the remaining duo member if this captain
- // has neither. Otherwise the other captain could be left with an illegal last card.
- if(teams[captainTurn].length===4&&!teams[captainTurn].some(c=>duoPairNames.includes(c.name))){
-  const needed=legal.filter(c=>duoPairNames.includes(c.name));
-  if(needed.length)return needed;
- }
- return legal;
-}
 function adjustScriptedHiddenPick(id){
  const clicked=available.find(c=>c.id===id);
- if(!clicked||!playableCards().some(c=>c.id===id)||selectedPair.some(c=>c.id===id))return null;
+ if(!clicked||!available.some(c=>c.id===id)||selectedPair.some(c=>c.id===id))return null;
  const targets=scriptedDuoTarget();
  if(targets){
   const wanted=targets[selectedPair.length];
@@ -77,101 +66,56 @@ function adjustScriptedHiddenPick(id){
  }
  const reserved=reservedNames();
  if(!reserved.includes(clicked.name))return id;
- const candidates=playableCards().filter(c=>!reserved.includes(c.name)&&!selectedPair.some(p=>p.id===c.id));
+ const candidates=available.filter(c=>!reserved.includes(c.name)&&!selectedPair.some(p=>p.id===c.id));
  if(!candidates.length)return null;
  return swapHiddenCardIntoChosenSlot(id,candidates[randomInt(candidates.length)].name);
 }
 
 function getCounterpartName(name){return name==='Грит'?'Аптека':name==='Аптека'?'Грит':null}
-function isHeroChainedForCaptain(hero,captIndex){return !!hero&&duoLock[captIndex]===hero.name}
-function currentCaptainHasPlayableCard(){return available.some(card=>!isHeroChainedForCaptain(card,captainTurn))}
-function hideChronosEvent(){
- const event=$('chronosEvent');
- event.classList.remove('visible','grayfall','show-figure','rewind-active','rewind-fading','chronos-release');
- $('chronosText').replaceChildren();
- event.setAttribute('aria-hidden','true');
+function draftIds(){
+ return teams.map(team=>team.map(card=>card.id));
 }
-let chronosController=null;
-async function runChronos(play){
- const controller=new AbortController();
- chronosController=controller;
- try{
-  await play(controller.signal);
-  return !controller.signal.aborted;
- }catch(error){
-  if(!controller.signal.aborted)throw error;
-  return false;
- }finally{
-  if(chronosController===controller)chronosController=null;
- }
-}
-async function playChronosIntervention(captIndex,invalidHero,signal){
- const event=$('chronosEvent');
- const cinema=window.chronosCinema;
- hideChronosEvent();
- state='cutscene';
- status('Нарушено древнее правило…');
- $('book').disabled=true;
- $('grid').querySelectorAll('.tile').forEach(card=>card.disabled=true);
- let echo, sealedBack;
- try{
-  if(cinema){
-   try{
-    const [verdict, challenge]=cinema.prepare($('chronosText'),[
-     'Жалкое насекомое, ты и правда думал что я позволю тебе взять их обоих?',
-     'Развлеките меня как подобает смертным.',
-    ]);
-    event.setAttribute('aria-hidden','false');
-    event.classList.add('visible','grayfall');
-    await cinema.wait(4900,signal);
-    event.classList.add('show-figure');
-    await cinema.wait(1900,signal);
-    await cinema.speak(verdict,index=>index===1?1500:340,signal);
-    await cinema.wait(1200,signal);
-    await cinema.speak(challenge,()=>460,signal);
-    await cinema.wait(2900,signal);
-    event.classList.remove('show-figure');
-    event.classList.add('rewind-active');
-    const slots=$('teamTiny'+captIndex).children;
-    const slot=[...slots].find(item=>item.dataset.hero===String(invalidHero.id));
-    echo=cinema.rewindCard(slot);
-    await cinema.wait(4800,signal);
-    echo?.remove();
-    event.classList.add('rewind-fading');
-    sealedBack=cinema.prepareSealedBack(chronosSealedBack);
-    await cinema.wait(1100,signal);
-   }catch(error){
-    if(signal.aborted)throw error;
-    console.warn('Chronos presentation unavailable:',error);
-   }
-  }
-  const removeIndex=teams[captIndex].findIndex(h=>h.id===invalidHero.id);
-  if(removeIndex!==-1)teams[captIndex].splice(removeIndex,1);
-  available=shuffle([...available,invalidHero]);
-  duoLock[captIndex]=invalidHero.name;
-  try{
-   await cinema?.seal(sealedBack??cinema.prepareSealedBack(chronosSealedBack),$('grid'),()=>event.classList.add('chronos-release'),signal);
-  }catch(error){
-   if(signal.aborted)throw error;
-   console.warn('Chronos seal presentation unavailable:',error);
-  }
-  captainUpdate();
-  status('Время отмотано назад · Кронос запечатал карту «'+invalidHero.name+'» для '+currentName());
-  state='shuffling';
- }finally{
-  echo?.remove();
-  hideChronosEvent();
- }
-}
-function skipBlockedTurnIfNeeded(){
- if(state!=='choose')return false;
- if(currentCaptainHasPlayableCard())return false;
- const blockedName=duoLock[captainTurn];
- status('Карта «'+blockedName+'» запечатана Кроносом для '+currentName()+' · ход переходит дальше');
- turn++;
+function enableLastCard(){
+ exchangeSeat=null;
+ state='choose';
  captainUpdate();
  displayGrid();
- return true;
+ status('Ход '+currentName()+' · нажмите на последнюю карту');
+ $('grid').querySelector('button')?.focus({preventScroll:true});
+}
+async function settleChronos(kind, decision){
+ if(state!=='chronos'||!['exchange','decline'].includes(kind))return;
+ const seats=draftIds();
+ if(kind==='exchange'&&!window.chronosRules.validSwap(seats,exchangeSeat,decision))return;
+ if(kind==='decline'&&decision!==undefined)return;
+ const signal=draftController.signal;
+ state='chronos-resolving';
+ const side=exchangeSeat;
+ const indexes=decision?.map((id,index)=>seats[index===0?side:1-side].indexOf(id));
+ let applied=false;
+ const update=()=>{
+  if(applied||!indexes||signal.aborted)return;
+  applied=true;
+  const [left,right]=indexes;
+  [teams[side][left],teams[1-side][right]]=[teams[1-side][right],teams[side][left]];
+  captainUpdate();
+ };
+ try{
+  await window.chronosCinema.finish(decision,update,signal);
+ }catch(error){
+  if(!signal.aborted)console.warn('Chronos exchange presentation interrupted:',error);
+ }
+ if(!signal.aborted){
+  update();
+  window.chronosCinema.close();
+  enableLastCard();
+ }
+}
+function showChronosExchange(){
+ window.chronosCinema.exchange({
+  teams, captains, side:exchangeSeat,
+  submit:settleChronos, allowed:()=>state==='chronos',
+ });
 }
 
 function renderRoster(roster, members){
@@ -184,9 +128,8 @@ function renderRoster(roster, members){
   }
   const key=hero?String(hero.id):'';
   if(slot.dataset.hero===key)continue;
-  const returning=!hero&&!!slot.dataset.hero&&state==='cutscene';
   slot.dataset.hero=key;
-  slot.className=hero?'roster-slot roster-arrive':returning?'roster-slot empty roster-withdrawn':'roster-slot empty';
+  slot.className=hero?'roster-slot roster-arrive':'roster-slot empty';
   slot.title=hero?.name??'';
   slot.replaceChildren();
   if(hero){
@@ -220,7 +163,6 @@ function captainUpdate(){
  $('scene').dataset.paletteSide=choosing?String(captainTurn):'';
  $('compare').dataset.paletteSide=String(captainTurn);
  for(let side=0;side<2;side++){
-  $('chrono84-'+side).classList.toggle('mark-active',!!duoLock[side]&&choosing);
   const captain=$('cap'+side);
   captain.classList.toggle('active',choosing&&captainTurn===side);
   captain.classList.toggle('dim',choosing&&captainTurn!==side);
@@ -231,7 +173,21 @@ function captainUpdate(){
  }
 }
 function backMarkup(){return '<div class="face card-back-face"><img class="card-back-image" src="media/images/draft-card-back.png" alt="" draggable="false"></div>'}
-function displayGrid(){const grid=$('grid'),legal=new Set(playableCards().map(card=>card.id));grid.replaceChildren();for(let i=0;i<available.length;i++){const c=available[i];const blocked=isHeroChainedForCaptain(c,captainTurn);const b=document.createElement('button');b.type='button';b.className='tile'+(available.length===1?' legendary':'')+(blocked?' chronos-sealed':'');b.setAttribute('aria-label',blocked?('Карта '+c.name+' запечатана Кроносом'):('Закрытая карта '+(i+1)));b.innerHTML=backMarkup();if(blocked){const image=b.querySelector('.card-back-image');if(image)image.src=chronosSealedBack;}b.style.animationDelay=(i*.038)+'s';b.onclick=()=>tapCard(c.id);b.disabled=state!=='choose'||!legal.has(c.id);if(blocked){b.title='Кронос запечатал эту карту. Она недоступна для '+currentName();b.setAttribute('aria-disabled','true')}grid.append(b)}}
+function displayGrid(){
+ const grid=$('grid');
+ grid.replaceChildren();
+ available.forEach((card,index)=>{
+  const tile=document.createElement('button');
+  tile.type='button';
+  tile.className=available.length===1?'tile legendary':'tile';
+  tile.setAttribute('aria-label','Закрытая карта '+(index+1));
+  tile.innerHTML=backMarkup();
+  tile.style.animationDelay=(index*.038)+'s';
+  tile.onclick=()=>tapCard(card.id);
+  tile.disabled=state!=='choose';
+  grid.append(tile);
+ });
+}
 function currentName(){return captains[captainTurn].name}
 async function summon(){
  if(state!=='idle')return;
@@ -241,7 +197,7 @@ async function summon(){
  state='summoning';
  $('book').disabled=true;
  available=shuffle(baseCharacters).slice(0,10);
- teams=[[],[]];turn=0;selectedPair=[];pair=[];duoLock=[null,null];chronosSecretPlayed=false;hideChronosEvent();randomizeScriptedDuoPicks();
+ teams=[[],[]];turn=0;selectedPair=[];pair=[];exchangeSeat=null;randomizeScriptedDuoPicks();
  captainUpdate();
  status('Гримуар пробуждается…');
 
@@ -271,7 +227,6 @@ async function summon(){
    grid.classList.remove('summon-preparing','summon-materializing');
    captainUpdate();
    status('Ход '+currentName()+' · нажмите на две закрытые карты');
-   skipBlockedTurnIfNeeded();
   }
  }
 }
@@ -280,8 +235,8 @@ function tapCard(id){
  if(state!=='choose'||selectedPair.some(x=>x.id===id))return;
  id=adjustScriptedHiddenPick(id);
  if(!id||selectedPair.some(x=>x.id===id))return;
- if(playableCards().length===1){
-  const c=playableCards()[0];state='last';captainUpdate();
+ if(available.length===1){
+  const c=available[0];state='last';captainUpdate();
   const tile=$('grid').children[available.findIndex(x=>x.id===c.id)];
   if(tile){tile.classList.add('legendary','arcane-picked');}
   showCompare([c],true);return;
@@ -401,7 +356,7 @@ async function revealCompare(cards,last,signal,portraits){
 async function choose(id){
  const signal=draftController.signal;
  if(state!=='preview'&&state!=='last')return;
- const hero=pair.find(c=>c.id===id);if(!hero||teams[captainTurn].length>=5||isHeroChainedForCaptain(hero,captainTurn))return;
+ const hero=pair.find(c=>c.id===id);if(!hero||teams[captainTurn].length>=5)return;
  const choosingCaptain=captainTurn;
  const panel=$('compare');
  const compareButtons=[...$('compareCards').querySelectorAll('button.reveal-card')];
@@ -425,17 +380,25 @@ async function choose(id){
  teams[choosingCaptain].push(hero);available=available.filter(c=>c.id!==id);selectedPair=[];
  $('scene').dispatchEvent(new CustomEvent('captain:received-card',{detail:choosingCaptain}));
  captainUpdate();
- const captainDuo=teams[choosingCaptain].filter(member=>duoPairNames.includes(member.name));
- if(captainDuo.length>=2){
-   status('Древнее правило нарушено…');
-   const completed=await runChronos(async signal=>{
-    if(window.chronosCinema)await window.chronosCinema.wait(3700,signal);
-    await playChronosIntervention(choosingCaptain,hero,signal);
-   });
-   if(!completed||signal.aborted)return;
-   // Rewound selection does not consume the captain's turn.
- }else turn++;
+ turn++;
  if(!available.length){state='done';captainUpdate();showFinish();return}
+ exchangeSeat=window.chronosRules.recipient(draftIds(),available.length);
+ if(exchangeSeat!==null){
+  state='cutscene';
+  captainUpdate();
+  displayGrid();
+  status('Время остановилось');
+  try{
+   await window.chronosCinema.appear(signal);
+  }catch(error){
+   if(signal.aborted)return;
+   console.warn('Chronos introduction interrupted:',error);
+  }
+  if(signal.aborted)return;
+  state='chronos';
+  showChronosExchange();
+  return;
+ }
  state='shuffling';
  captainUpdate();
  status('Оставшиеся карты собираются в колоду…');
@@ -477,20 +440,11 @@ async function choose(id){
   tile.style.opacity='1';
  });
  if(!await delay(1020,signal))return;
- if(!chronosSecretPlayed&&teams[0].length+teams[1].length===9&&available.length===1){
-  chronosSecretPlayed=true;
-  state='cutscene';
-  displayGrid();
-  try{
-   if(!await runChronos(signal=>window.playChronosSecret91(signal)))return;
-  }catch(error){console.error('Chronos secret:',error)}
- }
  if(signal.aborted)return;
  state='choose';
  captainUpdate();
  displayGrid();
- status('Ход '+currentName()+(playableCards().length===1?' · нажмите на доступную карту':' · нажмите на две закрытые карты'));
- skipBlockedTurnIfNeeded();
+ status('Ход '+currentName()+(available.length===1?' · нажмите на доступную карту':' · нажмите на две закрытые карты'));
 }
 let summonController=null;
 function skipVsIntro(){const finish=$('finish');finish.classList.add('vs-intro','vs-armies','vs-ready');finish.querySelectorAll('.vs-small-card,.vs-team').forEach(el=>{el.style.animation='none';el.style.opacity='1';el.style.transform='none';el.style.filter='none'});finish.querySelectorAll('.vs-captain,.vs-mark,.vs-headline').forEach(el=>{el.style.animation='none';el.style.opacity='1';el.style.transform='none';el.style.filter='none'})}
@@ -591,7 +545,6 @@ document.addEventListener('visibilitychange',()=>{
 function reset(){
  draftController.abort();
  draftController=new AbortController();
- chronosController?.abort();
  summonController?.abort();
  summonController=null;
  $('grid').classList.remove('summon-preparing','summon-materializing');
@@ -602,8 +555,8 @@ function reset(){
  $('compareCards').replaceChildren();
  $('scene').classList.remove('arcane-choosing');
  $('fx').replaceChildren();
- hideChronosEvent();
- available=[];teams=[[],[]];selectedPair=[];pair=[];turn=0;state='idle';duoLock=[null,null];chronosSecretPlayed=false;
+ window.chronosCinema?.close();
+ available=[];teams=[[],[]];selectedPair=[];pair=[];turn=0;state='idle';exchangeSeat=null;
  $('book').disabled=false;
  $('grid').replaceChildren();
  captainUpdate();

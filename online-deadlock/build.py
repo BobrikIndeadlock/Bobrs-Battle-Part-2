@@ -16,7 +16,7 @@ STYLES = (
 )
 ASSETS = (
     'media/deadlock/portraits.js',
-    'media/images/altar-header.jpg',
+    'media/season/part-3-wordmark.webp', 'media/season/lighting-maps.js',
     'media/cards/makarych.png',
     'media/cards/artemon.png',
     'media/throne/fog-haze.webp',

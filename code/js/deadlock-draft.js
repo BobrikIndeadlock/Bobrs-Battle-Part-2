@@ -174,8 +174,9 @@
    const previews=window.BobrsExportPreviews;
    const keyFor=image=>image.src.split('/media/cards/').at(-1);
    const rosterImages=[0,1].map(side=>[...$('dlRoster'+side).querySelectorAll('figure img')]);
-   const [background,...lineups]=await Promise.all([
+   const [background,wordmark,...lineups]=await Promise.all([
     tryImage(previews[art.cathedral]),
+    tryImage(previews[art.wordmark]),
     ...captains.map(async(captain,side)=>({
      captain:await tryImage(previews[captain.portrait]),
      players:await Promise.all(rosterImages[side].map(image=>tryImage(previews['media/cards/'+keyFor(image)])))
@@ -186,8 +187,12 @@
    g.fillStyle='#070a0a';g.fillRect(0,0,1600,900);
    if(background)g.drawImage(background,0,0,1600,900);
    g.fillStyle='#060809ba';g.fillRect(0,0,1600,900);
-   g.textAlign='center';g.fillStyle='#ecf1e8';g.font='bold 58px Georgia';g.fillText('BOBRS BATTLE · DEADLOCK',800,84);
-   g.font='25px Georgia';g.fillText(window.BobrsSeason.name.toUpperCase(),800,125);
+   if(wordmark)fit(wordmark,540,19,520,108);
+   else{
+    g.textAlign='center';g.fillStyle='#ecf1e8';g.font='bold 52px Georgia';
+    g.fillText(window.BobrsSeason.name,800,86);
+   }
+   g.fillStyle='#d0d6c7';g.textAlign='center';g.font='18px Georgia';g.fillText('ДРАФТ ГЕРОЕВ DEADLOCK',800,142);
    function fit(image,x,y,w,h) {
     if(!image)return;
     const scale=Math.min(w/image.width,h/image.height),iw=image.width*scale,ih=image.height*scale;

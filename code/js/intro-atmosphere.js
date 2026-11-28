@@ -8,21 +8,15 @@
   canvas.id = 'intro-life82';
   canvas.setAttribute('aria-hidden', 'true');
   world.insertBefore(canvas, gate);
-  const context = canvas.getContext('2d');
-  if (!context) return;
-
-  const width = 824;
-  const height = 464;
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const compact = matchMedia('(max-width: 850px), (max-height: 500px)');
-  const season = window.createSeasonAtmosphere(context);
+  const season = window.createSeasonAtmosphere(canvas,'gate');
 
   let frame = 0;
   let last = 0;
   let cameraPosition = () => 0;
   function fit() {
-    canvas.width = compact.matches ? 544 : width;
-    canvas.height = compact.matches ? 306 : height;
+    season.size(compact.matches ? 352 : 512,compact.matches ? 198 : 288);
   }
 
   function render(now) {
@@ -33,9 +27,7 @@
     if (now - last < interval) return;
     last = now;
 
-    context.setTransform(canvas.width / width, 0, 0, canvas.height / height, 0, 0);
-    context.clearRect(0, 0, width, height);
-    season.paint('gate', now / 1000, '', { compact: compact.matches, proximity: cameraPosition() });
+    season.paint(now / 1000, '', { proximity: cameraPosition() });
   }
 
   function stop() {
@@ -44,7 +36,10 @@
   }
 
   function sync() {
-    if (motion.matches || document.hidden || !stage.isConnected) stop();
+    if (motion.matches || document.hidden || !stage.isConnected) {
+      stop();
+      if(motion.matches)canvas.hidden = true;
+    }
     else if (!frame) frame = requestAnimationFrame(render);
   }
 

@@ -1,7 +1,7 @@
 (()=>{'use strict';
 const $=id=>document.getElementById(id);
 const { captains, movie: filmSource } = window.BobrsSeason;
-const baseCharacters=[{"id":"preset-1","name":"Макарыч","image":"media/cards/makarych.png","reveal":"spirits"},{"id":"preset-2","name":"Стасик","image":"media/cards/stasik.png"},{"id":"preset-3","name":"Грит","image":"media/cards/grit.png"},{"id":"preset-4","name":"Аптека","image":"media/cards/apteka.png"},{"id":"preset-5","name":"Артемон","image":"media/cards/artemon.png","reveal":"blood"},{"id":"preset-6","name":"Сережа","image":"media/cards/serezha.png"},{"id":"preset-7","name":"Данечек","image":"media/cards/danechek.png"},{"id":"preset-8","name":"Дрипсик","image":"media/cards/dripsik.png"},{"id":"preset-9","name":"Ануар","image":"media/cards/anuar.png"},{"id":"preset-10","name":"Митя","image":"media/cards/mitya.png"}];
+const baseCharacters=[{"id":"preset-1","name":"Макарыч","image":"media/cards/makarych.png"},{"id":"preset-2","name":"Стасик","image":"media/cards/stasik.png"},{"id":"preset-3","name":"Грит","image":"media/cards/grit.png"},{"id":"preset-4","name":"Аптека","image":"media/cards/apteka.png"},{"id":"preset-5","name":"Артемон","image":"media/cards/artemon.png"},{"id":"preset-6","name":"Сережа","image":"media/cards/serezha.png"},{"id":"preset-7","name":"Данечек","image":"media/cards/danechek.png"},{"id":"preset-8","name":"Дрипсик","image":"media/cards/dripsik.png"},{"id":"preset-9","name":"Ануар","image":"media/cards/anuar.png"},{"id":"preset-10","name":"Митя","image":"media/cards/mitya.png"}];
 let available=[],turn=0,state='idle',pair=[],selectedPair=[],teams=[[],[]],captainTurn=0,duoLock=[null,null];
 const randomInt=max=>{const r=new Uint32Array(1);if(crypto?.getRandomValues){crypto.getRandomValues(r);return r[0]%max}return Math.floor(Math.random()*max)};
 function shuffle(list){const res=[...list];for(let i=res.length-1;i>0;i--){const j=randomInt(i+1);[res[i],res[j]]=[res[j],res[i]]}return res}
@@ -299,22 +299,7 @@ function tapCard(id){
  }else status('Выбрана первая карта · выберите вторую');
 }
 function ensureCompareStageFx(){const panel=$('compare');let fx=panel.querySelector('.compare-stage-fx');if(!fx){fx=document.createElement('div');fx.className='compare-stage-fx';fx.innerHTML='<div class="compare-halo"></div><div class="compare-halo-two"></div><div class="compare-runes"></div><div class="compare-flash-layer"></div>';panel.prepend(fx)}return fx}
-function mountComparePortrait(button,image,card){
- if(card.reveal)button.dataset.reveal=card.reveal;
- if(card.reveal==='spirits'){
-  const spirits=document.createElement('div');
-  spirits.className='card-spirits';
-  spirits.setAttribute('aria-hidden','true');
-  for(let i=0;i<8;i++){
-   const spirit=document.createElement('i');
-   spirit.style.setProperty('--spirit-x',(5+i*12.7)+'%');
-   spirit.style.setProperty('--spirit-y',(3+(i*7)%17)+'%');
-   spirit.style.setProperty('--spirit-delay',(i*.116)+'s');
-   spirit.style.setProperty('--spirit-frame',((i*3)%5)*25+'% '+((i*7)%4)*(100/3)+'%');
-   spirits.append(spirit);
-  }
-  button.querySelector('.arcane-aura').append(spirits);
- }
+function mountComparePortrait(button,image){
  const face=button.querySelector('.flip-side.back');
  function setEdges(){
   if(!image.naturalHeight)return;
@@ -350,8 +335,8 @@ async function showCompare(cards,last,hold=0){
    b.className='reveal-card arcane-live arcane-settled flipped arcane-choice-ready';
    b.dataset.cardId=String(c.id);
    b.setAttribute('aria-label',c.name);
-   b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.shortName??c.name}</div>`;
-   mountComparePortrait(b,portraits[index],c);
+   b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.name}</div>`;
+   mountComparePortrait(b,portraits[index]);
    b.onclick=()=>choose(c.id);
    container.append(b);
   }
@@ -376,8 +361,8 @@ async function revealCompare(cards,last,signal,portraits){
   b.dataset.cardId=String(c.id);
   b.type='button';
   b.disabled=true;
-  b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.shortName??c.name}</div>`;
-  mountComparePortrait(b,portraits[i],c);
+  b.innerHTML=`<div class="arcane-aura"></div><div class="flip-core"><div class="flip-side front">${backMarkup()}</div><div class="flip-side back"></div></div><div class="arcane-rim"></div><div class="arcane-name">${c.name}</div>`;
+  mountComparePortrait(b,portraits[i]);
   b.setAttribute('aria-label',c.name);
   b.onclick=()=>choose(c.id);
   container.append(b);
@@ -413,40 +398,6 @@ async function revealCompare(cards,last,signal,portraits){
  $('choiceHint').innerHTML=last?'Нажмите на <strong>легендарного героя</strong>':'Выберите <strong>одного персонажа</strong> для команды '+currentName();
 
 }
-function absorbCard(side) {
- const pedestal=$('cap'+side);
- pedestal.classList.remove('absorbing');
- requestAnimationFrame(()=>requestAnimationFrame(()=>pedestal.classList.add('absorbing')));
-}
-function flyToCaptain(source, side, signal) {
- const destination=$('teamTiny'+side).children[teams[side].length];
- const portrait=source.querySelector('.flip-side.back img');
- if(!destination||!portrait||signal.aborted||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
- const from=source.getBoundingClientRect(),to=destination.getBoundingClientRect();
- if(!from.width||!to.width)return;
- const flight=document.createElement('div');
- const image=portrait.cloneNode();
- flight.className='season-transfer';
- flight.dataset.paletteSide=String(side);
- flight.setAttribute('aria-hidden','true');
- Object.assign(flight.style,{left:from.left+'px',top:from.top+'px',width:from.width+'px',height:from.height+'px'});
- flight.append(image);
- document.body.append(flight);
- const x=to.left+to.width/2-from.left-from.width/2;
- const y=to.top+to.height/2-from.top-from.height/2;
- const scale=Math.max(.08,to.width/from.width);
- const animation=flight.animate([
-  {transform:'none',opacity:.96},
-  {transform:'translate3d('+x*.6+'px,'+(y*.55-28)+'px,0) rotateY('+(side?-20:20)+'deg) scale(.64)',opacity:1,offset:.52},
-  {transform:'translate3d('+x+'px,'+y+'px,0) rotateY(0) scale('+scale+')',opacity:0},
- ],{duration:800,easing:'cubic-bezier(.34,.02,.22,1)',fill:'both'});
- signal.addEventListener('abort',cancel,{once:true});
- animation.finished.catch(()=>{}).finally(()=>{
-  signal.removeEventListener('abort',cancel);
-  flight.remove();
- });
- function cancel(){animation.cancel()}
-}
 async function choose(id){
  const signal=draftController.signal;
  if(state!=='preview'&&state!=='last')return;
@@ -466,15 +417,13 @@ async function choose(id){
  });
  panel.classList.remove('arcane-selectable');
  panel.classList.add('arcane-resolving','arcane-flare');
- flyToCaptain(chosenBtn,choosingCaptain,signal);
- window.playSeasonSound(choosingCaptain);
  if(!await delay(820,signal))return;
  $('compare').classList.remove('visible','arcane-cinematic','arcane-ready','arcane-flare','arcane-selectable','arcane-resolving');
  $('scene').classList.remove('arcane-choosing');
  $('compareCards').replaceChildren();
  pair=[];
  teams[choosingCaptain].push(hero);available=available.filter(c=>c.id!==id);selectedPair=[];
- absorbCard(choosingCaptain);
+ $('scene').dispatchEvent(new CustomEvent('captain:received-card',{detail:choosingCaptain}));
  captainUpdate();
  const captainDuo=teams[choosingCaptain].filter(member=>duoPairNames.includes(member.name));
  if(captainDuo.length>=2){

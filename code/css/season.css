@@ -2,36 +2,6 @@
   --bg: var(--season-hall);
 }
 
-#scene .captain-frame {
-  position: absolute;
-  display: grid !important;
-  inset: 5% 13% 11%;
-  width: auto;
-  height: auto;
-  max-height: none;
-  place-items: stretch;
-  overflow: visible;
-  animation: none;
-  border: 0;
-  background: none;
-  box-shadow: none;
-  transform: none;
-}
-#scene .captain-frame::after { content: none; }
-#scene .captain-frame img {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border: 0;
-  box-shadow: none;
-  filter: drop-shadow(0 4px 9px #000c);
-  transition: filter .9s ease;
-}
-#scene .captain.active .captain-frame img {
-  filter: drop-shadow(0 4px 8px #000) drop-shadow(0 0 8px rgba(var(--glow),.52));
-}
 #scene .captain {
   top: 19%;
   width: 22%;
@@ -57,82 +27,23 @@
 }
 #scene .roster-slot .team-badge { border-color: rgba(var(--glow),.36); }
 
-#intro-left { transform-origin:30.5% 50%; }
-#intro-right { transform-origin:69.5% 50%; }
-#intro-left::after { left:50.4%; }
-#intro-right::after { left:50.4%; }
+#intro-left { transform-origin:31.5% 50%; }
+#intro-right { transform-origin:68.8% 50%; }
+#intro-left::after { left:50.2%; }
+#intro-right::after { left:50.2%; }
 .intro-door::after {
-  top:27.5%;
-  bottom:24.4%;
+  top:25%;
+  bottom:22.8%;
   background:linear-gradient(90deg,#090f11,#53594e 54%,#111716);
 }
 #intro-gate {
-  left:30.5%;
-  top:27.5%;
-  width:39%;
-  height:48.1%;
+  left:31.5%;
+  top:25%;
+  width:37.3%;
+  height:52.2%;
   clip-path:polygon(0 100%,0 35%,2% 26%,6% 18%,14% 11%,24% 5%,38% 1%,51% 0,64% 1%,78% 5%,89% 11%,96% 18%,100% 35%,100% 100%);
 }
 #intro-gate:focus-visible { background: #c4ffe620; }
-
-.compare.arcane-cinematic {
-  background: radial-gradient(ellipse at 50% 42%,var(--tint),#030505 80%);
-}
-.compare.arcane-cinematic::before {
-  background: radial-gradient(ellipse at center,transparent 15%,#040807b8 94%);
-  backdrop-filter: none;
-}
-.compare.arcane-cinematic .compare-title {
-  text-shadow: 0 0 20px rgba(var(--glow), .58),0 2px 3px #000;
-}
-.compare .compare-stage-fx .compare-halo,
-.compare .compare-stage-fx .compare-halo-two,
-.compare .reveal-card .arcane-aura {
-  filter: none;
-}
-.compare .reveal-card[data-reveal=spirits] { --glow: 146,97,224; --accent: #67418f; }
-.compare .reveal-card[data-reveal=blood] { --glow: 221,40,66; --accent: #a2223a; }
-.compare .reveal-card[data-reveal=spirits] .arcane-aura::after,
-.compare .reveal-card[data-reveal=blood] .arcane-aura::after {
-  content: "";
-  position: absolute;
-  inset: 20% -24% -6%;
-  background: url("../../media/captains/ashen-violet.webp") center bottom / contain no-repeat;
-  opacity: 0;
-  transform: translateY(8%) scale(.9);
-}
-.compare .reveal-card[data-reveal=blood] .arcane-aura::after {
-  background-image: url("../../media/captains/crimson-vapour.webp");
-}
-.compare .reveal-card.flipped[data-reveal] .arcane-aura::after {
-  animation: season-reveal 1.9s ease-out both;
-}
-@keyframes season-reveal { 40% { opacity: .82; } to { opacity: .21; transform: translateY(-4%) scale(1.05); } }
-
-.season-transfer {
-  position: fixed;
-  z-index: 246;
-  pointer-events: none;
-  perspective: 800px;
-  isolation: isolate;
-}
-.season-transfer img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.season-transfer::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: -28%;
-  background: var(--team-0-aura) center / contain no-repeat;
-  mix-blend-mode: screen;
-  opacity: .44;
-  transform: rotate(-26deg);
-}
-.season-transfer[data-palette-side="1"]::after {
-  inset: -44%;
-  background-image: var(--team-1-aura);
-  opacity: .62;
-  transform: rotate(7deg);
-}
 
 #finish.vs-finisher::before {
   background: linear-gradient(#06090941,#060909de),var(--season-versus) center / cover no-repeat;
@@ -146,11 +57,11 @@
   text-transform: uppercase;
 }
 #finish .vs-mark {
-  background-image: linear-gradient(105deg,#5bc98a 13%,#e0ecd8 46%,#fff0a3 73%,#b88b20);
+  background-image: linear-gradient(105deg,#9ea992 13%,#e0ecd8 46%,#fff0a3 73%,#b88b20);
   filter: drop-shadow(0 0 12px #000);
 }
 #finish .vs-actions .deadlock-next {
-  background: linear-gradient(145deg,#163b2c,#12201e 53%,#453a16);
+  background: linear-gradient(145deg,#2d3b29,#191f1b 53%,#453a16);
   border-color: #809e79;
 }
 #moviePoster {
@@ -162,59 +73,18 @@
   background: linear-gradient(#04060848,#04060818 55%,#040608d0),var(--season-versus) center / cover;
 }
 #moviePoster img { width: 100%; aspect-ratio: 1037/1517; object-fit: contain; filter: drop-shadow(0 12px 17px #000); }
-.season-title {
-  grid-column: 1/-1;
-  text-align: center;
-  color: #e8ece5;
-  text-shadow: 0 1px 12px #000;
-  font-size: clamp(.7rem,1.9vw,1.4rem);
-  letter-spacing: .16em;
+.season-title { grid-column: 1/-1; justify-self: center; }
+#moviePoster .season-title img {
+  width: min(76vw, 46dvh, 520px);
+  height: auto;
+  aspect-ratio: auto;
 }
-.season-title strong {
-  display: block;
-  margin-top: .3em;
-  font-size: clamp(1.4rem,4.8vw,4rem);
-  line-height: 1.1;
-  text-transform: uppercase;
-}
-@media (prefers-reduced-motion:reduce) {
-  #scene .captain-frame img { transition: none; }
-  .compare .reveal-card.flipped[data-reveal] .arcane-aura::after { animation: none; }
-}
-.intro-captain {
-  position: absolute;
-  top: 21.6%;
-  width: 16.28%;
-  height: 43.68%;
-  object-fit: contain;
-  filter: drop-shadow(0 4px 9px #000c);
-}
-.intro-captain.left { left: 5.86%; }
-.intro-captain.right { right: 5.86%; }
+.season-light[hidden] { display: none !important; }
+
 #intro-interior::after { background: #090d0e; }
 
-#scene .captain::before {
-  content: "";
-  position: absolute;
-  inset: 74% -10% -45%;
-  pointer-events: none;
-  background: var(--team-0-aura) center / contain no-repeat;
-  mix-blend-mode: screen;
-  opacity: 0;
-}
-#scene .captain.right::before { background-image: var(--team-1-aura); }
-#scene .captain.absorbing::before { animation: season-absorb .76s ease-out both; }
-@keyframes season-absorb {
-  from { opacity: 0; transform: translateY(8%) scale(.72); }
-  24% { opacity: .75; }
-  to { opacity: 0; transform: translateY(-7%) scale(1.1); }
-}
-@media (prefers-reduced-motion:reduce) {
-  #scene .captain.absorbing::before { animation: none; }
-}
-
 #scene .captain {
-  --roster-rail: linear-gradient(155deg,#030c096e,#080b0cbb),url("../../media/season/rail-royal.webp");
+  --roster-rail: linear-gradient(155deg,#030c096e,#080b0cbb),url("../../media/season/rail-ossuary.webp");
 }
 #scene .captain.right {
   --roster-rail: linear-gradient(155deg,#090a0d60,#080b0cbb),url("../../media/season/rail-storm.webp");
@@ -222,32 +92,6 @@
 #scene .captain .teams-view {
   background: var(--roster-rail) center / 100% 100% no-repeat;
 }
-.card-spirits {
-  position: absolute;
-  inset: 5% -17% 5%;
-  pointer-events: none;
-}
-.card-spirits i {
-  position: absolute;
-  left: var(--spirit-x);
-  bottom: var(--spirit-y);
-  width: 12%;
-  height: 24%;
-  opacity: 0;
-  background: url("../../media/captains/spirits-left.webp") var(--spirit-frame) / 500% 400%;
-}
-.card-spirits i:nth-child(2n) { background-image: url("../../media/captains/spirits-right.webp"); }
-.reveal-card.flipped .card-spirits i { animation: season-card-spirit 2.5s var(--spirit-delay) ease-in-out both; }
-@keyframes season-card-spirit {
-  from { opacity: 0; transform: translateY(18%) scale(.8); }
-  28% { opacity: .57; }
-  70% { opacity: .34; }
-  to { opacity: 0; transform: translateY(-26%) scale(1.04); }
-}
-@media (prefers-reduced-motion:reduce) {
-  .reveal-card.flipped .card-spirits i { animation: none; }
-}
-
 /* The caption must not enlarge the grid track or cover the transition controls. */
 #finish .vs-main {
   flex: 0 0 auto;
@@ -270,3 +114,8 @@
   position: relative;
   z-index: 1;
 }
+
+/* Keep the original card destinations while clearing the title and name plates. */
+#compare .compare-title, #compare .choice-hint { position: relative; }
+#compare .compare-title { inset-block-start: -1rem; }
+#compare .choice-hint { inset-block-start: min(2.1rem, 4dvh); }

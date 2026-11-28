@@ -3,12 +3,10 @@
   const effect = document.getElementById('dlFx');
   const chamber = document.getElementById('dlCathedral');
   const canvas = chamber.querySelector('canvas');
-  const context = canvas.getContext('2d');
-  if (!context) return;
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const compact = matchMedia('(max-width: 850px), (max-height: 500px)');
-  const season = window.createSeasonAtmosphere(context);
+  const season = window.createSeasonAtmosphere(canvas,'cathedral');
   const draft = document.getElementById('dlDraftScreen');
   let frame = 0;
   let last = 0;
@@ -22,9 +20,7 @@
   });
 
   function paint(time) {
-    context.setTransform(canvas.width / 1000, 0, 0, canvas.height / 563, 0, 0);
-    context.clearRect(0, 0, 1000, 563);
-    season.paint('cathedral', time, draft.dataset.paletteSide, { reduced: reduced.matches, compact: compact.matches });
+    season.paint(time,draft.dataset.paletteSide,{ reduced: reduced.matches });
   }
 
   function active() {
@@ -51,20 +47,20 @@
       if (frame) cancelAnimationFrame(frame);
       frame = 0;
       if (!visible && canvas.width !== 1) {
-        canvas.width = 1;
-        canvas.height = 1;
+        season.size(1,1);
+        canvas.hidden = true;
         started = false;
       }
       return;
     }
     if (!started) {
       const small = compact.matches || reduced.matches;
-      canvas.width = small ? 600 : 960;
-      canvas.height = small ? 338 : 540;
+      season.size(small ? 352 : 512,small ? 198 : 288);
       paint(elapsed / 1000);
       started = true;
     }
     if (reduced.matches) {
+      canvas.hidden = true;
       if (frame) cancelAnimationFrame(frame);
       frame = 0;
     } else if (!frame) {

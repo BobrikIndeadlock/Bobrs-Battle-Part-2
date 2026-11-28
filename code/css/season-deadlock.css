@@ -54,12 +54,12 @@
 }
 
 #dlTeam0 {
-  --draft-detail: url("../../media/season/rail-royal.webp");
-  --team-fog: var(--team-0-mist);
+  --draft-detail: url("../../media/season/rail-ossuary.webp");
+  --team-fog: none;
 }
 #dlTeam1 {
   --draft-detail: url("../../media/season/rail-storm.webp");
-  --team-fog: var(--team-1-mist);
+  --team-fog: none;
 }
 #dlPhase .dl-captain-stage::after {
   mix-blend-mode: screen;
@@ -70,3 +70,24 @@
 #dlPhase .draft-impact.is-ban .draft-impact-card {
   background: linear-gradient(145deg,#281619,#100e11);
 }
+
+/* The title is the same engraved asset at entry, in the draft and at the finale. */
+#dlPhase .dl-head .draft-wordmark {
+  display: block;
+  width: min(100%, 326px);
+  height: auto;
+  mask-image: none;
+  margin-inline: 0;
+}
+#dlPhase #dlEndScreen .dl-finale-title img {
+  display: block;
+  width: min(73vw, 460px);
+  height: auto;
+  margin: 0 auto;
+}
+#dlTeam0 .dl-captain { filter: saturate(.63) drop-shadow(0 4px 6px #0009); }
+@media (max-width: 680px) {
+  #dlPhase .dl-head .draft-wordmark { width: min(80vw, 222px); }
+}
+
+#dlCathedral .season-light[hidden] { display: none; }

@@ -55,46 +55,6 @@
 .compare.arcane-ready .choice-hint strong{color:#ffe1a8}
 
 
-@media (min-width: 1024px) and (min-height: 700px) {
-  .compare.arcane-cinematic {
-    --compare-card-height: min(76dvh, 100dvh - 220px, 1640px);
-    gap: clamp(28px, 4dvh, 58px);
-  }
-
-  /* Keep the original vignette without blurring the whole room on each frame. */
-  .compare.arcane-cinematic::before {
-    backdrop-filter: none;
-  }
-
-  .compare.arcane-cinematic .compare-cards {
-    width: 94vw;
-  }
-
-  .compare.arcane-cinematic .reveal-card {
-    --compare-card-width: min(42vw, var(--compare-card-height) * var(--flip-card-aspect));
-    flex: none;
-    width: var(--compare-card-width);
-    perspective: calc(var(--compare-card-width) * 5);
-  }
-
-  /* Measure arrivals against the untransformed model before the flight keyframes. */
-  .compare.arcane-cinematic .reveal-card.arcane-arriving {
-    transform: none;
-  }
-
-  .compare.arcane-cinematic .reveal-card.arcane-settled {
-    filter: none;
-  }
-
-  .compare.arcane-cinematic .flip-core {
-    will-change: transform;
-  }
-
-  .compare.arcane-cinematic .choice-hint {
-    margin-top: 24px;
-  }
-}
-
 /* Grimoire is the invisible, accessible tap target; no visible label. */
 .grimoire{width:min(38vw,600px);height:25vh;bottom:0;min-height:115px;background:transparent!important;border:none!important;z-index:120;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .grimoire .bookhit{background:none;border:0;padding:0;pointer-events:none}

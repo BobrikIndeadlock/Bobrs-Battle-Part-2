@@ -2,8 +2,8 @@ const summoningRitual = (() => {
   const media = 'media/summoning/';
   const filenames = {
     haze: 'ember-haze.webp',
-    rays: 'vault-rays.webp', wave: 'resonance.webp',
-    left: '../season/emerald-mist.webp', right: '../season/storm-mist.webp',
+    light: 'stone-light.webp', rays: 'vault-rays.webp', wave: 'resonance.webp',
+    book: 'book-light.webp', left: 'left-light.webp', right: 'right-light.webp',
     ember: '../throne/ember.webp',
   };
   const textures = new Map();
@@ -98,12 +98,7 @@ const summoningRitual = (() => {
     return (time, paths, reduced) => {
       context.clearRect(0, 0, sceneWidth, sceneHeight);
       if (reduced) {
-        const light = Math.sin(Math.PI * clamp(time / 720)) * .14;
-        context.globalCompositeOperation = 'screen';
-        plate('left', 0, 170, 445, 370, light);
-        plate('right', 515, 170, 445, 370, light);
-        context.globalCompositeOperation = 'source-over';
-        context.globalAlpha = 1;
+        plate('light', 0, 0, sceneWidth, sceneHeight, Math.sin(Math.PI * clamp(time / 720)) * .12);
         return;
       }
       const sinceImpact = time - impact;
@@ -112,6 +107,8 @@ const summoningRitual = (() => {
       const flash = sinceImpact < 0 ? 0 : Math.exp(-sinceImpact / 165);
       const residual = sinceImpact < 0 ? 1 : 1 - smooth(sinceImpact / 1470);
       const surface = (.31 * approach + .32 * charge * residual + .46 * flash);
+      // The moving light pass is painted from the castle's own stone and metal texture.
+      plate('light', 0, 0, sceneWidth, sceneHeight, surface);
       let leftLight = 0;
       let rightLight = 0;
       paths.forEach((path, index) => {
@@ -122,10 +119,9 @@ const summoningRitual = (() => {
         leftLight += proximity * (1 - smooth(Math.abs(flamePosition.x - 277) / 185));
         rightLight += proximity * (1 - smooth(Math.abs(flamePosition.x - 681) / 185));
       });
-      context.globalCompositeOperation = 'screen';
-      plate('left', 9, 198, 438, 308, Math.min(.44, leftLight) + surface * .59);
-      plate('right', 515, 198, 438, 308, Math.min(.44, rightLight) + surface * .63);
-      context.globalCompositeOperation = 'source-over';
+      plate('book', 335, 351, 290, 189, approach * .54 + flash * .29);
+      plate('left', 146, 200, 288, 258, Math.min(.52, leftLight) + flash * .22);
+      plate('right', 526, 200, 288, 258, Math.min(.52, rightLight) + flash * .22);
 
       if (sinceImpact >= 0) {
         const rayAlpha = smooth(sinceImpact / 44) *

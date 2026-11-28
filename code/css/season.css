@@ -58,7 +58,6 @@
 }
 #finish .vs-mark {
   background-image: linear-gradient(105deg,#9ea992 13%,#e0ecd8 46%,#fff0a3 73%,#b88b20);
-  filter: drop-shadow(0 0 12px #000);
 }
 #finish .vs-actions .deadlock-next {
   background: linear-gradient(145deg,#2d3b29,#191f1b 53%,#453a16);

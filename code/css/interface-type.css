@@ -1,0 +1,245 @@
+:root {
+  --ui-display: "Cormorant Garamond", Georgia, serif;
+  --ui-text: "Source Sans 3", system-ui, sans-serif;
+  --ui-paper: #e9e5d8;
+  --ui-secondary: #c0c2b8;
+  --ui-ossuary: #c4d0b8;
+  --ui-storm: #f0d590;
+  --ui-time: #e3cfa6;
+  --ui-ban: #e6b3a8;
+  --ui-panel: #151815;
+  --ui-edge: #71674e;
+  --ui-side-paper: var(--ui-paper);
+  --ui-side-edge: var(--ui-edge);
+  -webkit-text-stroke-width: 0;
+  text-shadow: none;
+}
+
+body,
+#dlPhase,
+body:has(#roomLobby),
+:where(input, select, textarea) {
+  font-family: var(--ui-text);
+  color: var(--ui-paper);
+}
+
+:where(#cap0, #dlTeam0, .battle-team.side0, .vs-captain.left, .vs-team:first-child, [data-palette-side="0"]) {
+  --ui-side-paper: var(--ui-ossuary);
+  --ui-side-edge: #788771;
+}
+:where(#cap1, #dlTeam1, .battle-team.side1, .vs-captain.right, .vs-team:nth-child(2), [data-palette-side="1"]) {
+  --ui-side-paper: var(--ui-storm);
+  --ui-side-edge: #9b804e;
+}
+
+/* Small labels stay legible over the original scene lighting. */
+.small-help,
+#scene #status,
+#scene .captain .captain-count,
+#scene .roster-slot,
+#compare .choice-hint,
+#compare .arcane-name,
+.h92button,
+#movieFinal button {
+  font-family: var(--ui-text);
+}
+#scene #status {
+  color: var(--ui-side-paper);
+  background-color: #101410e8;
+  font-weight: 600;
+  letter-spacing: .025em;
+}
+#scene .captain .captain-count {
+  color: var(--ui-side-paper);
+  border-color: var(--ui-side-edge);
+  font-variant-numeric: tabular-nums;
+}
+#scene .roster-slot { color: var(--ui-paper); }
+#compare .compare-title {
+  font-family: var(--ui-display);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: .06em;
+  color: var(--ui-side-paper);
+}
+#compare .choice-hint { color: var(--ui-paper); }
+#compare .choice-hint strong { color: var(--ui-side-paper); }
+#compare .arcane-name {
+  color: var(--ui-side-paper);
+  background: var(--ui-panel);
+  border-color: var(--ui-side-edge);
+  box-shadow: none;
+  font-weight: 600;
+  letter-spacing: .035em;
+}
+.h92button, #movieFinal button {
+  color: var(--ui-paper);
+  font-weight: 600;
+  border-color: var(--ui-edge);
+}
+.h92button { box-shadow: 0 3px 9px #0008; }
+
+/* Captions keep their original anchoring and word-by-word timing. */
+.chronos-subtitles {
+  font-family: var(--ui-text);
+  font-weight: 500;
+  letter-spacing: .01em;
+  color: var(--ui-time);
+  background: linear-gradient(90deg, transparent, #100e0bf5 12% 88%, transparent);
+}
+.rewind-caption {
+  font-family: var(--ui-display);
+  font-weight: 700;
+  letter-spacing: .08em;
+  color: var(--ui-time);
+}
+.chronos-mark84 text {
+  font-family: var(--ui-display);
+  font-weight: 700;
+  fill: var(--ui-time);
+  stroke: none;
+}
+
+/* The live VS lettering echoes the engravings without adding a halo. */
+#finish.vs-finisher { font-family: var(--ui-text); }
+#finish .vs-topline {
+  font-family: var(--ui-text);
+  letter-spacing: .09em;
+  color: var(--ui-secondary);
+}
+#finish .vs-captain .vs-name,
+#finish .vs-team .vs-team-heading {
+  font-family: var(--ui-display);
+  font-weight: 700;
+  letter-spacing: .03em;
+  color: var(--ui-side-paper);
+}
+#finish .vs-style {
+  font-family: var(--ui-text);
+  font-weight: 600;
+  letter-spacing: .07em;
+  color: var(--ui-side-paper);
+}
+#finish .vs-headline {
+  font-family: var(--ui-display);
+  font-weight: 700;
+  letter-spacing: .10em;
+  color: var(--ui-paper);
+}
+#finish .vs-mark,
+#dlEndScreen .battle-vs {
+  font-family: var(--ui-display);
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: -.055em;
+}
+#finish .vs-mark {
+  background-image: linear-gradient(107deg, #929780, #dfdfc9 52%, #c6a365);
+}
+#finish .vs-actions button,
+#finish .vs-skip {
+  font-family: var(--ui-text);
+  font-weight: 600;
+  letter-spacing: .035em;
+  color: var(--ui-paper);
+  box-shadow: none;
+}
+#deadlockMode {
+  color: var(--ui-paper);
+  box-shadow: 0 8px 24px #0008;
+}
+#deadlockMode h2,
+#dlPhase .dl-head h1,
+#dlPhase.draft-active .dl-wrap .dl-head h1,
+#dlCoinScreen h2,
+#roomLobby h1 {
+  font-family: var(--ui-display);
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--ui-paper);
+}
+#deadlockMode :is(button,a) {
+  font-family: var(--ui-text);
+  color: var(--ui-paper);
+}
+
+/* Draft hierarchy: whose turn, what action, then counts and names. */
+#dlPhase :is(.dl-btn, .dl-sub, .dl-slot, .dl-history, .dl-upload, .dl-search),
+#dlPhase .dl-final-list figure,
+#dlPhase #dlDraftScreen :is(.dl-upload,.dl-search,.dl-hero span),
+#dlPhase #dlDraftScreen .dl-hero.taken::after,
+#dlPhase #dlDraftScreen .dl-order-item,
+#dlDraftScreen :is(.dl-player-roster figure,.dl-place,.dl-gothic-label),
+#dlPhase .dl-eyebrow,
+#dlPhase #dlDraftScreen .dl-team h3,
+#dlEndScreen .battle-team :is(h4,figcaption) {
+  font-family: var(--ui-text);
+}
+#dlPhase .dl-btn,
+#dlPhase #dlDraftScreen .dl-confirm .dl-btn { letter-spacing: .045em; }
+#dlPhase #dlDraftScreen .dl-team h2,
+#dlTurnText,
+#dlPhase #dlCoinResult,
+#dlPhase .draft-impact .draft-impact-card figcaption,
+#dlEndScreen .battle-team h3 {
+  font-family: var(--ui-display);
+  font-weight: 700;
+  letter-spacing: .025em;
+}
+#dlPhase #dlDraftScreen .dl-team :is(h2,h3),
+#dlDraftScreen #dlTurnText,
+#dlDraftScreen #dlStep,
+#dlEndScreen .battle-team :is(h3,h4) { color: var(--ui-side-paper); }
+#dlPhase #dlDraftScreen .dl-team h3 { letter-spacing: .065em; }
+#dlPhase .dl-head .dl-sub,
+#dlCoinHelp,
+#dlDraftScreen .dl-team .dl-place,
+#dlDraftScreen #dlTurnHint,
+#dlDraftScreen #dlChosenText,
+#dlDraftScreen .dl-gothic-label,
+#dlEndScreen .dl-eyebrow { color: var(--ui-secondary); }
+#dlPhase #dlCoinResult {
+  color: var(--ui-paper);
+  font-size: 22px;
+  min-height: 30px;
+}
+#dlPhase #dlCoin.heads ~ #dlCoinResult { color: var(--ui-storm); }
+#dlPhase #dlCoin.tails ~ #dlCoinResult { color: var(--ui-ossuary); }
+#dlDraftScreen :is(.dl-place,.dl-order-item,#dlStep) {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .035em;
+}
+#dlPhase #dlDraftScreen .dl-order-item.now,
+#dlPhase #dlDraftScreen .dl-hero.selected,
+#dlPhase #dlDraftScreen .dl-team.current {
+  border-color: var(--ui-side-edge);
+  box-shadow: inset 0 0 0 1px #080b08;
+}
+#dlPhase #dlDraftScreen .dl-order-item.now { color: var(--ui-side-paper); }
+#dlPhase #dlDraftScreen .dl-hero span,
+#dlEndScreen .battle-team figcaption { color: var(--ui-paper); }
+
+@media (max-width: 850px) {
+  #dlPhase #dlDraftScreen .dl-hero span,
+  #dlDraftScreen .dl-team .dl-place,
+  #dlDraftScreen .dl-player-roster figure {
+    font-size: 10px;
+  }
+  #dlPhase #dlDraftScreen .dl-order-item { font-size: 9px; }
+}
+#dlEndScreen .battle-vs { color: var(--ui-time); }
+#dlPhase .draft-impact .draft-impact-card figcaption { color: var(--ui-paper); }
+#dlPhase .draft-impact .draft-impact-kind {
+  font-family: var(--ui-text);
+  letter-spacing: .085em;
+}
+#dlPhase .draft-impact.is-pick .draft-impact-kind { color: var(--ui-side-paper); }
+#dlPhase .draft-impact.is-ban .draft-impact-kind { color: var(--ui-ban); }
+
+#roomBar,
+#campaignMenu :is(#campaignCreate,#campaignNotice) {
+  font-family: var(--ui-text);
+  color: var(--ui-paper);
+}
+#roomBar :is(summary,label) { color: var(--ui-time); }
+#campaignMenu #campaignCreate { border-color: var(--ui-edge); }

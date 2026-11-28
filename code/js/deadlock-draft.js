@@ -182,6 +182,14 @@
      players:await Promise.all(rosterImages[side].map(image=>tryImage(previews['media/cards/'+keyFor(image)])))
     })),
    ]);
+   const typography=getComputedStyle(document.documentElement);
+   const displayFont=typography.getPropertyValue('--ui-display').trim();
+   const textFont=typography.getPropertyValue('--ui-text').trim();
+   await Promise.allSettled([
+    document.fonts.load('700 32px '+displayFont,'Павел Deadlock'),
+    document.fonts.load('600 18px '+textFont,'Драфт Deadlock'),
+    document.fonts.load('400 19px '+textFont,'Команда Deadlock'),
+   ]);
    const c=document.createElement('canvas');c.width=1600;c.height=900;
    const g=c.getContext('2d');
    g.fillStyle='#070a0a';g.fillRect(0,0,1600,900);
@@ -189,10 +197,10 @@
    g.fillStyle='#060809ba';g.fillRect(0,0,1600,900);
    if(wordmark)fit(wordmark,540,19,520,108);
    else{
-    g.textAlign='center';g.fillStyle='#ecf1e8';g.font='bold 52px Georgia';
+    g.textAlign='center';g.fillStyle='#ecf1e8';g.font='700 52px '+displayFont;
     g.fillText(window.BobrsSeason.name,800,86);
    }
-   g.fillStyle='#d0d6c7';g.textAlign='center';g.font='18px Georgia';g.fillText('ДРАФТ ГЕРОЕВ DEADLOCK',800,142);
+   g.fillStyle='#c0c2b8';g.textAlign='center';g.font='600 18px '+textFont;g.fillText('ДРАФТ ГЕРОЕВ DEADLOCK',800,142);
    function fit(image,x,y,w,h) {
     if(!image)return;
     const scale=Math.min(w/image.width,h/image.height),iw=image.width*scale,ih=image.height*scale;
@@ -200,28 +208,29 @@
    }
    for(const [side,captain] of captains.entries()){
     const x=side?840:70,y=164;
+    const sideInk=typography.getPropertyValue(side?'--ui-storm':'--ui-ossuary').trim()||captain.theme.light;
     g.fillStyle='#070b0de0';g.fillRect(x-17,y-12,710,678);
     g.strokeStyle=captain.theme.middle;g.strokeRect(x-17,y-12,710,678);
     fit(lineups[side].captain,x,y,58,84);
-    g.textAlign='left';g.fillStyle=captain.theme.light;g.font='bold 32px Georgia';
+    g.textAlign='left';g.fillStyle=sideInk;g.font='700 34px '+displayFont;
     g.fillText(captain.name.toUpperCase(),x+74,203,590);
-    g.font='20px Georgia';g.fillText(captain.styleName,x+74,237,590);
+    g.font='400 20px '+textFont;g.fillText(captain.styleName,x+74,237,590);
     for(const [j,player] of rosterImages[side].entries()){
      const px=x+j*136;
      fit(lineups[side].players[j],px,260,129,108);
-     g.fillStyle=captain.theme.light;g.font='bold 17px Georgia';g.textAlign='center';
+     g.fillStyle=sideInk;g.font='600 17px '+textFont;g.textAlign='center';
      g.fillText(player.alt,px+64,391,130);
     }
-    g.textAlign='left';g.font='20px Georgia';g.fillText('ГЕРОИ DEADLOCK',x,430);
+    g.textAlign='left';g.font='400 20px '+textFont;g.fillText('ГЕРОИ DEADLOCK',x,430);
     for(const [j,pickedHero] of picked(side).entries()){
      const h=heroes[pickedHero.id],px=x+(j%3)*228,py=445+Math.floor(j/3)*169;
      g.fillStyle=captain.theme.dark;g.fillRect(px,py,214,150);
      const im=loaded[side*6+j];
      if(im)fit(im,px,py+2,214,114);
-     g.fillStyle=captain.theme.light;g.font='bold 23px Georgia';g.textAlign='center';
+     g.fillStyle=sideInk;g.font='600 23px '+textFont;g.textAlign='center';
      g.fillText(h.name,px+107,py+139,210);
     }
-    g.textAlign='left';g.font='19px Georgia';g.fillStyle='#e7d0c0';
+    g.textAlign='left';g.font='400 19px '+textFont;g.fillStyle='#e6b3a8';
     g.fillText('БАНЫ: '+banned(side).map(x=>heroes[x.id].name).join(', '),x,811,675);
    }
    const png=await new Promise((resolve,reject)=>{try{c.toBlob(blob=>blob?resolve(blob):reject(new Error('PNG недоступен')),'image/png')}catch(err){reject(err)}});

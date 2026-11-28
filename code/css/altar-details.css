@@ -129,7 +129,6 @@
   margin: 2px 0;
   color: #f1dcc7;
   font: 600 clamp(17px, 2.1vw, 33px)/1.2 Georgia, serif;
-  text-shadow: 0 3px 5px #000;
 }
 #dlDraftScreen .dl-turn .dl-eyebrow {
   font-size: clamp(10px, .86vw, 14px);
@@ -411,7 +410,6 @@
   color: #fce7cf;
   font: 600 clamp(17px, 2.6vw, 37px)/1.1 Georgia, serif;
   text-align: center;
-  text-shadow: 0 2px 4px #000;
 }
 .draft-impact-kind {
   display: block;

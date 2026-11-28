@@ -15,7 +15,7 @@ STYLES = (
     'deadlock-sound.css', 'altar-details.css', 'palette.css', 'coin.css', 'season-deadlock.css',
 )
 ASSETS = (
-    'media/deadlock/portraits.js',
+    'media/deadlock/portraits.js', 'media/fonts/typefaces.css', 'code/css/interface-type.css',
     'media/season/part-3-wordmark.webp', 'media/season/lighting-maps.js',
     'media/cards/makarych.png',
     'media/cards/artemon.png',
@@ -126,6 +126,8 @@ def add_campaign(output, html):
       new URLSearchParams(location.hash.slice(1)).has('room')) {
       location.replace('deadlock.html' + location.hash);
     }</script>""")
+    typography = '<link rel="stylesheet" href="code/css/interface-type.css">'
+    html = replace_once(html, typography, '')
     html = replace_once(html, '</body>', bar + """
     <aside id="campaignMenu">
       <button type="button" id="campaignCreate">Играть по сети</button>
@@ -133,6 +135,7 @@ def add_campaign(output, html):
     </aside>
     <link rel="stylesheet" href="online-deadlock/room.css">
     <link rel="stylesheet" href="online-deadlock/campaign.css">
+    <link rel="stylesheet" href="code/css/interface-type.css">
     <script src="online-deadlock/peerjs.min.js"></script>
     <script type="module" src="online-deadlock/campaign.mjs"></script>
     </body>""")

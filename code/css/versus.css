@@ -1,6 +1,6 @@
 
 /* === Stage 6: cinematic VS and two-army reveal === */
-#finish.vs-finisher{position:fixed!important;inset:0!important;z-index:245!important;overflow:auto!important;overscroll-behavior:contain;background:#050305!important;padding:0!important;display:none;align-items:stretch!important;justify-content:initial!important;flex-direction:column!important;color:#f5e4c9!important;font-family:Georgia,'Times New Roman',serif!important;text-align:center!important}
+#finish.vs-finisher{position:fixed!important;inset:0!important;z-index:245!important;overflow:auto!important;overscroll-behavior:contain;background:#050305!important;padding:0!important;display:none;align-items:stretch!important;justify-content:initial!important;flex-direction:column!important;color:#f5e4c9!important;text-align:center!important}
 #finish.vs-finisher.visible{display:flex!important}
 #finish.vs-finisher:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 62% 66% at 24% 48%,rgba(148,38,31,.22),transparent 77%),radial-gradient(ellipse 65% 68% at 79% 48%,rgba(64,17,68,.33),transparent 75%),linear-gradient(140deg,#110508 0%,#07060b 48%,#09030a 100%)}
 #finish .vs-noise{position:fixed;inset:0;pointer-events:none;opacity:.18;mix-blend-mode:screen;background:repeating-linear-gradient(100deg,transparent 0 70px,rgba(213,144,100,.03) 71px,transparent 72px),repeating-linear-gradient(0deg,transparent 0 98px,rgba(255,255,255,.025) 99px,transparent 100px)}
@@ -19,14 +19,14 @@
 @keyframes vsCaptRight{from{opacity:0;transform:translateX(34%) scale(.94);filter:blur(14px)}to{opacity:1;transform:translateX(0) scale(1);filter:blur(0)}}
 #finish .vs-captain-image{display:block;width:min(100%,360px);height:calc(100% - 35px);object-fit:contain;filter:drop-shadow(0 18px 22px rgba(0,0,0,.82)) drop-shadow(0 0 28px rgba(168,67,35,.16));-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 91%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 91%,transparent 100%)}
 #finish .vs-captain.right .vs-captain-image{filter:drop-shadow(0 18px 22px rgba(0,0,0,.82)) drop-shadow(0 0 28px rgba(146,41,112,.15))}
-#finish .vs-name{margin-top:-11px;position:relative;z-index:2;font-weight:900;font-size:clamp(22px,3.1vw,51px);line-height:1.1;text-shadow:0 4px 0 #180809,0 0 22px rgba(242,105,52,.44);letter-spacing:.07em;color:#f1d4a3}
-#finish .vs-captain.right .vs-name{color:#f3b3bd;text-shadow:0 4px 0 #180809,0 0 22px rgba(231,55,101,.4)}
+#finish .vs-name{margin-top:-11px;position:relative;z-index:2;font-weight:900;font-size:clamp(22px,3.1vw,51px);line-height:1.1;letter-spacing:.07em;color:#f1d4a3}
+#finish .vs-captain.right .vs-name{color:#f3b3bd;}
 #finish .vs-mid{z-index:4;display:flex;align-items:center;justify-content:center;position:relative;height:100%}
 #finish .vs-mid:before{content:"";position:absolute;width:clamp(105px,17vw,280px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(255,190,90,.18),rgba(224,51,45,.07) 48%,transparent 71%);filter:blur(8px);opacity:.9}
-#finish .vs-mark{font-size:clamp(84px,13vw,210px);font-weight:900;font-style:italic;letter-spacing:-.14em;line-height:1;white-space:nowrap;padding-right:.17em;color:#ffe1a6;background:linear-gradient(162deg,#fffbe5 1%,#f5d69b 27%,#b45a35 54%,#ffdc9e 76%,#5e1f20 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 8px 3px #160206) drop-shadow(0 0 24px #a93b27);opacity:0;transform:scale(4) rotate(-5deg)}
+#finish .vs-mark{font-size:clamp(84px,13vw,210px);font-weight:900;font-style:italic;letter-spacing:-.14em;line-height:1;white-space:nowrap;padding-right:.17em;color:#ffe1a6;background:linear-gradient(162deg,#fffbe5 1%,#f5d69b 27%,#b45a35 54%,#ffdc9e 76%,#5e1f20 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;opacity:0;transform:scale(4) rotate(-5deg)}
 #finish.vs-intro .vs-mark{animation:vsImpact 1.35s cubic-bezier(.12,.68,.19,1) 1.1s forwards}
 @keyframes vsImpact{0%{opacity:0;transform:scale(4) rotate(-9deg)}37%{opacity:1;transform:scale(.87) rotate(3deg)}62%{transform:scale(1.16) rotate(-2deg)}100%{opacity:1;transform:scale(1) rotate(0deg)}}
-#finish .vs-headline{font-size:clamp(13px,1.8vw,25px);font-weight:700;letter-spacing:.35em;color:#eac99e;text-shadow:0 0 15px rgba(218,140,74,.35);margin:-5px auto 0;opacity:0;transform:translateY(10px)}
+#finish .vs-headline{font-size:clamp(13px,1.8vw,25px);font-weight:700;letter-spacing:.35em;color:#eac99e;margin:-5px auto 0;opacity:0;transform:translateY(10px)}
 #finish.vs-intro .vs-headline{animation:vsTextIn 1s 2.2s forwards}
 @keyframes vsTextIn{to{opacity:1;transform:translateY(0)}}
 #finish .vs-teams{display:grid!important;grid-template-columns:1fr 1fr;gap:clamp(12px,4vw,70px);width:100%;margin-top:5px}

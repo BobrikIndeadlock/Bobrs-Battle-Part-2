@@ -6,7 +6,7 @@
 .face .back-ring{position:absolute;width:65%;aspect-ratio:1;border:2px solid #b17d576e;border-radius:50%;box-shadow:0 0 20px #a3194666,inset 0 0 18px #a3194650;transform:rotate(12deg)}
 .face .back-ring:after{content:'✧';position:absolute;inset:8px;border:1px dashed #a77a557e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:clamp(20px,3vw,44px);color:#6f3542}
 .face .back-flourish{position:absolute;top:10%;color:#bb8f62;font-size:clamp(7px,1vw,15px);letter-spacing:.3em}
-.face .sigil{z-index:1;color:#eed5a5;text-shadow:0 0 15px #d93259,0 2px 6px #000;font-size:clamp(20px,3vw,52px)}
+.face .sigil{z-index:1;color:#eed5a5;font-size:clamp(20px,3vw,52px)}
 .face .sigil em{display:block;font:normal 700 .19em Georgia,serif;letter-spacing:.17em;text-align:center;color:#b99365;margin-top:4px}
 .face .back-footer{position:absolute;bottom:10%;font-size:clamp(5px,.55vw,10px);letter-spacing:.12em;color:#af765d}
 #grid .tile:disabled{pointer-events:none}

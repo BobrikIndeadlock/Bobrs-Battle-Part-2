@@ -3,18 +3,16 @@
 :root{--m-dark:var(--team-0-dark);--m-mid:var(--team-0-middle);--m-light:var(--team-0-light);--m-rgb:var(--team-0-rgb);--a-dark:var(--team-1-dark);--a-mid:var(--team-1-middle);--a-light:var(--team-1-light);--a-rgb:var(--team-1-rgb);--c-dark:#291b0c;--c-mid:#ad863e;--c-light:#ffe4aa;--c-rgb:218,170,81;--neutral:#141018;--metal:#a77a43;--ink:#f3e4cf;--accent:var(--metal);--glow:183,132,76;--tint:#231713;--light:var(--ink)}
 #cap0,#dlTeam0,.battle-team.side0,#finish .vs-captain.left,#finish .vs-team:first-child,[data-palette-side="0"]{--accent:var(--m-mid);--glow:var(--m-rgb);--tint:var(--m-dark);--light:var(--m-light)}
 #cap1,#dlTeam1,.battle-team.side1,#finish .vs-captain.right,#finish .vs-team:nth-child(2),[data-palette-side="1"]{--accent:var(--a-mid);--glow:var(--a-rgb);--tint:var(--a-dark);--light:var(--a-light)}
-.scene[data-palette-side] .status{color:var(--light);text-shadow:0 0 12px rgba(var(--glow),.6),0 2px 4px #000}
+.scene[data-palette-side] .status{color:var(--light);}
 #grid.grid > button.tile:hover:not(:disabled){outline-color:var(--light)!important;filter:brightness(1.12) drop-shadow(0 0 9px rgba(var(--glow),.65))!important}
 .compare .compare-stage-fx .compare-halo{background:radial-gradient(circle,rgba(var(--glow),.32),rgba(var(--glow),.13) 35%,transparent 67%)}
 .compare .compare-stage-fx .compare-halo-two{background:radial-gradient(circle,rgba(var(--glow),.24),transparent 72%)}
 .compare .reveal-card .arcane-aura{background:radial-gradient(circle,rgba(var(--glow),.45),rgba(var(--glow),.14) 35%,transparent 70%)}
 .compare .reveal-card .arcane-rim{border-color:rgba(var(--glow),.55);box-shadow:0 0 22px rgba(var(--glow),.35)}
 .compare .reveal-card .arcane-name{background:linear-gradient(var(--tint),#09060b);border-color:var(--accent);color:var(--light)}
-.compare.arcane-ready .choice-hint strong,.compare-title{color:var(--light)!important}
-#chronosText{color:var(--c-light)!important;border-color:rgba(var(--c-rgb),.4)!important}
+#chronosText{border-color:rgba(var(--c-rgb),.4)!important}
 /* The approved blue sealed-card art and blue time fissures remain unchanged. */
 #finish{background:radial-gradient(ellipse at 22% 45%,rgba(var(--m-rgb),.18),transparent 65%),radial-gradient(ellipse at 78% 45%,rgba(var(--a-rgb),.18),transparent 65%),#0a070d}
-#finish .vs-captain .vs-name,#finish .vs-team .vs-team-heading{color:var(--light)!important;text-shadow:0 3px 4px #000,0 0 20px rgba(var(--glow),.4)}
 #finish .vs-captain .vs-captain-image{filter:drop-shadow(0 18px 22px #0009) drop-shadow(0 0 22px rgba(var(--glow),.35))!important}
 #finish .vs-team .vs-small-card{box-shadow:0 0 0 1px var(--accent),0 8px 12px #0008}
 #dlEndScreen .battle-team h3,#dlEndScreen .battle-team h4{color:var(--light);border-color:var(--accent);background:linear-gradient(90deg,transparent,var(--tint),transparent)}

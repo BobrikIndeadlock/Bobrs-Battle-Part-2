@@ -171,7 +171,8 @@ def add_campaign(output, html):
 def version_online_scripts(output):
     # Pages caches individual files. Keep the controllers and the wire protocol in one build.
     modules = ('campaign.mjs', 'room.mjs', 'rules.mjs', 'draft-data.mjs')
-    controllers = ('code/js/first-draft.js', 'code/js/deadlock-draft.js', 'code/js/season.js', 'code/js/season-atmosphere.js', 'code/js/captain-portraits.js', 'code/js/chronos-secret.js')
+    controllers = ('code/js/first-draft.js', 'code/js/deadlock-draft.js', 'code/js/season.js', 'code/js/season-atmosphere.js', 'code/js/captain-portraits.js', 'code/js/chronos-secret.js', 'code/js/living-captains.js',
+                   'code/js/living-throne.js', 'code/js/season-cinematics.js', 'media/season/captain-motion-plates.js')
     scripts = tuple(f'online-deadlock/{name}' for name in modules) + controllers
     digest = hashlib.sha256()
     for file in scripts:

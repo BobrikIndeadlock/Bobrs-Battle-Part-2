@@ -16,3 +16,11 @@
   height: 100%;
   pointer-events: none;
 }
+
+#scene .captain-motion {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  pointer-events: none;
+}
+#scene .captain-motion[hidden] { display: none; }

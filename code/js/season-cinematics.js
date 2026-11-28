@@ -14,6 +14,7 @@
   let start;
   let last = 0;
   let frame = 0;
+  let reacted = false;
 
   function shown() {
     if (document.hidden || motion.matches || deadlock.classList.contains('active')) return null;
@@ -39,6 +40,7 @@
   }
 
   function sync() {
+    if (!movie.classList.contains('active')) reacted = false;
     const next = shown();
     if (next!==target) {
       target = next;
@@ -55,7 +57,14 @@
       fit();
       surface.ready.then(() => { ready = true; sync(); });
     }
-    if (ready && !frame) frame = requestAnimationFrame(tick);
+    if (ready && !frame) {
+      const completed = document.getElementById('scene').dataset.completedCaptain;
+      if (target === poster && !reacted && (completed === '0' || completed === '1')) {
+        surface.receive(Number(completed));
+        reacted = true;
+      }
+      frame = requestAnimationFrame(tick);
+    }
   }
 
   const observer = new MutationObserver(sync);

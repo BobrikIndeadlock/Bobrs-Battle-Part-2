@@ -26,7 +26,7 @@ window.createSeasonAtmosphere = (canvas, scene) => {
     precision mediump float;
     uniform sampler2D response, details;
     uniform float t, aspect, fade, charge, strike, approach;
-    uniform vec2 energy;
+    uniform vec2 energy, captainLight;
     uniform vec3 ash, storm;
     varying vec2 uv;
 
@@ -71,7 +71,8 @@ window.createSeasonAtmosphere = (canvas, scene) => {
       float fog = (.09*surface.b+.29*field.b)*bank;
       float spores = grains(p*vec2(40.,25.)+vec2(t*.39,t*.64),t) *
         (surface.r*.10+field.b*(.08+charge*.18));
-      float drift = wisp * (.06+energy.x*.25) + spores;
+      float breathFog = wisp * surface.r * captainLight.x * .27;
+      float drift = wisp * (.06+energy.x*.25) + spores + breathFog;
       vec3 mistColor = vec3(.57,.59,.61);
       vec3 light = ash*(left+drift) + storm*(right+litBolt*.32)
         + mistColor*fog + vec3(1.,.57,.26)*torch;
@@ -111,7 +112,7 @@ window.createSeasonAtmosphere = (canvas, scene) => {
       gl.uniform1i(gl.getUniformLocation(program,name),unit);
     }
     const locations = Object.fromEntries(
-      ['t','aspect','fade','energy','charge','strike','approach'].map(name=>[name,gl.getUniformLocation(program,name)])
+      ['t','aspect','fade','energy','charge','strike','approach','captainLight'].map(name=>[name,gl.getUniformLocation(program,name)])
     );
     gl.uniform3fv(gl.getUniformLocation(program,'ash'),ash);
     gl.uniform3fv(gl.getUniformLocation(program,'storm'),storm);
@@ -133,7 +134,7 @@ window.createSeasonAtmosphere = (canvas, scene) => {
     landingPending = true;
   }
 
-  function paint(time, side, { reduced = false, proximity = 0, charge = 0, convergence = 0 } = {}) {
+  function paint(time, side, { reduced = false, proximity = 0, charge = 0, convergence = 0, captainMotion, held = false } = {}) {
     if (reduced || proximity >= .98) {
       canvas.hidden = true;
       return;
@@ -168,11 +169,14 @@ window.createSeasonAtmosphere = (canvas, scene) => {
       + .50*Math.exp(-Math.max(0,cycle-.38)*13)*smoothstep(.34,.44,cycle);
     const activation = .86 + .3*charge;
     const ban = pulseKind === 'ban';
+    const necromancy = captainMotion?.[0].strength ?? 0;
+    const voltage = captainMotion?.[1].strength ?? 0;
+    const discharge = captainMotion?.[1].strike ?? 0;
     const left = .20 + harmonic*.09 + level[0]*.36*activation +
-      (pulseSide===0 ? pulse*(ban ? .30 : .69) : 0) + convergence*.35;
+      (pulseSide===0 ? pulse*(ban ? .30 : .69) : 0) + convergence*.35 + necromancy*.22;
     const right = .13 + level[1]*.27*activation + flash*1.2 +
-      (pulseSide===1 ? pulse*(ban ? .36 : .73) : 0) + convergence*.32;
-    const lightning = Math.min(1,flash*2.1 + (pulseSide===1 ? pulse*.58 : 0) + convergence*.18);
+      (pulseSide===1 ? pulse*(ban ? .36 : .73) : 0) + convergence*.32 + voltage*.11 + discharge*.39;
+    const lightning = Math.min(1,flash*2.1 + (pulseSide===1 ? pulse*.58 : 0) + convergence*.18 + discharge*.68);
 
     const { gl,locations } = renderer;
     gl.uniform1f(locations.t,time%512);
@@ -180,8 +184,9 @@ window.createSeasonAtmosphere = (canvas, scene) => {
     gl.uniform1f(locations.fade,(1-proximity)**1.5);
     gl.uniform1f(locations.approach,proximity);
     gl.uniform1f(locations.charge,charge);
-    gl.uniform1f(locations.strike,lightning);
-    gl.uniform2f(locations.energy,left,right);
+    gl.uniform1f(locations.strike,held ? 0 : lightning);
+    gl.uniform2f(locations.captainLight,necromancy,voltage);
+    gl.uniform2f(locations.energy,held ? .055 : left,held ? .035 : right);
     gl.drawArrays(gl.TRIANGLES,0,3);
   }
 

@@ -57,7 +57,8 @@
 
 @media (min-width: 1024px) and (min-height: 700px) {
   .compare.arcane-cinematic {
-    --compare-card-height: min(80dvh, 100dvh - 160px, 1640px);
+    --compare-card-height: min(76dvh, 100dvh - 220px, 1640px);
+    gap: clamp(28px, 4dvh, 58px);
   }
 
   /* Keep the original vignette without blurring the whole room on each frame. */
@@ -90,7 +91,7 @@
   }
 
   .compare.arcane-cinematic .choice-hint {
-    margin-top: 40px;
+    margin-top: 24px;
   }
 }
 

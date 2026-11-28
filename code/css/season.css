@@ -78,6 +78,18 @@
 .compare.arcane-cinematic {
   background: radial-gradient(ellipse at 50% 42%,var(--tint),#030505 80%);
 }
+.compare.arcane-cinematic::before {
+  background: radial-gradient(ellipse at center,transparent 15%,#040807b8 94%);
+  backdrop-filter: none;
+}
+.compare.arcane-cinematic .compare-title {
+  text-shadow: 0 0 20px rgba(var(--glow), .58),0 2px 3px #000;
+}
+.compare .compare-stage-fx .compare-halo,
+.compare .compare-stage-fx .compare-halo-two,
+.compare .reveal-card .arcane-aura {
+  filter: none;
+}
 .compare .reveal-card[data-reveal=spirits] { --glow: 146,97,224; --accent: #67418f; }
 .compare .reveal-card[data-reveal=blood] { --glow: 221,40,66; --accent: #a2223a; }
 .compare .reveal-card[data-reveal=spirits] .arcane-aura::after,
